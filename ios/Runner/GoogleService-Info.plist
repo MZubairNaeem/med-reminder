@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>475132050298-0a6co0v9pftbmid6pv41ch8ov7614ih4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.475132050298-0a6co0v9pftbmid6pv41ch8ov7614ih4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCPnowrYBKGpDci610pbjyrkUBkqqieiRM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>475132050298</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.medreminder</string>
+	<key>PROJECT_ID</key>
+	<string>minder-alert</string>
+	<key>STORAGE_BUCKET</key>
+	<string>minder-alert.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:475132050298:ios:7f6ec7d987579cbedcb4c3</string>
+</dict>
+</plist>

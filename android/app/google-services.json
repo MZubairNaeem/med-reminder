@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "475132050298",
+    "project_id": "minder-alert",
+    "storage_bucket": "minder-alert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475132050298:android:2254b9e22fdbf732dcb4c3",
+        "android_client_info": {
+          "package_name": "com.example.medreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475132050298-rte9kbd4ifafra1haf4dv69co56dg872.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvWNGoRYSIYxo3VqhI6sJuqiCElDtjOBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475132050298-rte9kbd4ifafra1haf4dv69co56dg872.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
