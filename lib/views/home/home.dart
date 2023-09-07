@@ -6,6 +6,8 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/views/home/appoinments/doc_appointments_list.dart';
+import 'package:medreminder/views/home/medicines/MedicineList.dart';
+import 'package:medreminder/views/home/medicines/MedicineSchedule.dart';
 import 'package:medreminder/views/home/notes/notes_list.dart';
 import 'package:medreminder/widgets/card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -39,17 +41,6 @@ class Home extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    // CustomCard(
-                    //   text: 'Notes',
-                    //   onTap: () => Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => NotesList(),
-                    //     ),
-                    //   ),
-                    //   height: 20.h,
-                    //   width: 43.w,
-                    // ),
                     GestureDetector(
                       onTap: () => Navigator.push(
                         context,
@@ -244,11 +235,25 @@ class Home extends StatelessWidget {
                         ),
                       ),
                     ),
-                    CustomCard(
-                      text: 'Medicines Schedule',
-                      onTap: () => print('tapped'),
-                      height: 20.h,
-                      width: 43.w,
+                    GestureDetector(
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MedicineList(),
+                        ),
+                      ),
+                      child: Card(
+                        margin: EdgeInsets.all(3.w),
+                        elevation: 2,
+                        shadowColor: secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.w),
+                        ),
+                        child: SizedBox(
+                            height: 20.h,
+                            width: 43.w,
+                            child: Center(child: Text('Medicines Schedule'))),
+                      ),
                     ),
                   ],
                 ),
