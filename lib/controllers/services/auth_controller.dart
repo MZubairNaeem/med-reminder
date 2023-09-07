@@ -65,32 +65,32 @@ class Auth {
 
   static verifyCode(BuildContext context, String phoneNo, String verificationId,
       String pinController) async {
-    try {
-      PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
-          verificationId: verificationId, smsCode: pinController);
-      String uid = FirebaseAuth.instance.currentUser!.uid;
-      await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
-      uid;
-      //create user in firestore with uid
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      firestore.collection('users').doc(uid).set({
-        'uid': uid,
-        'phone': phoneNo,
-      });
-      final SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      sharedPreferences.setString('uid', uid);
-      // ignore: use_build_context_synchronously
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const Home()));
-      Get.snackbar(
-        'Success',
-        'Logged in successfully',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } catch (e) {
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: pinController);
+    await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+    print(phoneAuthCredential);
+    print(FirebaseAuth.instance.currentUser!.uid);
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    //create user in firestore with uid
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    firestore.collection('users').doc(uid).set({
+      'uid': uid,
+      'phone': phoneNo,
+    });
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    sharedPreferences.setString('uid', uid);
+    // ignore: use_build_context_synchronously
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const Home()));
+    Get.snackbar(
+      'Success',
+      'Logged in successfully',
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+      snackPosition: SnackPosition.BOTTOM,
+    );
+    try {} catch (e) {
       if (context.mounted) {
         Get.snackbar(
           'Error',
