@@ -5,6 +5,7 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/notes_controller.dart';
 import 'package:medreminder/widgets/todolist_tile.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
 class NotesList extends StatefulWidget {
@@ -49,45 +50,61 @@ class _NotesListState extends State<NotesList> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(notesProvider);
-                ref.refresh(notesProvider);
+                // ref.refresh(notesProvider);
                 return userResult.when(
-                  data: (notes) {
-                    return ListView.builder(
-                        itemCount: notes.length,
-                        itemBuilder: (context, index) {
-                          DateTime time = notes[index].timestamp!.toDate();
-                          DateTime now = DateTime.now();
-                          String formattedTime = DateFormat.jm().format(time);
-                          String formattedDate = DateFormat.yMd().format(time);
-                          return ToDoList(
-                            taskName: notes[index].title!,
-                            description: notes[index].description!,
-                            taskCompleted: notes[index].status!,
-                            time: (time.year == now.year &&
-                                    time.month == now.month &&
-                                    time.day == now.day)
-                                ? formattedTime
-                                : formattedDate,
-                            onChanged: (value) {
-                              //change status of task to completed
-                              Notes().changeStatus(
-                                context,
-                                notes[index].id!,
-                                notes[index].status! ? false : true,
-                              );
-                            },
-                            deleteFunction: (context) {
-                              Notes().deleteNote(
-                                context,
-                                notes[index].id!,
-                              );
-                            },
-                          );
-                        });
-                  },
-                  loading: () => const Text("..."),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                );
+                    data: (notes) {
+                      return notes.isEmpty
+                          ? Center(
+                              child: Text(
+                                '-- You have no notes yet --',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: notes.length,
+                              itemBuilder: (context, index) {
+                                DateTime time =
+                                    notes[index].timestamp!.toDate();
+                                DateTime now = DateTime.now();
+                                String formattedTime =
+                                    DateFormat.jm().format(time);
+                                String formattedDate =
+                                    DateFormat.yMd().format(time);
+                                return ToDoList(
+                                  taskName: notes[index].title!,
+                                  description: notes[index].description!,
+                                  taskCompleted: notes[index].status!,
+                                  time: (time.year == now.year &&
+                                          time.month == now.month &&
+                                          time.day == now.day)
+                                      ? formattedTime
+                                      : formattedDate,
+                                  onChanged: (value) {
+                                    //change status of task to completed
+                                    Notes().changeStatus(
+                                      context,
+                                      notes[index].id!,
+                                      notes[index].status! ? false : true,
+                                    );
+                                  },
+                                  deleteFunction: (context) {
+                                    Notes().deleteNote(
+                                      context,
+                                      notes[index].id!,
+                                    );
+                                  },
+                                );
+                              });
+                    },
+                    loading: () => const Text("..."),
+                    error: (error, stackTrace) {
+                      print('Error: $error');
+                      return Text('Error: $error');
+                    });
               },
             ),
           ),

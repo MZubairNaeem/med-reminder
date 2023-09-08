@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:medreminder/views/home/medicines/MedicineSchedule.dart';
+import 'package:medreminder/views/home/medicineSchedules/MedicineSchedule.dart';
 
 class MedicineList extends StatefulWidget {
   const MedicineList({super.key});
@@ -21,7 +21,7 @@ class _MedicineListState extends State<MedicineList> {
           // Navigate to MedicineList screen
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MedicineSchedule()),
+            MaterialPageRoute(builder: (context) => const MedicineSchedule()),
           );
         },
         child: Icon(Icons.add),

@@ -6,8 +6,7 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/views/home/appoinments/doc_appointments_list.dart';
-import 'package:medreminder/views/home/medicines/MedicineList.dart';
-import 'package:medreminder/views/home/medicines/MedicineSchedule.dart';
+import 'package:medreminder/views/home/medicineSchedules/MedicineList.dart';
 import 'package:medreminder/views/home/notes/notes_list.dart';
 import 'package:medreminder/widgets/card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -202,27 +201,29 @@ class Home extends StatelessWidget {
                                           builder: (context, ref, _) {
                                             final userResult =
                                                 ref.watch(pendingNotesProvider);
-                                            ref.refresh(pendingNotesProvider);
+                                            // ref.refresh(pendingNotesProvider);
                                             return userResult.when(
-                                              data: (notes) {
-                                                return Center(
-                                                  child: Text(
-                                                    notes.isNotEmpty
-                                                        ? notes.length
-                                                            .toString()
-                                                        : "0",
-                                                    style: TextStyle(
-                                                        fontSize: 16.sp,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: white),
-                                                  ),
-                                                );
-                                              },
-                                              loading: () => const Text("..."),
-                                              error: (error, stackTrace) =>
-                                                  Text('Error: $error'),
-                                            );
+                                                data: (notes) {
+                                                  return Center(
+                                                    child: Text(
+                                                      notes.isNotEmpty
+                                                          ? notes.length
+                                                              .toString()
+                                                          : "0",
+                                                      style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: white),
+                                                    ),
+                                                  );
+                                                },
+                                                loading: () =>
+                                                    const Text("..."),
+                                                error: (error, stackTrace) {
+                                                  print('Error: $error');
+                                                  return Text('Error: $error');
+                                                });
                                           },
                                         ),
                                       ),
@@ -324,7 +325,7 @@ class Home extends StatelessWidget {
                                           builder: (context, ref, _) {
                                             final userResult =
                                                 ref.watch(appoinmentProvider);
-                                            ref.refresh(appoinmentProvider);
+                                            // ref.refresh(appoinmentProvider);
                                             return userResult.when(
                                               data: (appoinment) {
                                                 return Text(

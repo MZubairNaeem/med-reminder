@@ -54,7 +54,7 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(appoinmentProvider);
-                ref.refresh(appoinmentProvider);
+                // ref.refresh(appoinmentProvider);
                 return userResult.when(
                   data: (appoinments) {
                     return appoinments.isEmpty
