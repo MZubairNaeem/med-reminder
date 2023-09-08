@@ -10,7 +10,7 @@ class MedicineSchedule extends StatefulWidget {
 }
 
 class _MedicineScheduleState extends State<MedicineSchedule> {
-  String selectedMedicineType = 'Bottle'; // Initialize with a default value
+  String selectedMedicineType = 'Syrup'; // Initialize with a default value
   String? selectedInterval; // Declare selectedInterval as nullable
   bool showHint = true;
   final List<String> intervals = [
@@ -74,7 +74,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    medicineType('lib/constants/assets/bottles.png', 'Bottle'),
+                    medicineType('lib/constants/assets/bottles.png', 'Syrup'),
                     medicineType('lib/constants/assets/pills.png', 'Pill'),
                     medicineType('lib/constants/assets/syringe.png', 'Syringe'),
                     medicineType('lib/constants/assets/tablets.png', 'Tablet'),
