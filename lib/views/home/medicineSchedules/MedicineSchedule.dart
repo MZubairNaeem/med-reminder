@@ -82,7 +82,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                 ),
                 SizedBox(height: 3.h),
                 Text(
-                  "Dosage in mg",
+                  "Dosage",
                   style: TextStyle(
                     fontSize: 17.sp,
                     fontWeight: FontWeight.bold,
@@ -257,7 +257,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
   String getHintText(String medicineType) {
     switch (medicineType) {
       case 'Bottle':
-        return 'Qty of Syrups';
+        return 'Qty of Spoon';
       case 'Pill':
         return 'Qty of Pills';
       case 'Syringe':
