@@ -9,3 +9,4 @@ const Color gray3 = Color(0xffd5d7da);
 const Color white = Color(0xffffffff);
 const Color lightBlue = Color(0xff17456b);
 Color blueGray = Colors.blueGrey.shade50;
+const Color cardColor = Color.fromARGB(207, 121, 180, 227);

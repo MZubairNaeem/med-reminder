@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
+import 'package:medreminder/controllers/providers/med_provider.dart';
+import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MedicineSchedule extends StatefulWidget {
@@ -10,9 +13,14 @@ class MedicineSchedule extends StatefulWidget {
 }
 
 class _MedicineScheduleState extends State<MedicineSchedule> {
+  //med text editing controller
+  final med = TextEditingController();
+  final dosage = TextEditingController();
+
   String selectedMedicineType = 'Syrup'; // Initialize with a default value
   String? selectedInterval; // Declare selectedInterval as nullable
   bool showHint = true;
+  bool loading = false;
   final List<String> intervals = [
     '6 hours',
     '8 hours',
@@ -39,8 +47,9 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: secondary,
           centerTitle: true,
-          title: Text("Add New Medminder"),
+          title: const Text("Add New Medminder"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -57,7 +66,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                 ),
                 SizedBox(height: 2.h),
                 TextField(
-                  decoration: InputDecoration(
+                  controller: med,
+                  decoration: const InputDecoration(
                     hintText: "Enter Medicine Name",
                     border: OutlineInputBorder(),
                   ),
@@ -90,10 +100,11 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                 ),
                 SizedBox(height: 2.h),
                 TextField(
+                  controller: dosage,
                   decoration: InputDecoration(
                     hintText: getHintText(
                         selectedMedicineType), // Get the hint text dynamically
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 SizedBox(height: 2.5.h),
@@ -165,8 +176,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                           context); // Call the time picker when the button is pressed
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: primary, // Primary background color
-                      onPrimary: Colors.white, // Text color
+                      backgroundColor: primary, // Primary background color
+                      foregroundColor: Colors.white, // Text color
                     ),
                     child: Padding(
                       padding: EdgeInsets.all(14.sp),
@@ -184,21 +195,61 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                   child: Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            primary: primary, // Primary background color
-                            onPrimary: Colors.white, // Text color
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(14.sp),
-                            child: Text(
-                              'Confirm',
-                              style: TextStyle(
-                                fontSize: 17.sp,
-                              ),
-                            ),
-                          ),
+                        child: Consumer(
+                          builder: (context, ref, _) {
+                            final userResult = ref.watch(medProvider);
+                            // ref.refresh(medProvider);
+                            return userResult.when(
+                                data: (medicine) {
+                                  return ElevatedButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      await Med().addMed(
+                                        context,
+                                        med.text,
+                                        selectedMedicineType,
+                                        dosage.text,
+                                        selectedInterval.toString(),
+                                      );
+                                      // ignore: unused_result
+                                      ref.refresh(medProvider);
+                                      setState(() {
+                                        med.clear();
+                                        dosage.clear();
+                                        selectedInterval = null;
+                                        selectedTime = null;
+                                        loading = false;
+                                      });
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          primary, // Primary background color
+                                      foregroundColor: Colors.white, // Text color
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(14.sp),
+                                      child: loading
+                                          ? const Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : Text(
+                                              'Confirm',
+                                              style: TextStyle(
+                                                fontSize: 17.sp,
+                                              ),
+                                            ),
+                                    ),
+                                  );
+                                },
+                                loading: () => const Text("..."),
+                                error: (error, stackTrace) {
+                                  return Text('Error: $error');
+                                });
+                          },
                         ),
                       ),
                     ],

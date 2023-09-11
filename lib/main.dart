@@ -26,13 +26,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String? uid;
+  String? uuid;
   Future getValidationKey() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     var uid = sharedPreferences.getString('uid');
     setState(() {
-      uid = uid;
+      print(uid);
+      uuid = uid;
     });
   }
 
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            home: uid == null ? const OBScreen1() : const Home(),
+            home: uuid == null ? const OBScreen1() : const Home(),
           ),
         );
       },

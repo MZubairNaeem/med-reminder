@@ -13,6 +13,18 @@ class OBScreen1 extends StatefulWidget {
 }
 
 class _OBScreen1State extends State<OBScreen1> {
+  bool load = true;
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        load = false;
+      });
+    });
+    super.initState();
+  }
+
   int currentTextIndex = 0;
   double progress = 0.33;
   List<String> onBoardingTitle = [
@@ -29,112 +41,127 @@ class _OBScreen1State extends State<OBScreen1> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: white,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Login(),
-                    ),
-                  );
-                },
-                child: Text(
-                  'Skip',
-                  style: TextStyle(
-                    color: secondary,
-                    fontSize: 20.sp,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 10.w,
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 300),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(1, 0),
-                            end: const Offset(0, 0),
-                          ).animate(animation),
-                          child: child,
-                        );
-                      },
-                      child: Text(
-                        onBoardingTitle[currentTextIndex],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        key: ValueKey<int>(currentTextIndex),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    //animated switcher
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 500),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: child,
-                        );
-                      },
-                      child: Text(
-                        onBoardingSubTitle[currentTextIndex],
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: gray2,
-                        ),
-                        key: ValueKey<int>(currentTextIndex),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 20),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: OnboardingArrowWithCircle(
-                  progress: progress,
-                  onTap: () {
-                    setState(() {
-                      if (currentTextIndex < onBoardingTitle.length - 1) {
-                        progress += 0.33;
-                        currentTextIndex++;
-                      } else {
+      body: Stack(
+        children: [
+          Visibility(
+            visible: !load,
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton(
+                      onPressed: () {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const Login(),
                           ),
                         );
-                      }
-                    });
-                  },
-                ),
+                      },
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(
+                          color: secondary,
+                          fontSize: 20.sp,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1, 0),
+                                  end: const Offset(0, 0),
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                            child: Text(
+                              onBoardingTitle[currentTextIndex],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 24.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              key: ValueKey<int>(currentTextIndex),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2.h,
+                          ),
+                          //animated switcher
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 500),
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            },
+                            child: Text(
+                              onBoardingSubTitle[currentTextIndex],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: gray2,
+                              ),
+                              key: ValueKey<int>(currentTextIndex),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: OnboardingArrowWithCircle(
+                        progress: progress,
+                        onTap: () {
+                          setState(() {
+                            if (currentTextIndex < onBoardingTitle.length - 1) {
+                              progress += 0.33;
+                              currentTextIndex++;
+                            } else {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Login(),
+                                ),
+                              );
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          Visibility(
+            visible: load,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: tertiary,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
