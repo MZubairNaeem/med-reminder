@@ -11,6 +11,7 @@ class AppointmentListTile extends StatelessWidget {
     required this.reason,
     required this.hospitalName,
     required this.deleteFunction,
+    required this.editFunction,
     required this.taskCompleted,
     required this.time,
     required this.note,
@@ -29,6 +30,7 @@ class AppointmentListTile extends StatelessWidget {
   final int index;
   Function(bool?)? onChanged;
   Function(BuildContext)? deleteFunction;
+  Function(BuildContext)? editFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +42,20 @@ class AppointmentListTile extends StatelessWidget {
       child: Slidable(
         endActionPane: ActionPane(motion: const StretchMotion(), children: [
           SlidableAction(
-            label: 'Remove',
+            label: 'Edit',
             backgroundColor: secondary,
+            onPressed: editFunction,
+            icon: Icons.edit_rounded,
+            foregroundColor: white,
+            borderRadius: BorderRadius.circular(12.sp),
+          ),
+          SlidableAction(
+            label: 'Remove',
+            backgroundColor: Color.fromARGB(255, 221, 44, 31),
             onPressed: deleteFunction,
             icon: Icons.delete_forever_rounded,
             foregroundColor: white,
-            borderRadius: BorderRadius.circular(6),
+            borderRadius: BorderRadius.circular(12.sp),
           )
         ]),
         child: Center(

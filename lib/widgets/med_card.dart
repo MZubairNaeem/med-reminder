@@ -10,6 +10,7 @@ class MedicineCard extends StatelessWidget {
   final String medicineType;
   final String medicineInterval;
   Function(BuildContext)? deleteFunction;
+  Function(BuildContext)? editFunction;
 
   MedicineCard({
     super.key,
@@ -18,6 +19,7 @@ class MedicineCard extends StatelessWidget {
     required this.medicineType,
     required this.medicineInterval,
     required this.deleteFunction,
+    required this.editFunction,
   });
 
   @override
@@ -27,13 +29,21 @@ class MedicineCard extends StatelessWidget {
       child: Slidable(
         endActionPane: ActionPane(motion: const StretchMotion(), children: [
           SlidableAction(
+            label: 'Edit',
+            backgroundColor: primary,
+            onPressed: editFunction,
+            icon: Icons.edit_rounded,
+            foregroundColor: white,
+            borderRadius: BorderRadius.circular(12.sp),
+          ),
+          SlidableAction(
             label: 'Remove',
-            backgroundColor: secondary,
+            backgroundColor: Color.fromARGB(255, 221, 44, 31),
             onPressed: deleteFunction,
             icon: Icons.delete_forever_rounded,
             foregroundColor: white,
-            borderRadius: BorderRadius.circular(10.sp),
-          )
+            borderRadius: BorderRadius.circular(12.sp),
+          ),
         ]),
         child: Container(
           padding: EdgeInsets.all(16.sp),

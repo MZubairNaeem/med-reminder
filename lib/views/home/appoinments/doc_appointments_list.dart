@@ -5,6 +5,7 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
 import 'package:medreminder/views/home/appoinments/doc_appointments_add.dart';
+import 'package:medreminder/views/home/appoinments/edit_appointment.dart';
 import 'package:medreminder/widgets/appointment_list_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -76,7 +77,7 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
                               String formattedTime =
                                   DateFormat.jm().format(time);
                               String formattedDate =
-                                 DateFormat('MMMM dd, yyyy').format(time);
+                                  DateFormat('MMMM dd, yyyy').format(time);
                               return AppointmentListTile(
                                 index: index + 1,
                                 reason: appoinments[index].visitReason!,
@@ -98,6 +99,25 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
                                   Appointments().deleteAppointments(
                                     context,
                                     appoinments[index].id!,
+                                  );
+                                },
+                                editFunction: (context) {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => AppoinmentsEdit(
+                                        index: index,
+                                        reason: appoinments[index].visitReason!,
+                                        doctorName:
+                                            appoinments[index].doctorName!,
+                                        hospitalName:
+                                            appoinments[index].hospitalName!,
+                                        taskCompleted:
+                                            appoinments[index].status!,
+                                        time: formattedTime,
+                                        date: formattedDate,
+                                        note: appoinments[index].note!,
+                                      ),
+                                    ),
                                   );
                                 },
                               );

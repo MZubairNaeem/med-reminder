@@ -6,33 +6,61 @@ import 'package:medreminder/controllers/services/doc_appointment_controller.dart
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
-class AppoinmentsAdd extends StatefulWidget {
-  const AppoinmentsAdd({super.key});
+class AppoinmentsEdit extends StatefulWidget {
+  final int index;
+  final String reason;
+  final String doctorName;
+  final String hospitalName;
+  final bool taskCompleted;
+  final String time;
+  final String date;
+  final String note;
+// Updated to accept parameters
 
+  AppoinmentsEdit({
+    required this.index,
+    required this.reason,
+    required this.doctorName,
+    required this.hospitalName,
+    required this.taskCompleted,
+    required this.time,
+    required this.date,
+    required this.note,
+    // Updated to accept parameters
+  });
   @override
-  State<AppoinmentsAdd> createState() => _AppoinmentsAddState();
+  _AppoinmentsEdit createState() => _AppoinmentsEdit();
 }
 
-class _AppoinmentsAddState extends State<AppoinmentsAdd> {
+class _AppoinmentsEdit extends State<AppoinmentsEdit> {
   final doctorName = TextEditingController();
-
   final hospitalName = TextEditingController();
-
   final note = TextEditingController();
-
   final visitReason = TextEditingController();
   Timestamp? _selectedDateTime;
-  //form key
   final _formKey = GlobalKey<FormState>();
-
   bool load = false;
   bool val = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set the initial values of text fields using the widget's parameters
+    visitReason.text = widget.reason;
+    doctorName.text = widget.doctorName;
+    hospitalName.text = widget.hospitalName;
+    note.text = widget.note;
+
+    // You may also set the initial value of _selectedDateTime if needed.
+    _selectedDateTime = Timestamp.fromDate(DateTime.parse(widget.date));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Doctor Appointments'),
+        title: const Text(' Edit Doctor Appointments'),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -196,46 +224,7 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                 width: 100.w,
                 height: 12.w,
                 child: ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      load = true;
-                    });
-                    if (!_formKey.currentState!.validate()) {
-                      setState(() {
-                        load = false;
-                      });
-                      return;
-                    }
-                    if (_selectedDateTime == null) {
-                      setState(() {
-                        val = true;
-                        load = false;
-                      });
-                      return;
-                    }
-
-                    await Appointments().addAppointments(
-                      context,
-                      doctorName.text,
-                      hospitalName.text,
-                      _selectedDateTime,
-                      note.text,
-                      visitReason.text,
-                      // Timestamp.now(),
-                    );
-                    //unfocus keyboard
-                    // ignore: use_build_context_synchronously
-                    FocusScope.of(context).unfocus();
-                    doctorName.clear();
-                    hospitalName.clear();
-                    note.clear();
-                    visitReason.clear();
-                    _selectedDateTime = null;
-
-                    setState(() {
-                      load = false;
-                    });
-                  },
+                  onPressed: () async {},
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -246,7 +235,7 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                           child: CircularProgressIndicator(
                           color: white,
                         ))
-                      : const Text('Update'),
+                      : const Text('Continue'),
                 ),
               ),
             ),
