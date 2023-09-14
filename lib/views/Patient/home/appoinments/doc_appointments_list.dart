@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
-import 'package:medreminder/views/home/appoinments/doc_appointments_add.dart';
-import 'package:medreminder/views/home/appoinments/edit_appointment.dart';
+import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_add.dart';
+import 'package:medreminder/views/Patient/home/appoinments/edit_appointment.dart';
 import 'package:medreminder/widgets/appointment_list_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

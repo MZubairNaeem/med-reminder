@@ -6,9 +6,9 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
-import 'package:medreminder/views/home/appoinments/doc_appointments_list.dart';
-import 'package:medreminder/views/home/medicineSchedules/medicine_list.dart';
-import 'package:medreminder/views/home/notes/notes_list.dart';
+import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
+import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
 import 'package:medreminder/widgets/card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

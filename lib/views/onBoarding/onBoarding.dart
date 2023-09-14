@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/on_boarding.dart';
-import 'package:medreminder/views/auth/login.dart';
+import 'package:medreminder/views/Patient/auth/login.dart';
 import 'package:medreminder/widgets/progress_circle.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

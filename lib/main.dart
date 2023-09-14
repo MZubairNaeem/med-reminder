@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:medreminder/firebase_options.dart';
-import 'package:medreminder/views/home/home.dart';
+import 'package:medreminder/views/Patient/home/home.dart';
 import 'package:medreminder/views/onBoarding/onBoarding.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';

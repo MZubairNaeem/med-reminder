@@ -8,7 +8,7 @@ import 'package:medreminder/views/Patient/auth/number_verification.dart';
 import 'package:medreminder/views/Patient/home/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Auth {
+class Auth_ {
   static sendCode(BuildContext context, String phoneNo) async {
     try {
       //remove recaptcha verifier
@@ -28,7 +28,7 @@ class Auth {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => NumberVerification(
+              builder: (context) => OTPVerification(
                   verificationId: verificationId.toString(),
                   phoneNo: phoneNo.toString(),
                   token: resendToken!),
@@ -83,8 +83,8 @@ class Auth {
         await SharedPreferences.getInstance();
     sharedPreferences.setString('uid', uid);
     // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Home()));
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => const Caretaker_Home()));
     Get.snackbar(
       'Success',
       'Logged in successfully',

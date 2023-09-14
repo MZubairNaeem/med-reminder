@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
-import 'package:medreminder/views/home/medicineSchedules/Edit_Medicine.dart';
-import 'package:medreminder/views/home/medicineSchedules/medicine_schedule_add.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/Edit_Medicine.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
 import 'package:medreminder/widgets/med_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
