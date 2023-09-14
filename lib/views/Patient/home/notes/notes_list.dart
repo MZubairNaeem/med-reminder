@@ -50,7 +50,7 @@ class _NotesListState extends State<NotesList> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(notesProvider);
-                // ref.refresh(notesProvider);
+                ref.refresh(notesProvider);
                 return userResult.when(
                     data: (notes) {
                       return notes.isEmpty
