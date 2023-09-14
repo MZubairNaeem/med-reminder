@@ -35,24 +35,33 @@ class _CareTakerLogin extends State<CareTakerLogin> {
       child: Scaffold(
         body: Form(
           key: formKey,
-          child: Stack(
-            children: [
-              Container(
-                height: double.infinity,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue, primary],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+          child: Container(
+            height: double.infinity,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue, primary],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 100.w,
+                  decoration: BoxDecoration(
+                    color: secondary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.w),
+                      bottomRight: Radius.circular(10.w),
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 45.sp),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: 13.h,
+                      ),
                       Text(
                         appName,
                         style: TextStyle(
@@ -62,7 +71,7 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                         ),
                       ),
                       SizedBox(
-                        height: 1.h,
+                        height: 2.h,
                       ),
                       SizedBox(
                         width: 85.w,
@@ -75,121 +84,115 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
                     ],
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(18.sp),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 90.w,
-                      child: Text(
-                        smsOTP,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: white,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 4.h,
-                    ),
-                    SizedBox(
-                      width: 90.w,
-                      child: InternationalPhoneNumberInput(
-                        inputDecoration: InputDecoration(
-                          hintText: 'Phone number', // Set your hint text here
-                          hintStyle: TextStyle(
-                              color:
-                                  Colors.white), // Set hint text color to white
-
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color:
-                                    Colors.white), // Set border color to white
-                          ),
-                        ),
-                        textStyle: TextStyle(
-                          color: white,
-                        ),
-                        cursorColor: white,
-                        onInputChanged: (PhoneNumber number) {
-                          phoneNo = number.phoneNumber;
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your number';
-                          }
-                          return null;
-                        },
-                        selectorConfig: const SelectorConfig(
-                          selectorType: PhoneInputSelectorType.DROPDOWN,
-                        ),
-                        ignoreBlank: true,
-                        autoValidateMode: AutovalidateMode.disabled,
-                        selectorTextStyle:
-                            TextStyle(color: white, fontSize: 17.sp),
-                        initialValue: number,
-                        textFieldController: controller,
-                        formatInput: true,
-                        focusNode: focusNode,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
-                        inputBorder: const OutlineInputBorder(),
-                        onSaved: (PhoneNumber number) {
-                          print('On Saved: $number');
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    SizedBox(
-                      width: 90.w,
-                      height: 6.h,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            focusNode.unfocus();
-                            setState(() {
-                              loading = true;
-                            });
-                            await Auth_.sendCode(context, phoneNo.toString());
-                            setState(() {
-                              loading = false;
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          primary: const Color.fromARGB(
-                              255, 25, 47, 64), // Change button color
-                        ),
-                        child: loading
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                color: white,
-                              ))
-                            : Text(
-                                'Continue',
-                                style: TextStyle(
-                                  fontSize: 17.sp,
-                                  color: white,
-                                ),
-                              ),
-                      ),
-                    ),
-                  ],
+                SizedBox(
+                  height: 7.h,
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: 90.w,
+                  child: Text(
+                    smsOTP,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      color: white,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                SizedBox(
+                  width: 90.w,
+                  child: InternationalPhoneNumberInput(
+                    inputDecoration: InputDecoration(
+                      hintText: 'Phone number', // Set your hint text here
+                      hintStyle: TextStyle(
+                          color: Colors.white), // Set hint text color to white
+
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white), // Set border color to white
+                      ),
+                    ),
+                    textStyle: TextStyle(
+                      color: white,
+                    ),
+                    cursorColor: white,
+                    onInputChanged: (PhoneNumber number) {
+                      phoneNo = number.phoneNumber;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your number';
+                      }
+                      return null;
+                    },
+                    selectorConfig: const SelectorConfig(
+                      selectorType: PhoneInputSelectorType.DROPDOWN,
+                    ),
+                    ignoreBlank: true,
+                    autoValidateMode: AutovalidateMode.disabled,
+                    selectorTextStyle: TextStyle(color: white, fontSize: 17.sp),
+                    initialValue: number,
+                    textFieldController: controller,
+                    formatInput: true,
+                    focusNode: focusNode,
+                    keyboardType: const TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    inputBorder: const OutlineInputBorder(),
+                    onSaved: (PhoneNumber number) {
+                      print('On Saved: $number');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                  width: 90.w,
+                  height: 6.h,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (formKey.currentState!.validate()) {
+                        focusNode.unfocus();
+                        setState(() {
+                          loading = true;
+                        });
+                        await Auth_.sendCode(context, phoneNo.toString());
+                        setState(() {
+                          loading = false;
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      primary: const Color.fromARGB(
+                          255, 25, 47, 64), // Change button color
+                    ),
+                    child: loading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                            color: white,
+                          ))
+                        : Text(
+                            'Continue',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: white,
+                            ),
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -211,6 +211,7 @@ class AppointmentListTile extends StatelessWidget {
                           ),
                           Expanded(
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   note,
