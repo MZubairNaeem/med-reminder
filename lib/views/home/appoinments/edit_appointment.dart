@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
-import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
@@ -15,7 +14,9 @@ class AppoinmentsEdit extends StatefulWidget {
   final String time;
   final String date;
   final String note;
-// Updated to accept parameters
+  final Function(String, String, String, String, bool, String, String, String)
+      onUpdate;
+  final Timestamp? initialSelectedDateTime; // Add this parameter
 
   AppoinmentsEdit({
     required this.index,
@@ -26,7 +27,8 @@ class AppoinmentsEdit extends StatefulWidget {
     required this.time,
     required this.date,
     required this.note,
-    // Updated to accept parameters
+    required this.onUpdate,
+    required this.initialSelectedDateTime, // Initialize the _selectedDateTime
   });
   @override
   _AppoinmentsEdit createState() => _AppoinmentsEdit();
@@ -42,7 +44,6 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
   bool load = false;
   bool val = false;
 
-  @override
   void initState() {
     super.initState();
 
@@ -52,8 +53,8 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
     hospitalName.text = widget.hospitalName;
     note.text = widget.note;
 
-    // You may also set the initial value of _selectedDateTime if needed.
-    _selectedDateTime = Timestamp.fromDate(DateTime.parse(widget.date));
+    // Initialize _selectedDateTime with the provided initial value
+    _selectedDateTime = widget.initialSelectedDateTime;
   }
 
   @override
@@ -224,7 +225,26 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                 width: 100.w,
                 height: 12.w,
                 child: ElevatedButton(
-                  onPressed: () async {},
+                  onPressed: () async {
+                    String formattedDateTime = _selectedDateTime != null
+                        ? DateFormat('yyyy-MM-dd HH:mm')
+                            .format(_selectedDateTime!.toDate())
+                        : "";
+
+                    widget.onUpdate(
+                      visitReason.text,
+                      doctorName.text,
+                      hospitalName.text,
+                      note.text,
+                      val,
+                      formattedDateTime, // This should be a Timestamp?
+                      widget.date, // Keep the original date as it is
+                      widget.time, // Keep the original time as it is
+                    );
+
+                    // Close the edit screen
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -235,7 +255,7 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                           child: CircularProgressIndicator(
                           color: white,
                         ))
-                      : const Text('Continue'),
+                      : const Text('Update'),
                 ),
               ),
             ),

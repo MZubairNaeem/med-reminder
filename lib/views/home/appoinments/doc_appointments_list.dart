@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -105,18 +106,48 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => AppoinmentsEdit(
-                                        index: index,
-                                        reason: appoinments[index].visitReason!,
-                                        doctorName:
-                                            appoinments[index].doctorName!,
-                                        hospitalName:
-                                            appoinments[index].hospitalName!,
-                                        taskCompleted:
-                                            appoinments[index].status!,
-                                        time: formattedTime,
-                                        date: formattedDate,
-                                        note: appoinments[index].note!,
-                                      ),
+                                          index: index,
+                                          reason:
+                                              appoinments[index].visitReason!,
+                                          doctorName:
+                                              appoinments[index].doctorName!,
+                                          hospitalName:
+                                              appoinments[index].hospitalName!,
+                                          taskCompleted:
+                                              appoinments[index].status!,
+                                          time: formattedTime,
+                                          date: formattedDate,
+                                          note: appoinments[index].note!,
+                                          initialSelectedDateTime:
+                                              appoinments[index]
+                                                  .appointmentDateTime,
+                                          onUpdate: (updatedReason,
+                                              updatedDoctorName,
+                                              updatedHospitalName,
+                                              updatedNote,
+                                              updatedVal,
+                                              updatedDateTime,
+                                              updatedDate,
+                                              updatedTime) {
+                                            // Update the data in your ListView.builder
+                                            setState(() {
+                                              appoinments[index].visitReason =
+                                                  updatedReason;
+                                              appoinments[index].doctorName =
+                                                  updatedDoctorName;
+                                              appoinments[index].hospitalName =
+                                                  updatedHospitalName;
+                                              appoinments[index].note =
+                                                  updatedNote;
+                                              appoinments[index].status =
+                                                  updatedVal;
+                                              appoinments[index]
+                                                      .appointmentDateTime =
+                                                  Timestamp.fromDate(
+                                                      DateTime.parse(
+                                                          updatedDateTime));
+                                            });
+                                          }),
                                     ),
                                   );
                                 },
