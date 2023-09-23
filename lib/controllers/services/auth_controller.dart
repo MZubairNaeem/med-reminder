@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:medreminder/views/Caretaker/auth/OTP.dart';
-import 'package:medreminder/views/Caretaker/home/Home..dart';
 import 'package:medreminder/views/Patient/auth/number_verification.dart';
 import 'package:medreminder/views/Patient/home/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,10 +76,12 @@ class Auth {
     firestore.collection('users').doc(uid).set({
       'uid': uid,
       'phone': phoneNo,
+      'userType': 'user',
     });
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setString('uid', uid);
+    sharedPreferences.setString('userType', 'patient');
     // ignore: use_build_context_synchronously
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const Home()));

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:medreminder/firebase_options.dart';
+import 'package:medreminder/views/Caretaker/home/Home..dart';
 import 'package:medreminder/views/Patient/home/home.dart';
 import 'package:medreminder/views/onBoarding/onBoarding.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -27,13 +28,17 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String? uuid;
+  String? userType;
   Future getValidationKey() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     var uid = sharedPreferences.getString('uid');
+    var type = sharedPreferences.getString('userType');
     setState(() {
       print(uid);
+      print(type);
       uuid = uid;
+      userType = type;
     });
   }
 
@@ -74,7 +79,11 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
             ),
-            home: uuid == null ? const OBScreen1() : const Home(),
+            home: uuid == null
+                ? const OBScreen1()
+                : (userType == 'patient'
+                    ? const Home()
+                    : const Caretaker_Home()),
           ),
         );
       },
