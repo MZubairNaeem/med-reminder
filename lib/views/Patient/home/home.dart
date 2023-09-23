@@ -8,6 +8,7 @@ import 'package:medreminder/controllers/providers/doc_appointment_provider.dart'
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/providers/relative_list_provider.dart';
+import 'package:medreminder/controllers/services/pharmacies.dart';
 import 'package:medreminder/views/Patient/auth/login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
@@ -752,7 +753,7 @@ class _HomeState extends State<Home> {
                         ),
                         CustomCard(
                           text: 'Pharmacy Nearby',
-                          onTap: () => print('tapped'),
+                          onTap: () => PharmaciesController().openGoogleMaps(),
                           height: 20.h,
                           width: 43.w,
                         ),
