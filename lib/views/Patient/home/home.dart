@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,6 @@ import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.d
 import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
 import 'package:medreminder/views/Patient/home/notifications/notifications.dart';
 import 'package:medreminder/views/Patient/home/notifyRelatives/relative_list.dart';
-import 'package:medreminder/widgets/card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -111,11 +109,33 @@ class _HomeState extends State<Home> {
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
-                child: CustomCard(
-                  text: uid,
-                  onTap: () {},
-                  height: 30.h,
-                  width: double.infinity,
+                child: Padding(
+                  padding: EdgeInsets.all(10.sp),
+                  child: Container(
+                    width: 80.w,
+                    height: 30.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          5.w), // Adjust the radius as needed
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: const Offset(
+                              0, 3), // Adjust the shadow position as needed
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(
+                          16.0), // Same radius as the BoxDecoration
+                      child: Image.asset(
+                        'lib/constants/assets/home.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               SliverToBoxAdapter(
@@ -151,7 +171,7 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
                                           "Notes",
@@ -160,11 +180,10 @@ class _HomeState extends State<Home> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.square_list_fill,
-                                          size: 16.sp,
-                                          color: tertiary,
-                                        )
+                                        Image.asset(
+                                          'lib/constants/assets/notes.png',
+                                          width: 18.sp,
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -359,7 +378,7 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Expanded(
                                           child: Text(
@@ -371,11 +390,10 @@ class _HomeState extends State<Home> {
                                             softWrap: true,
                                           ),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.bandage,
-                                          size: 16.sp,
-                                          color: tertiary,
-                                        )
+                                        Image.asset(
+                                          'lib/constants/assets/med.png',
+                                          width: 18.sp,
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -573,7 +591,7 @@ class _HomeState extends State<Home> {
                                   children: [
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
                                           "Appoinments",
@@ -582,11 +600,10 @@ class _HomeState extends State<Home> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.calendar,
-                                          size: 16.sp,
-                                          color: tertiary,
-                                        )
+                                        Image.asset(
+                                          'lib/constants/assets/calender.png',
+                                          width: 18.sp,
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -751,12 +768,44 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        CustomCard(
-                          text: 'Pharmacy Nearby',
+                        GestureDetector(
                           onTap: () => PharmaciesController().openGoogleMaps(),
-                          height: 20.h,
-                          width: 43.w,
+                          child: Card(
+                            margin: EdgeInsets.all(3.w),
+                            elevation: 2,
+                            shadowColor: secondary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.w),
+                            ),
+                            child: SizedBox(
+                              height: 20.h,
+                              width: 43.w,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                    'lib/constants/assets/map.png',
+                                    width: 20.w,
+                                  ),
+                                  Text(
+                                    "Pharmacy Nearby",
+                                    style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
+                        // CustomCard(
+                        //   text: 'Pharmacy Nearby',
+                        //   onTap: () => PharmaciesController().openGoogleMaps(),
+                        //   height: 20.h,
+                        //   width: 43.w,
+                        // ),
                       ],
                     ),
                     Row(
@@ -787,6 +836,10 @@ class _HomeState extends State<Home> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
+                                    Image.asset(
+                                      'lib/constants/assets/relative.png',
+                                      width: 20.w,
+                                    ),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
@@ -798,11 +851,10 @@ class _HomeState extends State<Home> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Icon(
-                                          CupertinoIcons.person_2_fill,
-                                          size: 18.sp,
-                                          color: tertiary,
-                                        )
+                                        Image.asset(
+                                          'lib/constants/assets/realtive-icon.png',
+                                          width: 18.sp,
+                                        ),
                                       ],
                                     ),
                                     Row(
@@ -861,11 +913,52 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                         ),
-                        CustomCard(
-                          text: 'Report',
-                          onTap: () => print('tapped'),
-                          height: 20.h,
-                          width: 43.w,
+                        Card(
+                          margin: EdgeInsets.all(3.w),
+                          elevation: 2,
+                          shadowColor: secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.w),
+                          ),
+                          child: SizedBox(
+                            height: 20.h,
+                            width: 43.w,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5.w,
+                              ),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        16.0), // Adjust the radius as needed
+                                    child: Image.asset(
+                                      'lib/constants/assets/report.jpg',
+                                      width: 20.w,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Report",
+                                        style: TextStyle(
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Image.asset(
+                                        'lib/constants/assets/medlist.png',
+                                        width: 18.sp,
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
