@@ -161,11 +161,14 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
               },
             ),
             ListView.builder(
-              itemCount: 3,
+              itemCount: 1,
               itemBuilder: (context, index) {
-                return const ListTile(
-                  title: Text('notification.title'),
-                  subtitle: Text('notification.content'),
+                return const Card(
+                  elevation: 5,
+                  child: ListTile(
+                    title: Text('+92 318 00 72 413'),
+                    subtitle: Text('Missed 2 doses of medicine'),
+                  ),
                 );
               },
             ),

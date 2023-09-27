@@ -16,8 +16,17 @@ class _HomeNotificationState extends State<HomeNotification> {
         title: const Text('Notification'),
         backgroundColor: secondary,
       ),
-      body: const Center(
-        child: Text('Notification'),
+      body: ListView.builder(
+        itemCount: 1,
+        itemBuilder: (context, index) {
+          return const Card(
+            elevation: 5,
+            child: ListTile(
+              title: Text('Missed Dose'),
+              subtitle: Text('Missed 2 doses of Panadol'),
+            ),
+          );
+        },
       ),
     );
   }
