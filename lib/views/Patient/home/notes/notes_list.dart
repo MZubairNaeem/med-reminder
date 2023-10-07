@@ -49,88 +49,113 @@ class _NotesListState extends State<NotesList> {
         children: [
           Visibility(
             visible: !load,
-            child: Consumer(
-              builder: (context, ref, _) {
-                final userResult = ref.watch(notesProvider);
-                // ref.refresh(notesProvider);
-                return userResult.when(
-                    data: (notes) {
-                      return notes.isEmpty
-                          ? Center(
-                              child: Text(
-                                '-- You have no notes yet --',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 4.0,
+                right: 4.0,
+              ),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  '<== Swipe left for more options',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !load,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 12.0,
+              ),
+              child: Consumer(
+                builder: (context, ref, _) {
+                  final userResult = ref.watch(notesProvider);
+                  // ref.refresh(notesProvider);
+                  return userResult.when(
+                      data: (notes) {
+                        return notes.isEmpty
+                            ? Center(
+                                child: Text(
+                                  '-- You have no notes yet --',
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
                                 ),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: notes.length,
-                              itemBuilder: (context, index) {
-                                DateTime time =
-                                    notes[index].timestamp!.toDate();
-                                DateTime now = DateTime.now();
-                                String formattedTime =
-                                    DateFormat.jm().format(time);
-                                String formattedDate =
-                                    DateFormat.yMd().format(time);
-                                return ToDoList(
-                                  taskName: notes[index].title!,
-                                  description: notes[index].description!,
-                                  taskCompleted: notes[index].status!,
-                                  time: (time.year == now.year &&
-                                          time.month == now.month &&
-                                          time.day == now.day)
-                                      ? formattedTime
-                                      : formattedDate,
-                                  onChanged: (value) async {
-                                    //change status of task to completed
-                                    await Notes().changeStatus(
-                                      context,
-                                      notes[index].id!,
-                                      notes[index].status! ? false : true,
-                                    );
-                                    ref.refresh(notesProvider);
-                                  },
-                                  deleteFunction: (context) async {
-                                    await Notes().deleteNote(
-                                      context,
-                                      notes[index].id!,
-                                    );
-                                    ref.refresh(notesProvider);
-                                  },
-                                  editFunction: (context) {
-                                    // Notes().updateNote(
-                                    //   context,
-                                    //   notes[index].id!,
-                                    //   title.text,
-                                    //   description.text,
-                                    // );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => NotesEdit(
-                                          id: notes[index].id!,
-                                          title: notes[index].title!,
-                                          description:
-                                              notes[index].description!,
+                              )
+                            : ListView.builder(
+                                itemCount: notes.length,
+                                itemBuilder: (context, index) {
+                                  DateTime time =
+                                      notes[index].timestamp!.toDate();
+                                  DateTime now = DateTime.now();
+                                  String formattedTime =
+                                      DateFormat.jm().format(time);
+                                  String formattedDate =
+                                      DateFormat.yMd().format(time);
+                                  return ToDoList(
+                                    taskName: notes[index].title!,
+                                    description: notes[index].description!,
+                                    taskCompleted: notes[index].status!,
+                                    time: (time.year == now.year &&
+                                            time.month == now.month &&
+                                            time.day == now.day)
+                                        ? formattedTime
+                                        : formattedDate,
+                                    onChanged: (value) async {
+                                      //change status of task to completed
+                                      await Notes().changeStatus(
+                                        context,
+                                        notes[index].id!,
+                                        notes[index].status! ? false : true,
+                                      );
+                                      ref.refresh(notesProvider);
+                                    },
+                                    deleteFunction: (context) async {
+                                      await Notes().deleteNote(
+                                        context,
+                                        notes[index].id!,
+                                      );
+                                      ref.refresh(notesProvider);
+                                    },
+                                    editFunction: (context) {
+                                      // Notes().updateNote(
+                                      //   context,
+                                      //   notes[index].id!,
+                                      //   title.text,
+                                      //   description.text,
+                                      // );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NotesEdit(
+                                            id: notes[index].id!,
+                                            title: notes[index].title!,
+                                            description:
+                                                notes[index].description!,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                    ref.refresh(notesProvider);
-                                  },
-                                );
-                              },
-                            );
-                    },
-                    loading: () => const Text("..."),
-                    error: (error, stackTrace) {
-                      print('Error: $error');
-                      return Text('Error: $error');
-                    });
-              },
+                                      );
+                                      ref.refresh(notesProvider);
+                                    },
+                                  );
+                                },
+                              );
+                      },
+                      loading: () => const Text("..."),
+                      error: (error, stackTrace) {
+                        print('Error: $error');
+                        return Text('Error: $error');
+                      });
+                },
+              ),
             ),
           ),
           Visibility(

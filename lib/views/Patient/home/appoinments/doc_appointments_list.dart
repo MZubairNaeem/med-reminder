@@ -51,86 +51,113 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
         children: [
           Visibility(
             visible: !load,
-            child: Consumer(
-              builder: (context, ref, _) {
-                final userResult = ref.watch(appoinmentProvider);
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 4.0,
+                right: 4.0,
+              ),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Text(
+                  '<== Swipe left for more options',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !load,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 12.0,
+              ),
+              child: Consumer(
+                builder: (context, ref, _) {
+                  final userResult = ref.watch(appoinmentProvider);
 
-                return userResult.when(
-                  data: (appoinments) {
-                    return appoinments.isEmpty
-                        ? Center(
-                            child: Text(
-                              '-- You have no appointments yet --',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
+                  return userResult.when(
+                    data: (appoinments) {
+                      return appoinments.isEmpty
+                          ? Center(
+                              child: Text(
+                                '-- You have no appointments yet --',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
                               ),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: appoinments.length,
-                            itemBuilder: (context, index) {
-                              DateTime time = appoinments[index]
-                                  .appointmentDateTime!
-                                  .toDate();
-                              String formattedTime =
-                                  DateFormat.jm().format(time);
-                              String formattedDate =
-                                  DateFormat('MMMM dd, yyyy').format(time);
-                              return AppointmentListTile(
-                                index: index + 1,
-                                reason: appoinments[index].visitReason!,
-                                doctorName: appoinments[index].doctorName!,
-                                hospitalName: appoinments[index].hospitalName!,
-                                taskCompleted: appoinments[index].status!,
-                                time: formattedTime,
-                                date: formattedDate,
-                                note: appoinments[index].note!,
-                                onChanged: (value) async {
-                                  //change status of task to completed
-                                  await Appointments().changeStatus(
-                                    context,
-                                    appoinments[index].id!,
-                                    appoinments[index].status! ? false : true,
-                                  );
-                                  ref.refresh(appoinmentProvider);
-                                },
-                                deleteFunction: (context) async {
-                                  await Appointments().deleteAppointments(
-                                    context,
-                                    appoinments[index].id!,
-                                  );
-                                  ref.refresh(appoinmentProvider);
-                                },
-                                editFunction: (context) {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => AppoinmentsEdit(
-                                        doctorName:
-                                            appoinments[index].doctorName!,
-                                        hospitalName:
-                                            appoinments[index].hospitalName!,
-                                        note: appoinments[index].note!,
-                                        visitReason:
-                                            appoinments[index].visitReason!,
-                                        appointmentDateTime: appoinments[index]
-                                            .appointmentDateTime!,
-                                        id: appoinments[index].id!,
-                                        status: appoinments[index].status!,
-                                        uid: appoinments[index].uid!,
+                            )
+                          : ListView.builder(
+                              itemCount: appoinments.length,
+                              itemBuilder: (context, index) {
+                                DateTime time = appoinments[index]
+                                    .appointmentDateTime!
+                                    .toDate();
+                                String formattedTime =
+                                    DateFormat.jm().format(time);
+                                String formattedDate =
+                                    DateFormat('MMMM dd, yyyy').format(time);
+                                return AppointmentListTile(
+                                  index: index + 1,
+                                  reason: appoinments[index].visitReason!,
+                                  doctorName: appoinments[index].doctorName!,
+                                  hospitalName:
+                                      appoinments[index].hospitalName!,
+                                  taskCompleted: appoinments[index].status!,
+                                  time: formattedTime,
+                                  date: formattedDate,
+                                  note: appoinments[index].note!,
+                                  onChanged: (value) async {
+                                    //change status of task to completed
+                                    await Appointments().changeStatus(
+                                      context,
+                                      appoinments[index].id!,
+                                      appoinments[index].status! ? false : true,
+                                    );
+                                    ref.refresh(appoinmentProvider);
+                                  },
+                                  deleteFunction: (context) async {
+                                    await Appointments().deleteAppointments(
+                                      context,
+                                      appoinments[index].id!,
+                                    );
+                                    ref.refresh(appoinmentProvider);
+                                  },
+                                  editFunction: (context) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => AppoinmentsEdit(
+                                          doctorName:
+                                              appoinments[index].doctorName!,
+                                          hospitalName:
+                                              appoinments[index].hospitalName!,
+                                          note: appoinments[index].note!,
+                                          visitReason:
+                                              appoinments[index].visitReason!,
+                                          appointmentDateTime:
+                                              appoinments[index]
+                                                  .appointmentDateTime!,
+                                          id: appoinments[index].id!,
+                                          status: appoinments[index].status!,
+                                          uid: appoinments[index].uid!,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                  ref.refresh(appoinmentProvider);
-                                },
-                              );
-                            });
-                  },
-                  loading: () => const Text("..."),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                );
-              },
+                                    );
+                                    ref.refresh(appoinmentProvider);
+                                  },
+                                );
+                              });
+                    },
+                    loading: () => const Text("..."),
+                    error: (error, stackTrace) => Text('Error: $error'),
+                  );
+                },
+              ),
             ),
           ),
           Visibility(

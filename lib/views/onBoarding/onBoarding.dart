@@ -13,15 +13,15 @@ class OBScreen1 extends StatefulWidget {
 }
 
 class _OBScreen1State extends State<OBScreen1> {
-  bool load = true;
+  bool load = false;
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 500), () {
-      setState(() {
-        load = false;
-      });
-    });
+    // Future.delayed(const Duration(milliseconds: 500), () {
+    //   setState(() {
+    //     load = false;
+    //   });
+    // });
     super.initState();
   }
 
