@@ -8,7 +8,14 @@ class NotesModel {
   String? id;
   String? uid;
 
-  NotesModel({this.title, this.description, this.timestamp, this.id, this.uid , this.status});
+  NotesModel({
+    this.title,
+    this.description,
+    this.timestamp,
+    this.id,
+    this.uid,
+    this.status,
+  });
 
   NotesModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];

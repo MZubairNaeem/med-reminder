@@ -27,6 +27,11 @@ class _OBScreen1State extends State<OBScreen1> {
 
   int currentTextIndex = 0;
   double progress = 0.33;
+  List<String> onBoardingImages = [
+    ob1,
+    ob2,
+    ob3,
+  ];
   List<String> onBoardingTitle = [
     onBoardingTitle1,
     onBoardingTitle2,
@@ -76,6 +81,23 @@ class _OBScreen1State extends State<OBScreen1> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 300),
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1, 0),
+                                  end: const Offset(0, 0),
+                                ).animate(animation),
+                                child: child,
+                              );
+                            },
+                            child: Image.asset(
+                              onBoardingImages[currentTextIndex],
+                              key: ValueKey<int>(currentTextIndex),
+                            ),
+                          ),
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             transitionBuilder:

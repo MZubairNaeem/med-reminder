@@ -4,19 +4,18 @@ import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/notes_controller.dart';
-import 'package:medreminder/views/Patient/home/notes/notes_add.dart';
 import 'package:medreminder/widgets/todolist_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
-class NotesList extends StatefulWidget {
-  const NotesList({super.key});
+class NotesEdit extends StatefulWidget {
+  const NotesEdit({super.key});
 
   @override
-  State<NotesList> createState() => _NotesListState();
+  State<NotesEdit> createState() => _NotesEditState();
 }
 
-class _NotesListState extends State<NotesList> {
+class _NotesEditState extends State<NotesEdit> {
   final title = TextEditingController();
 
   final description = TextEditingController();
@@ -124,12 +123,7 @@ class _NotesListState extends State<NotesList> {
         child: FloatingActionButton.extended(
           backgroundColor: secondary,
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const NotesAdd(),
-              ),
-            );
+            _showAddNoteDialog(context);
           },
           label: const Text('Add Note'),
           icon: const Icon(Icons.add),

@@ -39,12 +39,12 @@ class _CareTakerLogin extends State<CareTakerLogin> {
             height: double.infinity,
             width: double.infinity,
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.blue, primary],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+                // gradient: LinearGradient(
+                //   colors: [Colors.blue, primary],
+                //   begin: Alignment.topCenter,
+                //   end: Alignment.bottomCenter,
+                // ),
+                ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -100,7 +100,6 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 17.sp,
-                      color: white,
                     ),
                   ),
                 ),
@@ -111,9 +110,7 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                   width: 90.w,
                   child: InternationalPhoneNumberInput(
                     inputDecoration: InputDecoration(
-                      hintText: 'Phone number', // Set your hint text here
-                      hintStyle: TextStyle(
-                          color: Colors.white), // Set hint text color to white
+                      hintText: 'Phone number', // Set hint text color to white
 
                       border: OutlineInputBorder(
                         borderSide: BorderSide(
@@ -138,7 +135,6 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                     ),
                     ignoreBlank: true,
                     autoValidateMode: AutovalidateMode.disabled,
-                    selectorTextStyle: TextStyle(color: white, fontSize: 17.sp),
                     initialValue: number,
                     textFieldController: controller,
                     formatInput: true,
@@ -174,8 +170,6 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      primary: const Color.fromARGB(
-                          255, 25, 47, 64), // Change button color
                     ),
                     child: loading
                         ? const Center(

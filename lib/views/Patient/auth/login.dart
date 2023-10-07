@@ -133,24 +133,35 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 15.h,
                     ),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          // Navigate to CareTakerLogin() when the button is pressed
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CareTakerLogin()),
-                          );
-                        },
-                        child: Text(
-                          'Login as Caretaker',
+                    Column(
+                      children: [
+                        //or text
+                        Text(
+                          'or',
                           style: TextStyle(
-                            fontSize: 18.sp,
-                            color: primary,
+                            fontSize: 16.sp,
+                            color: gray,
                           ),
                         ),
-                      ),
+                        SizedBox(
+                          height: 2.h,
+                        ),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Navigate to CareTakerLogin() when the button is pressed
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CareTakerLogin()),
+                              );
+                            },
+                            child: const Text(
+                              'Login as Caretaker',
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -183,8 +194,9 @@ class _LoginState extends State<Login> {
                       child: loading
                           ? const Center(
                               child: CircularProgressIndicator(
-                              color: white,
-                            ))
+                                color: white,
+                              ),
+                            )
                           : const Text('Continue'),
                     ),
                   ),
