@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
+import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -14,6 +16,7 @@ class AppoinmentsAdd extends StatefulWidget {
 }
 
 class _AppoinmentsAddState extends State<AppoinmentsAdd> {
+  dynamic refresh;
   final doctorName = TextEditingController();
 
   final hospitalName = TextEditingController();
@@ -105,7 +108,7 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                   SizedBox(
                     height: 2.h,
                   ),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () async {
                       DateTime? selectedDateTime = await showDatePicker(
                         context: context,
@@ -135,26 +138,16 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                         }
                       }
                     },
-                    child: Column(
-                      children: [
-                        Text(
-                          'Tap to Select Appointment Date and Time',
-                          style: TextStyle(
-                              fontSize: 18.sp, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        val
-                            ? Text(
-                                'Please select date and time',
-                                style: TextStyle(
-                                    fontSize: 14.sp, color: Colors.red),
-                              )
-                            : Container(),
-                      ],
+                    child: const Text(
+                      'Tap to Select Appointment Date and Time',
                     ),
                   ),
+                  val
+                      ? Text(
+                          'Please select date and time',
+                          style: TextStyle(fontSize: 14.sp, color: Colors.red),
+                        )
+                      : Container(),
                   const SizedBox(
                     height: 10,
                   ),
@@ -235,6 +228,8 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     setState(() {
                       load = false;
                     });
+                    refresh;
+                    Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -246,7 +241,20 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                           child: CircularProgressIndicator(
                           color: white,
                         ))
-                      : const Text('Update'),
+                      : Consumer(
+                          builder: (context, ref, _) {
+                            final userResult = ref.watch(appoinmentProvider);
+                            refresh = ref.refresh(appoinmentProvider);
+                            return userResult.when(
+                              data: (notes) {
+                                return const Text('Update');
+                              },
+                              loading: () => const Text("..."),
+                              error: (error, stackTrace) =>
+                                  Text('Error: $error'),
+                            );
+                          },
+                        ),
                 ),
               ),
             ),

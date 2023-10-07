@@ -1,40 +1,42 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
+import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
+import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
 class AppoinmentsEdit extends StatefulWidget {
-  final int index;
-  final String reason;
-  final String doctorName;
-  final String hospitalName;
-  final bool taskCompleted;
-  final String time;
-  final String date;
-  final String note;
-  final Function(String, String, String, String, bool, String, String, String)
-      onUpdate;
-  final Timestamp? initialSelectedDateTime; // Add this parameter
+  String hospitalName;
+  String doctorName;
+  Timestamp appointmentDateTime;
+  String note;
+  String visitReason;
+  // String? prescription;
+  bool status;
+  String id;
+  String uid;
 
   AppoinmentsEdit({
-    required this.index,
-    required this.reason,
-    required this.doctorName,
+    super.key,
     required this.hospitalName,
-    required this.taskCompleted,
-    required this.time,
-    required this.date,
+    required this.doctorName,
+    required this.appointmentDateTime,
     required this.note,
-    required this.onUpdate,
-    required this.initialSelectedDateTime, // Initialize the _selectedDateTime
+    required this.visitReason,
+    // this.prescription,
+    required this.status,
+    required this.id,
+    required this.uid,
   });
   @override
   _AppoinmentsEdit createState() => _AppoinmentsEdit();
 }
 
 class _AppoinmentsEdit extends State<AppoinmentsEdit> {
+  dynamic refresh;
   final doctorName = TextEditingController();
   final hospitalName = TextEditingController();
   final note = TextEditingController();
@@ -44,17 +46,18 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
   bool load = false;
   bool val = false;
 
+  @override
   void initState() {
     super.initState();
 
     // Set the initial values of text fields using the widget's parameters
-    visitReason.text = widget.reason;
+    visitReason.text = widget.visitReason;
     doctorName.text = widget.doctorName;
     hospitalName.text = widget.hospitalName;
     note.text = widget.note;
 
     // Initialize _selectedDateTime with the provided initial value
-    _selectedDateTime = widget.initialSelectedDateTime;
+    _selectedDateTime = widget.appointmentDateTime;
   }
 
   @override
@@ -230,19 +233,29 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                         ? DateFormat('yyyy-MM-dd HH:mm')
                             .format(_selectedDateTime!.toDate())
                         : "";
-
-                    widget.onUpdate(
-                      visitReason.text,
+                    setState(() {
+                      load = true;
+                    });
+                    if (!_formKey.currentState!.validate()) {
+                      setState(() {
+                        load = false;
+                      });
+                      return;
+                    }
+                    await Appointments().updateAppointments(
+                      context,
+                      widget.id,
                       doctorName.text,
                       hospitalName.text,
+                      _selectedDateTime,
                       note.text,
-                      val,
-                      formattedDateTime, // This should be a Timestamp?
-                      widget.date, // Keep the original date as it is
-                      widget.time, // Keep the original time as it is
+                      visitReason.text,
+                      widget.status,
                     );
-
-                    // Close the edit screen
+                    setState(() {
+                      load = false;
+                    });
+                    await refresh;
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
@@ -255,7 +268,20 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                           child: CircularProgressIndicator(
                           color: white,
                         ))
-                      : const Text('Update'),
+                      : Consumer(
+                          builder: (context, ref, _) {
+                            final userResult = ref.watch(appoinmentProvider);
+                            refresh = ref.refresh(appoinmentProvider);
+                            return userResult.when(
+                              data: (notes) {
+                                return const Text('Update');
+                              },
+                              loading: () => const Text("..."),
+                              error: (error, stackTrace) =>
+                                  Text('Error: $error'),
+                            );
+                          },
+                        ),
                 ),
               ),
             ),

@@ -84,7 +84,7 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
             Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(patientlist);
-                ref.refresh(patientlist);
+                // ref.refresh(patientlist);
                 return userResult.when(
                     data: (list) {
                       return list.isEmpty

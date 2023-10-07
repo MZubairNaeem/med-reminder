@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBvWNGoRYSIYxo3VqhI6sJuqiCElDtjOBw',
-    appId: '1:475132050298:android:2254b9e22fdbf732dcb4c3',
-    messagingSenderId: '475132050298',
-    projectId: 'minder-alert',
-    storageBucket: 'minder-alert.appspot.com',
+    apiKey: 'AIzaSyD9MTdhS-pn00yeC0c3oiT5BcSHXQenCJg',
+    appId: '1:903062986955:android:ce662f38f5f9109831bb4e',
+    messagingSenderId: '903062986955',
+    projectId: 'mideralert',
+    storageBucket: 'mideralert.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCPnowrYBKGpDci610pbjyrkUBkqqieiRM',
-    appId: '1:475132050298:ios:7f6ec7d987579cbedcb4c3',
-    messagingSenderId: '475132050298',
-    projectId: 'minder-alert',
-    storageBucket: 'minder-alert.appspot.com',
-    iosClientId: '475132050298-0a6co0v9pftbmid6pv41ch8ov7614ih4.apps.googleusercontent.com',
+    apiKey: 'AIzaSyCZBCSxCE9M_09eORs-aFWX2KmGCt64cUk',
+    appId: '1:903062986955:ios:bbb650bf6dd04bcc31bb4e',
+    messagingSenderId: '903062986955',
+    projectId: 'mideralert',
+    storageBucket: 'mideralert.appspot.com',
     iosBundleId: 'com.example.medreminder',
   );
 }

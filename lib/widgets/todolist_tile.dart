@@ -10,6 +10,7 @@ class ToDoList extends StatelessWidget {
       required this.taskName,
       required this.description,
       required this.deleteFunction,
+      required this.editFunction,
       required this.taskCompleted,
       required this.time,
       required this.onChanged})
@@ -21,6 +22,7 @@ class ToDoList extends StatelessWidget {
   final String time;
   Function(bool?)? onChanged;
   Function(BuildContext)? deleteFunction;
+  Function(BuildContext)? editFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,16 @@ class ToDoList extends StatelessWidget {
       child: Slidable(
         endActionPane: ActionPane(motion: const StretchMotion(), children: [
           SlidableAction(
-            label: 'Remove',
+            label: 'Edit',
             backgroundColor: secondary,
+            onPressed: editFunction,
+            icon: Icons.edit_rounded,
+            foregroundColor: white,
+            borderRadius: BorderRadius.circular(6),
+          ),
+          SlidableAction(
+            label: 'Remove',
+            backgroundColor: Color.fromARGB(255, 221, 44, 31),
             onPressed: deleteFunction,
             icon: Icons.delete_forever_rounded,
             foregroundColor: white,

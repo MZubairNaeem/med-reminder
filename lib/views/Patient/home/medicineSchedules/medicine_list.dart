@@ -42,6 +42,7 @@ class _MedicineListState extends State<MedicineList> {
         child: Consumer(
           builder: (context, ref, _) {
             final userResult = ref.watch(medProvider);
+            // ref.refresh(medProvider);
             return userResult.when(
               data: (med) {
                 return med.isEmpty
@@ -64,14 +65,14 @@ class _MedicineListState extends State<MedicineList> {
                             medicineType: med[index].medType!,
                             medicineInterval: med[index].interval!,
                             deleteFunction: (context) {
-                              ref.refresh(medProvider);
                               Med().deleteMed(
                                 context,
                                 med[index].id!,
                               );
+                              ref.refresh(medProvider);
                             },
                             editFunction: (context) async {
-                              final updatedData = await Navigator.push(
+                              await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => EditMedicineSchedule(
@@ -79,25 +80,26 @@ class _MedicineListState extends State<MedicineList> {
                                     dosage: med[index].dosageQuantity!,
                                     medicineType: med[index].medType!,
                                     medicineInterval: med[index].interval!,
+                                    id: med[index].id!,
                                   ),
                                 ),
                               );
 
-                              if (updatedData != null) {
-                                // Update the medicine data in your data source (e.g., database or provider)
-                                // You can also refresh the UI if necessary
-                                // Example: Update med[index] with the updatedData
-                                setState(() {
-                                  med[index].medName =
-                                      updatedData['medicineName'];
-                                  med[index].dosageQuantity =
-                                      updatedData['dosage'];
-                                  med[index].medType =
-                                      updatedData['medicineType'];
-                                  med[index].interval =
-                                      updatedData['medicineInterval'];
-                                });
-                              }
+                              // if (updatedData != null) {
+                              //   // Update the medicine data in your data source (e.g., database or provider)
+                              //   // You can also refresh the UI if necessary
+                              //   // Example: Update med[index] with the updatedData
+                              //   setState(() {
+                              //     med[index].medName =
+                              //         updatedData['medicineName'];
+                              //     med[index].dosageQuantity =
+                              //         updatedData['dosage'];
+                              //     med[index].medType =
+                              //         updatedData['medicineType'];
+                              //     med[index].interval =
+                              //         updatedData['medicineInterval'];
+                              //   });
+                              // }
                             },
                           );
                         },

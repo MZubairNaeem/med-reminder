@@ -8,8 +8,8 @@ import 'package:uuid/uuid.dart';
 class Med {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   String medId = const Uuid().v4();
-  Future<void> addMed(
-      BuildContext context, String medName, String medType, String dosageQuantity, String interval) async {
+  Future<void> addMed(BuildContext context, String medName, String medType,
+      String dosageQuantity, String interval) async {
     try {
       MedModel note = MedModel(
         medName: medName,
@@ -28,7 +28,7 @@ class Med {
           .set(note.toJson());
       Get.snackbar(
         'Success',
-        'Note added successfully',
+        'Med added successfully',
         snackPosition: SnackPosition.BOTTOM,
       );
     } on FirebaseException catch (e) {
@@ -42,10 +42,13 @@ class Med {
 
   Future<void> deleteMed(BuildContext context, String id) async {
     try {
-      await FirebaseFirestore.instance.collection('medSchedule').doc(id).delete();
+      await FirebaseFirestore.instance
+          .collection('medSchedule')
+          .doc(id)
+          .delete();
       Get.snackbar(
         'Success',
-        'Note deleted successfully',
+        'Med deleted successfully',
         snackPosition: SnackPosition.BOTTOM,
       );
     } on FirebaseException catch (e) {
@@ -57,32 +60,43 @@ class Med {
     }
   }
 
-  // Future<void> updateNote(
-  //     BuildContext context, String id, String title, String description) async {
-  //   try {
-  //     NotesModel note = NotesModel(
-  //       title: title,
-  //       description: description,
-  //       timestamp: Timestamp.now(),
-  //       uid: uid,
-  //     );
-  //     await FirebaseFirestore.instance
-  //         .collection('notes')
-  //         .doc(id)
-  //         .update(note.toJson());
-  //     Get.snackbar(
-  //       'Success',
-  //       'Note updated successfully',
-  //       snackPosition: SnackPosition.BOTTOM,
-  //     );
-  //   } on FirebaseException catch (e) {
-  //     Get.snackbar(
-  //       'Error',
-  //       e.message.toString(),
-  //       snackPosition: SnackPosition.BOTTOM,
-  //     );
-  //   }
-  // }
+  Future<void> updateMed(
+    BuildContext context,
+    String id,
+    String medName,
+    String medType,
+    String dosageQuantity,
+    String interval,
+  ) async {
+    try {
+      MedModel med = MedModel(
+        medName: medName,
+        medType: medType,
+        medCreated: Timestamp.now(),
+        startTimeDate: Timestamp.now(),
+        dosageQuantity: dosageQuantity,
+        interval: interval,
+        status: false,
+        id: id,
+        uid: FirebaseAuth.instance.currentUser!.uid,
+      );
+      await FirebaseFirestore.instance
+          .collection('medSchedule')
+          .doc(id)
+          .update(med.toJson());
+      Get.snackbar(
+        'Success',
+        'Med updated successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on FirebaseException catch (e) {
+      Get.snackbar(
+        'Error',
+        e.message.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 
   //change status of task to completed
   Future<void> changeStatus(
@@ -94,7 +108,7 @@ class Med {
           .update({'status': status});
       Get.snackbar(
         'Success',
-        'Task status changed successfully',
+        'Med status changed successfully',
         snackPosition: SnackPosition.BOTTOM,
       );
     } on FirebaseException catch (e) {

@@ -5,6 +5,7 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/notes_controller.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_add.dart';
+import 'package:medreminder/views/Patient/home/notes/notes_edit.dart';
 import 'package:medreminder/widgets/todolist_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -51,7 +52,7 @@ class _NotesListState extends State<NotesList> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(notesProvider);
-                ref.refresh(notesProvider);
+                // ref.refresh(notesProvider);
                 return userResult.when(
                     data: (notes) {
                       return notes.isEmpty
@@ -84,22 +85,45 @@ class _NotesListState extends State<NotesList> {
                                           time.day == now.day)
                                       ? formattedTime
                                       : formattedDate,
-                                  onChanged: (value) {
+                                  onChanged: (value) async {
                                     //change status of task to completed
-                                    Notes().changeStatus(
+                                    await Notes().changeStatus(
                                       context,
                                       notes[index].id!,
                                       notes[index].status! ? false : true,
                                     );
+                                    ref.refresh(notesProvider);
                                   },
-                                  deleteFunction: (context) {
-                                    Notes().deleteNote(
+                                  deleteFunction: (context) async {
+                                    await Notes().deleteNote(
                                       context,
                                       notes[index].id!,
                                     );
+                                    ref.refresh(notesProvider);
+                                  },
+                                  editFunction: (context) {
+                                    // Notes().updateNote(
+                                    //   context,
+                                    //   notes[index].id!,
+                                    //   title.text,
+                                    //   description.text,
+                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => NotesEdit(
+                                          id: notes[index].id!,
+                                          title: notes[index].title!,
+                                          description:
+                                              notes[index].description!,
+                                        ),
+                                      ),
+                                    );
+                                    ref.refresh(notesProvider);
                                   },
                                 );
-                              });
+                              },
+                            );
                     },
                     loading: () => const Text("..."),
                     error: (error, stackTrace) {

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -55,7 +54,7 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(appoinmentProvider);
-                // ref.refresh(appoinmentProvider);
+
                 return userResult.when(
                   data: (appoinments) {
                     return appoinments.isEmpty
@@ -88,68 +87,42 @@ class _AppoinmentsListState extends State<AppoinmentsList> {
                                 time: formattedTime,
                                 date: formattedDate,
                                 note: appoinments[index].note!,
-                                onChanged: (value) {
+                                onChanged: (value) async {
                                   //change status of task to completed
-                                  Appointments().changeStatus(
+                                  await Appointments().changeStatus(
                                     context,
                                     appoinments[index].id!,
                                     appoinments[index].status! ? false : true,
                                   );
+                                  ref.refresh(appoinmentProvider);
                                 },
-                                deleteFunction: (context) {
-                                  Appointments().deleteAppointments(
+                                deleteFunction: (context) async {
+                                  await Appointments().deleteAppointments(
                                     context,
                                     appoinments[index].id!,
                                   );
+                                  ref.refresh(appoinmentProvider);
                                 },
                                 editFunction: (context) {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (context) => AppoinmentsEdit(
-                                          index: index,
-                                          reason:
-                                              appoinments[index].visitReason!,
-                                          doctorName:
-                                              appoinments[index].doctorName!,
-                                          hospitalName:
-                                              appoinments[index].hospitalName!,
-                                          taskCompleted:
-                                              appoinments[index].status!,
-                                          time: formattedTime,
-                                          date: formattedDate,
-                                          note: appoinments[index].note!,
-                                          initialSelectedDateTime:
-                                              appoinments[index]
-                                                  .appointmentDateTime,
-                                          onUpdate: (updatedReason,
-                                              updatedDoctorName,
-                                              updatedHospitalName,
-                                              updatedNote,
-                                              updatedVal,
-                                              updatedDateTime,
-                                              updatedDate,
-                                              updatedTime) {
-                                            // Update the data in your ListView.builder
-                                            setState(() {
-                                              appoinments[index].visitReason =
-                                                  updatedReason;
-                                              appoinments[index].doctorName =
-                                                  updatedDoctorName;
-                                              appoinments[index].hospitalName =
-                                                  updatedHospitalName;
-                                              appoinments[index].note =
-                                                  updatedNote;
-                                              appoinments[index].status =
-                                                  updatedVal;
-                                              appoinments[index]
-                                                      .appointmentDateTime =
-                                                  Timestamp.fromDate(
-                                                      DateTime.parse(
-                                                          updatedDateTime));
-                                            });
-                                          }),
+                                        doctorName:
+                                            appoinments[index].doctorName!,
+                                        hospitalName:
+                                            appoinments[index].hospitalName!,
+                                        note: appoinments[index].note!,
+                                        visitReason:
+                                            appoinments[index].visitReason!,
+                                        appointmentDateTime: appoinments[index]
+                                            .appointmentDateTime!,
+                                        id: appoinments[index].id!,
+                                        status: appoinments[index].status!,
+                                        uid: appoinments[index].uid!,
+                                      ),
                                     ),
                                   );
+                                  ref.refresh(appoinmentProvider);
                                 },
                               );
                             });

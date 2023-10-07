@@ -16,6 +16,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
   //med text editing controller
   final med = TextEditingController();
   final dosage = TextEditingController();
+  dynamic refresh;
 
   String selectedMedicineType = 'Syrup'; // Initialize with a default value
   String? selectedInterval; // Declare selectedInterval as nullable
@@ -224,7 +225,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               ScaffoldMessenger.of(
                                                       scaffoldContext)
                                                   .showSnackBar(
-                                                SnackBar(
+                                                const SnackBar(
                                                   content: Text(
                                                       'Please select an interval.'),
                                                   duration: Duration(
@@ -245,8 +246,9 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               dosage.text,
                                               selectedInterval.toString(),
                                             );
+
                                             // ignore: unused_result
-                                            ref.refresh(medProvider);
+                                            // ref.refresh(medProvider);
                                             setState(() {
                                               med.clear();
                                               dosage.clear();
@@ -254,6 +256,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               selectedTime = null;
                                               loading = false;
                                             });
+                                            refresh;
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -271,11 +274,28 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                                     color: Colors.white,
                                                   ),
                                                 )
-                                              : Text(
-                                                  'Confirm',
-                                                  style: TextStyle(
-                                                    fontSize: 17.sp,
-                                                  ),
+                                              : Consumer(
+                                                  builder: (context, ref, _) {
+                                                    final userResult =
+                                                        ref.watch(medProvider);
+                                                    refresh = ref
+                                                        .refresh(medProvider);
+                                                    return userResult.when(
+                                                      data: (notes) {
+                                                        return Text(
+                                                          'Confirm',
+                                                          style: TextStyle(
+                                                            fontSize: 17.sp,
+                                                          ),
+                                                        );
+                                                      },
+                                                      loading: () =>
+                                                          const Text("..."),
+                                                      error: (error,
+                                                              stackTrace) =>
+                                                          Text('Error: $error'),
+                                                    );
+                                                  },
                                                 ),
                                         ),
                                       );

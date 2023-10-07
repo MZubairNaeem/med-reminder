@@ -62,6 +62,8 @@ class Notes {
         description: description,
         timestamp: Timestamp.now(),
         uid: uid,
+        id: id,
+        status: false,
       );
       await FirebaseFirestore.instance
           .collection('notes')

@@ -10,19 +10,24 @@ class EditMedicineSchedule extends StatefulWidget {
   final String dosage;
   final String medicineType;
   final String medicineInterval;
+  final String id;
 
-  EditMedicineSchedule({
+  const EditMedicineSchedule({
+    super.key,
     required this.medicineName,
     required this.dosage,
     required this.medicineType,
     required this.medicineInterval,
+    required this.id,
   });
 
   @override
-  _EditMedicineScheduleState createState() => _EditMedicineScheduleState();
+  EditMedicineScheduleState createState() => EditMedicineScheduleState();
 }
 
-class _EditMedicineScheduleState extends State<EditMedicineSchedule> {
+class EditMedicineScheduleState extends State<EditMedicineSchedule> {
+  dynamic refresh;
+  bool load = false;
   //med text editing controller
   final med = TextEditingController();
   final dosage = TextEditingController();
@@ -30,7 +35,7 @@ class _EditMedicineScheduleState extends State<EditMedicineSchedule> {
   String selectedMedicineType = 'Syrup'; // Initialize with a default value
   String? selectedInterval; // Declare selectedInterval as nullable
   bool showHint = true;
-  bool loading = false;
+  final _formKey = GlobalKey<FormState>();
   final List<String> intervals = [
     '6 hours',
     '8 hours',
@@ -41,7 +46,6 @@ class _EditMedicineScheduleState extends State<EditMedicineSchedule> {
   @override
   void initState() {
     super.initState();
-    // Initialize text controllers with data from parameters
     med.text = widget.medicineName;
     dosage.text = widget.dosage;
     selectedMedicineType = widget.medicineType;
@@ -73,175 +77,201 @@ class _EditMedicineScheduleState extends State<EditMedicineSchedule> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(16.sp),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Medicine Name",
-                  style: TextStyle(
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                TextField(
-                  controller: med,
-                  decoration: const InputDecoration(
-                    hintText: "Enter Medicine Name",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Text(
-                  "Medicine Type",
-                  style: TextStyle(
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    medicineType('lib/constants/assets/bottles.png', 'Syrup'),
-                    medicineType('lib/constants/assets/pills.png', 'Pill'),
-                    medicineType('lib/constants/assets/syringe.png', 'Syringe'),
-                    medicineType('lib/constants/assets/tablets.png', 'Tablet'),
-                  ],
-                ),
-                SizedBox(height: 3.h),
-                Text(
-                  "Dosage",
-                  style: TextStyle(
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 2.h),
-                TextField(
-                  controller: dosage,
-                  decoration: InputDecoration(
-                    hintText: getHintText(
-                        selectedMedicineType), // Get the hint text dynamically
-                    border: const OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 2.5.h),
-                Text(
-                  "Interval Selection",
-                  style: TextStyle(
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 1.5.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Remind me every',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 17.sp,
-                      ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Medicine Name",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
                     ),
-                    SizedBox(width: 1.5.w),
-                    DropdownButton<String>(
-                      value: selectedInterval,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedInterval = newValue;
-                        });
-                      },
-                      items: intervals.map((String interval) {
-                        return DropdownMenuItem<String>(
-                          value: interval,
-                          child: Text(
-                            interval,
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 17.sp,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 1.5.h),
-                Text(
-                  "Starting Time",
-                  style: TextStyle(
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                SizedBox(height: 3.h),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _selectTime(
-                          context); // Call the time picker when the button is pressed
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primary, // Primary background color
-                      foregroundColor: Colors.white, // Text color
+                  SizedBox(height: 2.h),
+                  TextField(
+                    controller: med,
+                    decoration: const InputDecoration(
+                      hintText: "Enter Medicine Name",
+                      border: OutlineInputBorder(),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(14.sp),
-                      child: Text(
-                        'Pick Time',
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    "Medicine Type",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      medicineType('lib/constants/assets/bottles.png', 'Syrup'),
+                      medicineType('lib/constants/assets/pills.png', 'Pill'),
+                      medicineType(
+                          'lib/constants/assets/syringe.png', 'Syringe'),
+                      medicineType(
+                          'lib/constants/assets/tablets.png', 'Tablet'),
+                    ],
+                  ),
+                  SizedBox(height: 3.h),
+                  Text(
+                    "Dosage",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  TextField(
+                    controller: dosage,
+                    decoration: InputDecoration(
+                      hintText: getHintText(
+                          selectedMedicineType), // Get the hint text dynamically
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
+                  SizedBox(height: 2.5.h),
+                  Text(
+                    "Interval Selection",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 1.5.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Remind me every',
                         style: TextStyle(
+                          color: Colors.black,
                           fontSize: 17.sp,
+                        ),
+                      ),
+                      SizedBox(width: 1.5.w),
+                      DropdownButton<String>(
+                        value: selectedInterval,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedInterval = newValue;
+                          });
+                        },
+                        items: intervals.map((String interval) {
+                          return DropdownMenuItem<String>(
+                            value: interval,
+                            child: Text(
+                              interval,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 17.sp,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.5.h),
+                  Text(
+                    "Starting Time",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 3.h),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _selectTime(
+                            context); // Call the time picker when the button is pressed
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary, // Primary background color
+                        foregroundColor: Colors.white, // Text color
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(14.sp),
+                        child: Text(
+                          'Pick Time',
+                          style: TextStyle(
+                            fontSize: 17.sp,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(height: 3.h),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Get the updated values from the text fields and dropdowns
-                      String updatedMedicineName = med.text;
-                      String updatedDosage = dosage.text;
-                      String updatedMedicineType = selectedMedicineType;
-                      String updatedMedicineInterval = selectedInterval ?? '';
-
-                      // Create a map containing the updated values
-                      Map<String, String> updatedData = {
-                        'medicineName': updatedMedicineName,
-                        'dosage': updatedDosage,
-                        'medicineType': updatedMedicineType,
-                        'medicineInterval': updatedMedicineInterval,
-                      };
-
-                      // Pass the updated data back to the calling screen
-                      Navigator.pop(context, updatedData);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: primary, // Primary background color
-                      foregroundColor: Colors.white, // Text color
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.all(14.sp),
-                      child: loading
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                  SizedBox(height: 3.h),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          load = true;
+                        });
+                        if (!_formKey.currentState!.validate()) {
+                          setState(() {
+                            load = false;
+                          });
+                          return;
+                        }
+                        await Med().updateMed(
+                          context,
+                          widget.id,
+                          med.text,
+                          dosage.text,
+                          selectedMedicineType,
+                          selectedInterval!,
+                        );
+                        setState(() {
+                          load = false;
+                        });
+                        med.clear();
+                        dosage.clear();
+                        refresh;
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary, // Primary background color
+                        foregroundColor: Colors.white, // Text color
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(14.sp),
+                        child: load
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Consumer(
+                                builder: (context, ref, _) {
+                                  final userResult = ref.watch(medProvider);
+                                  refresh = ref.refresh(medProvider);
+                                  return userResult.when(
+                                    data: (notes) {
+                                      return Text(
+                                        'Update',
+                                        style: TextStyle(
+                                          fontSize: 17.sp,
+                                        ),
+                                      );
+                                    },
+                                    loading: () => const Text("..."),
+                                    error: (error, stackTrace) =>
+                                        Text('Error: $error'),
+                                  );
+                                },
                               ),
-                            )
-                          : Text(
-                              'Update',
-                              style: TextStyle(
-                                fontSize: 17.sp,
-                              ),
-                            ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

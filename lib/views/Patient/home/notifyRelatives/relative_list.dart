@@ -66,7 +66,7 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
             Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(relativelist);
-                ref.refresh(relativelist);
+                // ref.refresh(relativelist);
                 return userResult.when(
                     data: (relative) {
                       return relative.isEmpty
