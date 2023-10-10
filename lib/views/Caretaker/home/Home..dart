@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/patient_list_provider.dart';
 import 'package:medreminder/controllers/services/relative_controller.dart';
-import 'package:medreminder/views/Patient/auth/login.dart';
+import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +43,13 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
                             await SharedPreferences.getInstance();
                         sharedPreferences.remove('uid');
                         sharedPreferences.remove('userType');
-                        Get.offAll(const Login());
+                        // ignore: use_build_context_synchronously
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EmailLogin(),
+                            ),
+                            (route) => false);
                         Get.snackbar(
                           'Success',
                           "Logged out successfully",

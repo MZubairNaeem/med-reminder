@@ -252,6 +252,9 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                                 builder: (context, ref, _) {
                                   final userResult = ref.watch(medProvider);
                                   refresh = ref.refresh(medProvider);
+                                  ref.refresh(missedMedProvider);
+                                  ref.refresh(takenMedProvider);
+                                  ref.refresh(pendingMedProvider);
                                   return userResult.when(
                                     data: (notes) {
                                       return Text(

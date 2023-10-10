@@ -38,7 +38,7 @@ class MedicineCard extends StatelessWidget {
           ),
           SlidableAction(
             label: 'Remove',
-            backgroundColor: Color.fromARGB(255, 221, 44, 31),
+            backgroundColor: const Color.fromARGB(255, 221, 44, 31),
             onPressed: deleteFunction,
             icon: Icons.delete_forever_rounded,
             foregroundColor: white,
@@ -50,7 +50,7 @@ class MedicineCard extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.sp),
-            border: Border.all(color: Color.fromARGB(207, 121, 180, 227)),
+            border: Border.all(color: const Color.fromARGB(207, 121, 180, 227)),
             // boxShadow: [
             //   BoxShadow(
             //     color: Colors.grey.withOpacity(0.5),
@@ -59,7 +59,7 @@ class MedicineCard extends StatelessWidget {
             //     offset: Offset(2, 3),
             //   ),
             // ],
-            color: Color.fromARGB(150, 169, 205, 235),
+            color: const Color.fromARGB(150, 169, 205, 235),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

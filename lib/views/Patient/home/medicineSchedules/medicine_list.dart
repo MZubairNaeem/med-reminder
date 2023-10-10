@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
-import 'package:medreminder/controllers/providers/med_provider.dart';
-import 'package:medreminder/controllers/services/med_controller.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/Edit_Medicine.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
-import 'package:medreminder/widgets/med_card.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/missed.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/pending.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/taken.dart';
 
 class MedicineList extends StatefulWidget {
   const MedicineList({Key? key}) : super(key: key);
@@ -15,7 +13,23 @@ class MedicineList extends StatefulWidget {
   State<MedicineList> createState() => _MedicineListState();
 }
 
-class _MedicineListState extends State<MedicineList> {
+class _MedicineListState extends State<MedicineList>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  bool load = true;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        load = false;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,6 +37,52 @@ class _MedicineListState extends State<MedicineList> {
         backgroundColor: secondary,
         centerTitle: true,
         title: const Text("Medicine Schedule"),
+      ),
+      body: Stack(
+        children: [
+          Visibility(
+            visible: !load,
+            child: Column(
+              children: [
+                TabBar(
+                  isScrollable: true,
+                  indicatorColor: secondary,
+                  labelColor: gray,
+                  labelStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  controller: _tabController,
+                  tabs: const [
+                    Tab(text: 'All'),
+                    Tab(text: 'Pending'),
+                    Tab(text: 'Missed'),
+                    Tab(text: 'Taken'),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: const [
+                      AllMedicine(),
+                      PendingMedicine(),
+                      MissedMedicine(),
+                      TakenMedicine()
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Visibility(
+            visible: load,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: tertiary,
+              ),
+            ),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: secondary,
@@ -36,104 +96,6 @@ class _MedicineListState extends State<MedicineList> {
         },
         label: const Text("Add Medicine"),
         icon: const Icon(Icons.add),
-      ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 4.0,
-              right: 4.0,
-            ),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                '<== Swipe left for more options',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.sp),
-            child: Consumer(
-              builder: (context, ref, _) {
-                final userResult = ref.watch(medProvider);
-                // ref.refresh(medProvider);
-                return userResult.when(
-                  data: (med) {
-                    return med.isEmpty
-                        ? Center(
-                            child: Text(
-                              '-- You have no Medicine Schedules --',
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          )
-                        : ListView.builder(
-                            itemCount: med.length,
-                            itemBuilder: (context, index) {
-                              return MedicineCard(
-                                medicineName: med[index].medName!,
-                                dosage: med[index].dosageQuantity!,
-                                medicineType: med[index].medType!,
-                                medicineInterval: med[index].interval!,
-                                deleteFunction: (context) {
-                                  Med().deleteMed(
-                                    context,
-                                    med[index].id!,
-                                  );
-                                  ref.refresh(medProvider);
-                                },
-                                editFunction: (context) async {
-                                  await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditMedicineSchedule(
-                                        medicineName: med[index].medName!,
-                                        dosage: med[index].dosageQuantity!,
-                                        medicineType: med[index].medType!,
-                                        medicineInterval: med[index].interval!,
-                                        id: med[index].id!,
-                                      ),
-                                    ),
-                                  );
-
-                                  // if (updatedData != null) {
-                                  //   // Update the medicine data in your data source (e.g., database or provider)
-                                  //   // You can also refresh the UI if necessary
-                                  //   // Example: Update med[index] with the updatedData
-                                  //   setState(() {
-                                  //     med[index].medName =
-                                  //         updatedData['medicineName'];
-                                  //     med[index].dosageQuantity =
-                                  //         updatedData['dosage'];
-                                  //     med[index].medType =
-                                  //         updatedData['medicineType'];
-                                  //     med[index].interval =
-                                  //         updatedData['medicineInterval'];
-                                  //   });
-                                  // }
-                                },
-                              );
-                            },
-                          );
-                  },
-                  loading: () => const Text("..."),
-                  error: (error, stackTrace) {
-                    return Text('Error: $error');
-                  },
-                );
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

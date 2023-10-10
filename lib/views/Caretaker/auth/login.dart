@@ -117,10 +117,6 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                             color: Colors.white), // Set border color to white
                       ),
                     ),
-                    textStyle: TextStyle(
-                      color: white,
-                    ),
-                    cursorColor: white,
                     onInputChanged: (PhoneNumber number) {
                       phoneNo = number.phoneNumber;
                     },

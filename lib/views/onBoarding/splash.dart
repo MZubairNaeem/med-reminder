@@ -39,13 +39,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     Timer(
       const Duration(seconds: 2),
-      () => Navigator.pushReplacement(
+      () => Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => uuid == null
               ? const OBScreen1()
               : (userType == 'patient' ? const Home() : const Caretaker_Home()),
         ),
+        (route) => false,
       ),
     );
     return Scaffold(

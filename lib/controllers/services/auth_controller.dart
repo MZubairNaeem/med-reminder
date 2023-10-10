@@ -76,7 +76,7 @@ class Auth {
     firestore.collection('users').doc(uid).set({
       'uid': uid,
       'phone': phoneNo,
-      'userType': 'user',
+      'userType': 'patient',
     });
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();

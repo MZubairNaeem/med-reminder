@@ -51,7 +51,7 @@ class AppointmentListTile extends StatelessWidget {
           ),
           SlidableAction(
             label: 'Remove',
-            backgroundColor: Color.fromARGB(255, 221, 44, 31),
+            backgroundColor: const Color.fromARGB(255, 221, 44, 31),
             onPressed: deleteFunction,
             icon: Icons.delete_forever_rounded,
             foregroundColor: white,

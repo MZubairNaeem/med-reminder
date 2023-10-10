@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/on_boarding.dart';
-import 'package:medreminder/views/Patient/auth/login.dart';
+import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/widgets/progress_circle.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -60,7 +60,7 @@ class _OBScreen1State extends State<OBScreen1> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Login(),
+                            builder: (context) => const EmailLogin(),
                           ),
                         );
                       },
@@ -162,7 +162,7 @@ class _OBScreen1State extends State<OBScreen1> {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const Login(),
+                                  builder: (context) => const EmailLogin(),
                                 ),
                               );
                             }

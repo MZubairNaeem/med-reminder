@@ -69,6 +69,7 @@ final missedAppoinmentProvider =
       .collection('appointments')
       .where('uid', isEqualTo: uid)
       .where('appointmentDateTime', isLessThan: Timestamp.now())
+      .where('status', isEqualTo: false)
       .orderBy('appointmentDateTime', descending: false)
       .get();
 

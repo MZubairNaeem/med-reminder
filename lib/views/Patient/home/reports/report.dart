@@ -16,7 +16,7 @@ class _ReportState extends State<Report> {
         title: const Text('Notification'),
         backgroundColor: secondary,
       ),
-      body: Center(
+      body: const Center(
         child: Text('No reports yet'),
       ),
     );

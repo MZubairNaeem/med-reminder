@@ -8,7 +8,7 @@ import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/providers/relative_list_provider.dart';
 import 'package:medreminder/controllers/services/pharmacies.dart';
-import 'package:medreminder/views/Patient/auth/login.dart';
+import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
@@ -128,7 +128,13 @@ class _HomeState extends State<Home> {
                           await SharedPreferences.getInstance();
                       sharedPreferences.remove('uid');
                       sharedPreferences.remove('userType');
-                      Get.offAll(const Login());
+                      // ignore: use_build_context_synchronously
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EmailLogin(),
+                          ),
+                          (route) => false);
                       Get.snackbar(
                         'Success',
                         "Logged out successfully",
