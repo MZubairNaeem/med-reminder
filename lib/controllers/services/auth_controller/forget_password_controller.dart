@@ -11,11 +11,22 @@ class ForgotPasswordController {
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const EmailLogin()),
-          (route) => false
+          (route) => false);
+      Get.snackbar(
+        'Success',
+        'Password reset link sent to $email',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
       );
-      Get.snackbar('Success', 'Password reset email sent');
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('Failed', e.toString());
+      Get.snackbar(
+        'Failed',
+        e.toString().replaceAll('FirebaseAuthException', '').trim(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }

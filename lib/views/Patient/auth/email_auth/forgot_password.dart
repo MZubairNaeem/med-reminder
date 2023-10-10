@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';
+import 'package:medreminder/controllers/services/auth_controller/forget_password_controller.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -114,7 +114,8 @@ class _ForgorPasswordState extends State<ForgotPassword> {
                             setState(() {
                               loading = true;
                             });
-                            Get.snackbar('Success', 'Good');
+                            await ForgotPasswordController()
+                                .forgotPassword(emailController.text, context);
                             setState(() {
                               loading = false;
                             });

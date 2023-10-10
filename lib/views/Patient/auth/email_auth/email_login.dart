@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';
+import 'package:medreminder/controllers/services/auth_controller/login_controller.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/forgot_password.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/register.dart';
 import 'package:medreminder/views/Patient/auth/login.dart';
@@ -265,7 +265,11 @@ class _LoginState extends State<EmailLogin> {
                             setState(() {
                               loading = true;
                             });
-                            Get.snackbar('Success', 'Good');
+                            await LoginController().login(
+                              context,
+                              emailController.text,
+                              passController.text,
+                            );
                             setState(() {
                               loading = false;
                             });

@@ -5,11 +5,11 @@ import 'package:get/get.dart';
 import 'package:medreminder/models/relative_model.dart';
 
 class Relative {
-  addRelative(BuildContext context, String phoneNo, String uid) async {
+  addRelative(BuildContext context, String credentials, String uid) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('relative')
-          .where('phone', isEqualTo: phoneNo)
+          .where('credentials', isEqualTo: credentials)
           .get();
       if (querySnapshot.docs.isNotEmpty) {
         Get.snackbar(
@@ -23,7 +23,7 @@ class Relative {
       }
       RelativeModel relativeModel = RelativeModel(
         uid: FirebaseAuth.instance.currentUser!.uid,
-        phone: phoneNo,
+        phone: credentials,
         relativeUid: uid,
       );
       await FirebaseFirestore.instance
@@ -49,12 +49,12 @@ class Relative {
   }
 
   //delete relative
-  deleteRelative(BuildContext context, String phoneNo) async {
+  deleteRelative(BuildContext context, String credentials) async {
     try {
       //remove the relative from the list
       await FirebaseFirestore.instance
           .collection('relative')
-          .where('phone', isEqualTo: phoneNo)
+          .where('credentials', isEqualTo: credentials)
           .get()
           .then((snapshot) {
         snapshot.docs.first.reference.delete();

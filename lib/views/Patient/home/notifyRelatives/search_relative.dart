@@ -75,8 +75,8 @@ class _SearchRelativeState extends State<SearchRelative> {
                     .where('phone',
                         isGreaterThanOrEqualTo: searchController.text.trim())
                     .where("phone",
-                        isNotEqualTo: FirebaseAuth.instance.currentUser!.phoneNumber)
-                        
+                        isNotEqualTo:
+                            FirebaseAuth.instance.currentUser!.phoneNumber)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
@@ -110,10 +110,12 @@ class _SearchRelativeState extends State<SearchRelative> {
                                         });
                                       });
                                     });
-                                    Relative().addRelative(context,
-                                        searchUser.phone!, searchUser.uid!);
+                                    Relative().addRelative(
+                                        context,
+                                        searchUser.credentials!,
+                                        searchUser.uid!);
                                   },
-                                  title: Text(searchUser.phone!),
+                                  title: Text(searchUser.credentials!),
                                   trailing: Container(
                                     decoration: const BoxDecoration(
                                       color: secondary,

@@ -53,8 +53,8 @@ class Auth {
     } catch (e) {
       if (context.mounted) {
         Get.snackbar(
-          'Error',
-          e.toString(),
+          'Failed',
+          e.toString().replaceAll('FirebaseAuthException', '').trim(),
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,
@@ -75,7 +75,7 @@ class Auth {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     firestore.collection('users').doc(uid).set({
       'uid': uid,
-      'phone': phoneNo,
+      'credential': phoneNo,
       'userType': 'patient',
     });
     final SharedPreferences sharedPreferences =
@@ -95,8 +95,8 @@ class Auth {
     try {} catch (e) {
       if (context.mounted) {
         Get.snackbar(
-          'Error',
-          e.toString(),
+          'Failed',
+          e.toString().replaceAll('FirebaseAuthException', '').trim(),
           backgroundColor: Colors.red,
           colorText: Colors.white,
           snackPosition: SnackPosition.BOTTOM,

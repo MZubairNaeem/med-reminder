@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';
+import 'package:medreminder/controllers/services/auth_controller/register_controller.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/auth/login.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -28,6 +30,8 @@ class _EmailSignupState extends State<EmailSignup> {
     super.dispose();
   }
 
+  String user = 'patient';
+  bool _user = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -121,6 +125,7 @@ class _EmailSignupState extends State<EmailSignup> {
                         vertical: 10.sp, horizontal: 15.sp),
                     child: TextFormField(
                       controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         hintText: 'Email',
                         prefixIcon: const Icon(Icons.email),
@@ -164,6 +169,44 @@ class _EmailSignupState extends State<EmailSignup> {
 
                         return null;
                       },
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15.sp, top: 15.sp),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 30.0, // Adjust the size of the checkbox
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(8.0), // Rounded corners
+                            border: Border.all(
+                              color: Colors.blue, // Border color
+                              width: 2.0, // Border width
+                            ),
+                          ),
+                          child: Checkbox(
+                            value: _user,
+                            onChanged: (value) {
+                              setState(() {
+                                _user == false
+                                    ? user = 'caretaker'
+                                    : user = 'patient';
+                                _user = value!;
+                                print(user);
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5.w,
+                        ),
+                        Text(
+                          'Continue as Caretaker',
+                          style: GoogleFonts.dmSans(fontSize: 17.sp),
+                        ),
+                      ],
                     ),
                   ),
                   Column(
@@ -269,7 +312,13 @@ class _EmailSignupState extends State<EmailSignup> {
                             setState(() {
                               loading = true;
                             });
-                            Get.snackbar('Success', 'Good');
+                            await RegisterController().register(
+                              context: context,
+                              email: emailController.text,
+                              password: passController.text,
+                              username: nameController.text,
+                              userType: user,
+                            );
                             setState(() {
                               loading = false;
                             });

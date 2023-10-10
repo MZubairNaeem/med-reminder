@@ -14,17 +14,18 @@ class RegisterController {
     required String password,
     required String username,
     required String userType,
-    String? phone,
   }) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
 
       if (userCredential.user != null) {
         UserModel userModel = UserModel(
           username: username,
-          email: email,
-          phone: phone,
+          credentials: email,
           uid: userCredential.user!.uid,
           userType: userType,
         );
@@ -38,12 +39,30 @@ class RegisterController {
             context,
             MaterialPageRoute(builder: (context) => const EmailLogin()),
             (route) => false);
-        Get.snackbar('Success', 'Account created successfully');
+        Get.snackbar(
+          'Success',
+          'Account created successfully',
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       } else {
-        Get.snackbar('Failed', 'Account creation failed');
+        Get.snackbar(
+          'Failed',
+          'Account creation failed',
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
     } on FirebaseAuthException catch (e) {
-      Get.snackbar('Failed', e.toString());
+      Get.snackbar(
+        'Failed',
+        e.toString().replaceAll('FirebaseAuthException', '').trim(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 }
