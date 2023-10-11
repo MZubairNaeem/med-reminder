@@ -7,6 +7,7 @@ class MedModel {
   Timestamp? startTimeDate;
   String? dosageQuantity;
   String? interval;
+  String? quantity;
   bool? status;
   String? id;
   String? uid;
@@ -18,6 +19,7 @@ class MedModel {
     this.startTimeDate,
     this.dosageQuantity,
     this.interval,
+    this.quantity,
     this.status,
     this.id,
     this.uid,
@@ -30,7 +32,9 @@ class MedModel {
     startTimeDate = json['startTimeDate'];
 
     dosageQuantity = json['dosageQuantity'];
+
     interval = json['interval'];
+    quantity = json['quantity'];
     status = json['status'];
     id = json['id'];
     uid = json['uid'];
@@ -44,6 +48,7 @@ class MedModel {
     data['startTimeDate'] = startTimeDate;
     data['dosageQuantity'] = dosageQuantity;
     data['interval'] = interval;
+    data['quantity'] = quantity;
     data['status'] = status;
     data['id'] = id;
     data['uid'] = uid;

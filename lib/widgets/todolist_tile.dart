@@ -5,22 +5,28 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
 class ToDoList extends StatelessWidget {
-  ToDoList(
-      {Key? key,
-      required this.taskName,
-      required this.description,
-      required this.deleteFunction,
-      required this.editFunction,
-      required this.taskCompleted,
-      required this.time,
-      required this.onChanged})
-      : super(key: key);
+  ToDoList({
+    Key? key,
+    required this.taskName,
+    required this.description,
+    required this.deleteFunction,
+    required this.editFunction,
+    required this.taskCompleted,
+    required this.time,
+    this.select,
+    this.checkList,
+    required this.onChanged,
+    required this.onSelect,
+  }) : super(key: key);
 
   final String taskName;
   final String description;
   final bool taskCompleted;
   final String time;
+  bool? select;
+  bool? checkList;
   Function(bool?)? onChanged;
+  Function(bool?)? onSelect;
   Function(BuildContext)? deleteFunction;
   Function(BuildContext)? editFunction;
 
@@ -61,10 +67,25 @@ class ToDoList extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
-                Checkbox(
-                  value: taskCompleted,
-                  onChanged: onChanged,
-                  activeColor: secondary,
+                Column(
+                  children: [
+                    Visibility(
+                      visible: select!,
+                      child: Checkbox(
+                        value: checkList,
+                        onChanged: onSelect,
+                        activeColor: const Color.fromARGB(255, 221, 44, 31),
+                      ),
+                    ),
+                    Visibility(
+                      visible: !select!,
+                      child: Checkbox(
+                        value: taskCompleted,
+                        onChanged: onChanged,
+                        activeColor: secondary,
+                      ),
+                    ),
+                  ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

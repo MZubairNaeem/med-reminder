@@ -16,7 +16,9 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
   //med text editing controller
   final med = TextEditingController();
   final dosage = TextEditingController();
+  final qty = TextEditingController();
   dynamic refresh;
+  bool intervalCheck = false;
 
   String selectedMedicineType = 'Syrup'; // Initialize with a default value
   String? selectedInterval; // Declare selectedInterval as nullable
@@ -24,7 +26,19 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
   bool loading = false;
   final _formKey = GlobalKey<FormState>();
 
-  final List<String> intervals = [
+  final List<String> intervalsDays = [
+    '1 Day',
+    '2 Days',
+    '3 Days',
+    '4 Days',
+    '5 Days',
+    '6 Days',
+    '1 Week',
+    '2 Weeks',
+    '3 Weeks',
+    '1 Month',
+  ];
+  final List<String> intervalsHours = [
     '6 hours',
     '8 hours',
     '12 hours',
@@ -109,11 +123,29 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                     ),
                     SizedBox(height: 3.h),
                     TextFormField(
+                      controller: qty,
+                      decoration: const InputDecoration(
+                        hintText: 'Total no of dosages',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Total no of dosages are required';
+                        } else if (value.length > 5) {
+                          return 'Total no of dosages should be at most 4 characters';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 2.h),
+                    TextFormField(
                       controller: dosage,
                       decoration: InputDecoration(
                         hintText: getHintText(selectedMedicineType),
                         border: const OutlineInputBorder(),
                       ),
+                      keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Dosage is required';
@@ -161,18 +193,44 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                             ),
                           ), // Set the hint text
                           //underline: Container(),
-                          items: intervals.map((String interval) {
-                            return DropdownMenuItem<String>(
-                              value: interval,
-                              child: Text(
-                                interval,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 17.sp,
-                                ),
-                              ),
-                            );
-                          }).toList(),
+                          items: intervalCheck
+                              ? intervalsDays.map((String interval) {
+                                  return DropdownMenuItem<String>(
+                                    value: interval,
+                                    child: Text(
+                                      interval,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17.sp,
+                                      ),
+                                    ),
+                                  );
+                                }).toList()
+                              : intervalsHours.map((String interval) {
+                                  return DropdownMenuItem<String>(
+                                    value: interval,
+                                    child: Text(
+                                      interval,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 17.sp,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                        ),
+                        Column(
+                          children: [
+                            const Text('Hours/Days'),
+                            Checkbox(
+                                value: intervalCheck,
+                                onChanged: (value) {
+                                  selectedInterval = null;
+                                  setState(() {
+                                    intervalCheck = value!;
+                                  });
+                                }),
+                          ],
                         ),
                       ],
                     ),
@@ -245,13 +303,19 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               selectedMedicineType,
                                               dosage.text,
                                               selectedInterval.toString(),
+                                              qty.text,
                                             );
 
                                             // ignore: unused_result
-                                            // ref.refresh(medProvider);
+                                            ref.refresh(medProvider);
+                                            ref.refresh(missedMedProvider);
+                                            ref.refresh(takenMedProvider);
+                                            ref.refresh(pendingMedProvider);
+
                                             setState(() {
                                               med.clear();
                                               dosage.clear();
+                                              qty.clear();
                                               selectedInterval = null;
                                               selectedTime = null;
                                               loading = false;

@@ -104,4 +104,24 @@ class Notes {
       );
     }
   }
+
+  Future<void> deleteMultipleNotes(
+      BuildContext context, List<String> ids) async {
+    try {
+      for (var id in ids) {
+        await FirebaseFirestore.instance.collection('notes').doc(id).delete();
+      }
+      Get.snackbar(
+        'Success',
+        'Notes deleted successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on FirebaseException catch (e) {
+      Get.snackbar(
+        'Error',
+        e.message.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 }

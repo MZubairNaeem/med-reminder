@@ -138,6 +138,8 @@ class _NotesAddState extends State<NotesAdd> {
                                   builder: (context, ref, _) {
                                     final userResult = ref.watch(notesProvider);
                                     refresh = ref.refresh(notesProvider);
+                                    ref.refresh(pendingNotesProvider);
+                                    ref.refresh(completedNotesProvider);
                                     return userResult.when(
                                       data: (notes) {
                                         return const SizedBox(

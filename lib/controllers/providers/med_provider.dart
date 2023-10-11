@@ -22,6 +22,7 @@ final medProvider = FutureProvider<List<MedModel>>((ref) async {
       startTimeDate: data['startTimeDate'],
       dosageQuantity: data['dosageQuantity'],
       interval: data['interval'],
+      quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
     );
@@ -42,13 +43,14 @@ final takenMedProvider = FutureProvider<List<MedModel>>((ref) async {
   List<MedModel> notes = doc.docs.map((snapshot) {
     Map<String, dynamic> data = snapshot.data();
     return MedModel(
-       id: snapshot.id,
+      id: snapshot.id,
       medName: data['medName'],
       medType: data['medType'],
       medCreated: data['medCreated'],
       startTimeDate: data['startTimeDate'],
       dosageQuantity: data['dosageQuantity'],
       interval: data['interval'],
+      quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
     );
@@ -69,13 +71,14 @@ final missedMedProvider = FutureProvider<List<MedModel>>((ref) async {
   List<MedModel> notes = doc.docs.map((snapshot) {
     Map<String, dynamic> data = snapshot.data();
     return MedModel(
-       id: snapshot.id,
+      id: snapshot.id,
       medName: data['medName'],
       medType: data['medType'],
       medCreated: data['medCreated'],
       startTimeDate: data['startTimeDate'],
       dosageQuantity: data['dosageQuantity'],
       interval: data['interval'],
+      quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
     );
@@ -96,13 +99,14 @@ final pendingMedProvider = FutureProvider<List<MedModel>>((ref) async {
   List<MedModel> notes = doc.docs.map((snapshot) {
     Map<String, dynamic> data = snapshot.data();
     return MedModel(
-       id: snapshot.id,
+      id: snapshot.id,
       medName: data['medName'],
       medType: data['medType'],
       medCreated: data['medCreated'],
       startTimeDate: data['startTimeDate'],
       dosageQuantity: data['dosageQuantity'],
       interval: data['interval'],
+      quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
     );

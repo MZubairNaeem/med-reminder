@@ -9,6 +9,7 @@ class MedicineCard extends StatelessWidget {
   final String dosage;
   final String medicineType;
   final String medicineInterval;
+  String? qty;
   Function(BuildContext)? deleteFunction;
   Function(BuildContext)? editFunction;
 
@@ -18,6 +19,7 @@ class MedicineCard extends StatelessWidget {
     required this.dosage,
     required this.medicineType,
     required this.medicineInterval,
+    this.qty,
     required this.deleteFunction,
     required this.editFunction,
   });
@@ -100,6 +102,28 @@ class MedicineCard extends StatelessWidget {
                   ),
                   Text(
                     dosage,
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 1.h),
+              Row(
+                children: [
+                  Text(
+                    'Quantity:',
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Text(
+                    qty!,
                     style: TextStyle(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w400,

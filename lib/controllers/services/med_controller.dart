@@ -9,7 +9,7 @@ class Med {
   String uid = FirebaseAuth.instance.currentUser!.uid;
   String medId = const Uuid().v4();
   Future<void> addMed(BuildContext context, String medName, String medType,
-      String dosageQuantity, String interval) async {
+      String dosageQuantity, String interval,String qty) async {
     try {
       MedModel note = MedModel(
         medName: medName,
@@ -18,6 +18,7 @@ class Med {
         startTimeDate: Timestamp.now(),
         dosageQuantity: dosageQuantity,
         interval: interval,
+        quantity: qty,
         status: false,
         id: medId,
         uid: uid,

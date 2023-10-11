@@ -63,6 +63,7 @@ class _PendingMedicineState extends State<PendingMedicine> {
                                 dosage: med[index].dosageQuantity!,
                                 medicineType: med[index].medType!,
                                 medicineInterval: med[index].interval!,
+                                qty: med[index].quantity!,
                                 deleteFunction: (context) {
                                   Med().deleteMed(
                                     context,
