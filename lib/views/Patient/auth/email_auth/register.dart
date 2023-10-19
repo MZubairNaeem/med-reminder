@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';

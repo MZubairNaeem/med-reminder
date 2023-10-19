@@ -75,16 +75,19 @@ class Auth {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     firestore.collection('users').doc(uid).set({
       'uid': uid,
-      'credential': phoneNo,
+      'credentials': phoneNo,
       'userType': 'patient',
+      'username': '@username',
     });
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setString('uid', uid);
     sharedPreferences.setString('userType', 'patient');
     // ignore: use_build_context_synchronously
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const Home()));
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const Home()),
+        (route) => false);
     Get.snackbar(
       'Success',
       'Logged in successfully',

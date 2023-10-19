@@ -3,13 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:medreminder/firebase_options.dart';
+import 'package:medreminder/notifications/appoinments.dart';
 import 'package:medreminder/views/onBoarding/splash.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:uuid/uuid.dart';
+import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
 
 var uuid = const Uuid();
+NotificationService notificationService = NotificationService();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+    notificationService.initializeNotifications();
+    tzdata.initializeTimeZones();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
