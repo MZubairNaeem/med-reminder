@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
+import 'package:medreminder/models/med_model.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/missed.dart';
@@ -7,7 +8,8 @@ import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedu
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/taken.dart';
 
 class MedicineList extends StatefulWidget {
-  const MedicineList({Key? key}) : super(key: key);
+  MedModel? medModel;
+  MedicineList({Key? key, this.medModel}) : super(key: key);
 
   @override
   State<MedicineList> createState() => _MedicineListState();
@@ -63,11 +65,19 @@ class _MedicineListState extends State<MedicineList>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: const [
-                      AllMedicine(),
-                      PendingMedicine(),
-                      MissedMedicine(),
-                      TakenMedicine()
+                    children: [
+                      AllMedicine(
+                        medModel: widget.medModel!,
+                      ),
+                      PendingMedicine(
+                        medModel: widget.medModel!,
+                      ),
+                      MissedMedicine(
+                        medModel: widget.medModel!,
+                      ),
+                      TakenMedicine(
+                        medModel: widget.medModel!,
+                      )
                     ],
                   ),
                 ),

@@ -245,6 +245,9 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                           builder: (context, ref, _) {
                             final userResult = ref.watch(appoinmentProvider);
                             refresh = ref.refresh(appoinmentProvider);
+                            ref.refresh(completedAppoinmentProvider);
+                            ref.refresh(missedAppoinmentProvider);
+                            ref.refresh(upcomingAppoinmentProvider);
                             return userResult.when(
                               data: (notes) {
                                 return const Text('Update');

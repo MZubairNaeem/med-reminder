@@ -114,3 +114,33 @@ final pendingMedProvider = FutureProvider<List<MedModel>>((ref) async {
 
   return notes;
 });
+
+final missedSubMedProvider =
+    FutureProvider.family<List<MedModel>, String?>((ref, medId) async {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  QuerySnapshot<Map<String, dynamic>> doc = await firestore
+      .collection('medSchedule')
+      .doc(medId)
+      .collection('intervals')
+      .where('status', isEqualTo: false)
+      .where('time', isLessThanOrEqualTo: DateTime.now())
+      .get();
+
+  List<MedModel> notes = doc.docs.map((snapshot) {
+    Map<String, dynamic> data = snapshot.data();
+    return MedModel(
+      id: snapshot.id,
+      medName: data['medName'],
+      medType: data['medType'],
+      medCreated: data['medCreated'],
+      startTimeDate: data['startTimeDate'],
+      dosageQuantity: data['dosageQuantity'],
+      interval: data['interval'],
+      quantity: data['quantity'],
+      status: data['status'],
+      uid: data['uid'],
+    );
+  }).toList();
+
+  return notes;
+});

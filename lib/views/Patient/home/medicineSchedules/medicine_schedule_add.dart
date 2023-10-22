@@ -45,6 +45,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
     '24 hours',
   ];
   TimeOfDay? selectedTime = TimeOfDay.now(); // Update the type to TimeOfDay?
+  int intervalHours = 0;
 
   // Function to show the time picker
   Future<void> _selectTime(BuildContext context) async {
@@ -172,10 +173,11 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                           'Remind me every',
                           style: TextStyle(
                             color: Colors.black,
-                            fontSize: 17.sp,
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(width: 1.5.w),
+                        SizedBox(width: 2.w),
                         DropdownButton<String>(
                           value: showHint ? null : selectedInterval,
                           onChanged: (String? newValue) {
@@ -183,13 +185,15 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                               selectedInterval = newValue;
                               showHint =
                                   false; // Hide the hint once an item is selected
+                              intervalHours =
+                                  int.parse(newValue!.split(' ')[0]);
                             });
                           },
                           hint: Text(
                             'Select an interval',
                             style: TextStyle(
                               color: Colors.black,
-                              fontSize: 17.sp,
+                              fontSize: 15.sp,
                             ),
                           ), // Set the hint text
                           //underline: Container(),
@@ -221,7 +225,13 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                         ),
                         Column(
                           children: [
-                            const Text('Hours/Days'),
+                            Text(
+                              'Hours/Days',
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                             Checkbox(
                                 value: intervalCheck,
                                 onChanged: (value) {
@@ -277,6 +287,13 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                     data: (medicine) {
                                       return ElevatedButton(
                                         onPressed: () async {
+                                          print(intervalHours);
+                                          print(selectedTime);
+                                          // Get.snackbar(
+                                          //   selectedTime.toString(),
+                                          //   intervalHours.toString(),
+                                          //   snackPosition: SnackPosition.BOTTOM,
+                                          // );
                                           if (_formKey.currentState!
                                               .validate()) {
                                             if (selectedInterval == null) {
@@ -304,6 +321,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               dosage.text,
                                               selectedInterval.toString(),
                                               qty.text,
+                                              intervalHours,
+                                              selectedTime!,
                                             );
 
                                             // ignore: unused_result
@@ -321,6 +340,9 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                               loading = false;
                                             });
                                             refresh;
+                                            // setState(() {
+                                            //   loading = false;
+                                            // });
                                           }
                                         },
                                         style: ElevatedButton.styleFrom(
@@ -429,13 +451,13 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
   String getHintText(String medicineType) {
     switch (medicineType) {
       case 'Syrup':
-        return 'Qty of Spoon';
+        return 'Spoons per dosage';
       case 'Pill':
-        return 'Qty of Pills';
+        return 'Pill per dosage';
       case 'Syringe':
-        return 'Qty of Syringes';
+        return 'Syringes per dosage';
       case 'Tablet':
-        return 'Qty of Tablets';
+        return 'Tablets per dosage';
       default:
         return 'Enter Quantity';
     }

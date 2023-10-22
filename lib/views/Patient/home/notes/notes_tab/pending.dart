@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/notes_controller.dart';
+import 'package:medreminder/views/Patient/home/notes/notes_details.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_edit.dart';
 import 'package:medreminder/widgets/todolist_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -22,25 +23,26 @@ class _PendingNotesState extends State<PendingNotes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 4.0,
-              right: 4.0,
-            ),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                '<== Swipe left for more options',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     top: 4.0,
+          //     right: 4.0,
+          //   ),
+          //   child: Align(
+          //     alignment: Alignment.topRight,
+          //     child: Text(
+          //       '<== Swipe left for more options',
+          //       style: TextStyle(
+          //         fontSize: 14.sp,
+          //         fontWeight: FontWeight.bold,
+          //         fontStyle: FontStyle.italic,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.only(
               top: 12.0,
@@ -78,72 +80,91 @@ class _PendingNotesState extends State<PendingNotes> {
                                       select = true;
                                     });
                                   },
-                                  child: ToDoList(
-                                    taskName: notes[index].title!,
-                                    description: notes[index].description!,
-                                    taskCompleted: notes[index].status!,
-                                    time: (time.year == now.year &&
-                                            time.month == now.month &&
-                                            time.day == now.day)
-                                        ? formattedTime
-                                        : formattedDate,
-                                    select: select,
-                                    onSelect: (c) async {
-                                      if (c!) {
-                                        selectedNotes.add(notes[index].id!);
-                                      } else {
-                                        selectedNotes.removeWhere((element) =>
-                                            element == notes[index].id!);
-                                      }
-                                      //empty the list
-                                      setState(() {});
-                                    },
-                                    checkList: //checkList,
-                                        selectedNotes.contains(notes[index].id!)
-                                            ? true
-                                            : false,
-                                    onChanged: (value) async {
-                                      //change status of task to completed
-                                      await Notes().changeStatus(
-                                        context,
-                                        notes[index].id!,
-                                        notes[index].status! ? false : true,
-                                      );
-                                      ref.refresh(notesProvider);
-                                      ref.refresh(pendingNotesProvider);
-                                      ref.refresh(completedNotesProvider);
-                                    },
-                                    deleteFunction: (context) async {
-                                      await Notes().deleteNote(
-                                        context,
-                                        notes[index].id!,
-                                      );
-                                      ref.refresh(notesProvider);
-                                      ref.refresh(pendingNotesProvider);
-                                      ref.refresh(completedNotesProvider);
-                                    },
-                                    editFunction: (context) {
-                                      // Notes().updateNote(
-                                      //   context,
-                                      //   notes[index].id!,
-                                      //   title.text,
-                                      //   description.text,
-                                      // );
+                                  child: GestureDetector(
+                                    onTap: () {
                                       Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => NotesEdit(
-                                            id: notes[index].id!,
-                                            title: notes[index].title!,
-                                            description:
-                                                notes[index].description!,
-                                          ),
-                                        ),
-                                      );
-                                      ref.refresh(notesProvider);
-                                      ref.refresh(pendingNotesProvider);
-                                      ref.refresh(completedNotesProvider);
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NotesDetails(
+                                                    time: (time.year ==
+                                                                now.year &&
+                                                            time.month ==
+                                                                now.month &&
+                                                            time.day == now.day)
+                                                        ? formattedTime
+                                                        : formattedDate,
+                                                    notesModel: notes[index],
+                                                  )));
                                     },
+                                    child: ToDoList(
+                                      taskName: notes[index].title!,
+                                      description: notes[index].description!,
+                                      taskCompleted: notes[index].status!,
+                                      time: (time.year == now.year &&
+                                              time.month == now.month &&
+                                              time.day == now.day)
+                                          ? formattedTime
+                                          : formattedDate,
+                                      select: select,
+                                      onSelect: (c) async {
+                                        if (c!) {
+                                          selectedNotes.add(notes[index].id!);
+                                        } else {
+                                          selectedNotes.removeWhere((element) =>
+                                              element == notes[index].id!);
+                                        }
+                                        //empty the list
+                                        setState(() {});
+                                      },
+                                      checkList: //checkList,
+                                          selectedNotes
+                                                  .contains(notes[index].id!)
+                                              ? true
+                                              : false,
+                                      onChanged: (value) async {
+                                        //change status of task to completed
+                                        await Notes().changeStatus(
+                                          context,
+                                          notes[index].id!,
+                                          notes[index].status! ? false : true,
+                                        );
+                                        ref.refresh(notesProvider);
+                                        ref.refresh(pendingNotesProvider);
+                                        ref.refresh(completedNotesProvider);
+                                      },
+                                      deleteFunction: (context) async {
+                                        await Notes().deleteNote(
+                                          context,
+                                          notes[index].id!,
+                                        );
+                                        ref.refresh(notesProvider);
+                                        ref.refresh(pendingNotesProvider);
+                                        ref.refresh(completedNotesProvider);
+                                      },
+                                      editFunction: (context) {
+                                        // Notes().updateNote(
+                                        //   context,
+                                        //   notes[index].id!,
+                                        //   title.text,
+                                        //   description.text,
+                                        // );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => NotesEdit(
+                                              id: notes[index].id!,
+                                              title: notes[index].title!,
+                                              description:
+                                                  notes[index].description!,
+                                            ),
+                                          ),
+                                        );
+                                        ref.refresh(notesProvider);
+                                        ref.refresh(pendingNotesProvider);
+                                        ref.refresh(completedNotesProvider);
+                                      },
+                                    ),
                                   ),
                                 );
                               },

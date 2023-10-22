@@ -34,6 +34,7 @@ class _NotesListState extends State<NotesList>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('Notes'),
         centerTitle: true,

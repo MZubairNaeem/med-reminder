@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -10,6 +9,9 @@ class MedicineCard extends StatelessWidget {
   final String medicineType;
   final String medicineInterval;
   String? qty;
+  bool? select;
+  bool? checkList;
+  Function(bool?)? onSelect;
   Function(BuildContext)? deleteFunction;
   Function(BuildContext)? editFunction;
 
@@ -20,6 +22,9 @@ class MedicineCard extends StatelessWidget {
     required this.medicineType,
     required this.medicineInterval,
     this.qty,
+    this.select,
+    this.checkList,
+    required this.onSelect,
     required this.deleteFunction,
     required this.editFunction,
   });
@@ -28,61 +33,47 @@ class MedicineCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.sp),
-      child: Slidable(
-        endActionPane: ActionPane(motion: const StretchMotion(), children: [
-          SlidableAction(
-            label: 'Edit',
-            backgroundColor: primary,
-            onPressed: editFunction,
-            icon: Icons.edit_rounded,
-            foregroundColor: white,
-            borderRadius: BorderRadius.circular(12.sp),
-          ),
-          SlidableAction(
-            label: 'Remove',
-            backgroundColor: const Color.fromARGB(255, 221, 44, 31),
-            onPressed: deleteFunction,
-            icon: Icons.delete_forever_rounded,
-            foregroundColor: white,
-            borderRadius: BorderRadius.circular(12.sp),
-          ),
-        ]),
-        child: Container(
-          padding: EdgeInsets.all(16.sp),
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.sp),
-            border: Border.all(color: const Color.fromARGB(207, 121, 180, 227)),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Colors.grey.withOpacity(0.5),
-            //     spreadRadius: 3,
-            //     blurRadius: 5,
-            //     offset: Offset(2, 3),
-            //   ),
-            // ],
-            color: const Color.fromARGB(150, 169, 205, 235),
-          ),
+      child: Card(
+        color: blueGray,
+        elevation: 5,
+        shadowColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(6.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Medicine Name:",
                     style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.bold,
+                        color: primary),
                   ),
                   SizedBox(
                     width: 2.w,
                   ),
-                  Text(
-                    medicineName,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
+                  SizedBox(
+                    width: 30.w,
+                    child: Text(
+                      medicineName,
+                      style: TextStyle(
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: select!,
+                    child: Checkbox(
+                      value: checkList,
+                      onChanged: onSelect,
+                      activeColor: const Color.fromARGB(255, 221, 44, 31),
                     ),
                   ),
                 ],

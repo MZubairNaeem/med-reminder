@@ -3,7 +3,7 @@
 
 // Future<void> scheduleNotificationsFromFirestore() async {
 //   // Query Firestore to get tasks with reminder times.
-//   QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('tasks').get();
+//   QuerySnapshot snapshot =  FirebaseFirestore.instance.collection('tasks').get();
 
 //   for (QueryDocumentSnapshot document in snapshot.docs) {
 //     // Extract reminder time from Firestore data (adjust field name as needed).
@@ -11,7 +11,7 @@
 //     DateTime reminderTime = timestamp.toDate();
 
 //     // Schedule notifications using reminderTime.
-//     await scheduleNotification(reminderTime);
+//      scheduleNotification(reminderTime);
 //   }
 // }
 
@@ -29,7 +29,7 @@
 //     iOS: iOSPlatformChannelSpecifics,
 //   );
 
-//   await flutterLocalNotificationsPlugin.schedule(
+//    flutterLocalNotificationsPlugin.schedule(
 //     0,
 //     'Reminder Title',
 //     'Reminder Body',
@@ -47,14 +47,14 @@ class NotificationService {
       FlutterLocalNotificationsPlugin();
   final AndroidInitializationSettings androidInitializationSettings =
       const AndroidInitializationSettings('logo');
-  void initializeNotifications() async {
+  void initializeNotifications() {
     InitializationSettings initializationSettings = InitializationSettings(
       android: androidInitializationSettings,
     );
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void sendNotification(String title, String body) async {
+  void sendNotification(String title, String body) {
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails(
       'channel_id',
@@ -62,18 +62,19 @@ class NotificationService {
       importance: Importance.max,
       priority: Priority.high,
     );
+    print("NOTIFICATION DETAILS$androidNotificationDetails");
     NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );
-    await flutterLocalNotificationsPlugin.show(
-      0,
+    flutterLocalNotificationsPlugin.show(
+      88,
       title,
       body,
       notificationDetails,
     );
   }
 
-  void scheduleNotification(String title, String body) async {
+  void scheduleNotification(String title, String body) {
     try {
       AndroidNotificationDetails androidNotificationDetails =
           const AndroidNotificationDetails(
@@ -85,7 +86,7 @@ class NotificationService {
       NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
       );
-      await flutterLocalNotificationsPlugin.periodicallyShow(
+      flutterLocalNotificationsPlugin.periodicallyShow(
         2,
         title,
         body,

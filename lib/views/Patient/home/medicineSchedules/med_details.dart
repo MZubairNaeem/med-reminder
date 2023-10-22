@@ -1,37 +1,33 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
-import 'package:medreminder/controllers/providers/med_provider.dart';
-import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:medreminder/models/med_model.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/Edit_Medicine.dart';
-import 'package:medreminder/widgets/med_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class PendingMedicine extends StatefulWidget {
+class MedDetails extends StatefulWidget {
   MedModel medModel;
-   PendingMedicine({
-    Key? key,
-    required this.medModel
-  }) : super(key: key);
+  MedDetails({super.key, required this.medModel});
 
   @override
-  State<PendingMedicine> createState() => _PendingMedicineState();
+  State<MedDetails> createState() => _MedDetailsState();
 }
 
-class _PendingMedicineState extends State<PendingMedicine> {
+class _MedDetailsState extends State<MedDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        title: const Text('Medicine Details'),
+        backgroundColor: secondary,
+        centerTitle: true,
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('medSchedule')
             .doc(widget.medModel.id)
             .collection('intervals')
-            .where('status', isEqualTo: false)
-            .where('time', isGreaterThan: DateTime.now())
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {

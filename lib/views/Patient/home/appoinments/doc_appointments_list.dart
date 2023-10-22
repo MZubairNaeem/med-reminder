@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appoinment_tabs/all.dart';
+import 'package:medreminder/views/Patient/home/appoinments/doc_appoinment_tabs/completed.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appoinment_tabs/missed.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appoinment_tabs/upcoming.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_add.dart';
@@ -29,7 +30,7 @@ class _AppoinmentsListState extends State<AppoinmentsList>
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
         load = false;
@@ -63,6 +64,7 @@ class _AppoinmentsListState extends State<AppoinmentsList>
                   controller: _tabController,
                   tabs: const [
                     Tab(text: 'All'),
+                    Tab(text: 'Completed'),
                     Tab(text: 'Upcoming'),
                     Tab(text: 'Missed'),
                   ],
@@ -72,6 +74,7 @@ class _AppoinmentsListState extends State<AppoinmentsList>
                     controller: _tabController,
                     children: const [
                       AllAppoinments(),
+                      CompletedAppoinments(),
                       UpcomingAppoinments(),
                       MissedAppoinments(),
                     ],

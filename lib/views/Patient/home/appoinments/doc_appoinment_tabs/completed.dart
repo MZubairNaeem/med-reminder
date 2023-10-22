@@ -10,14 +10,14 @@ import 'package:medreminder/widgets/appointment_list_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
-class UpcomingAppoinments extends StatefulWidget {
-  const UpcomingAppoinments({super.key});
+class CompletedAppoinments extends StatefulWidget {
+  const CompletedAppoinments({super.key});
 
   @override
-  State<UpcomingAppoinments> createState() => _UpcomingAppoinmentsState();
+  State<CompletedAppoinments> createState() => _CompletedAppoinmentsState();
 }
 
-class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
+class _CompletedAppoinmentsState extends State<CompletedAppoinments> {
   final doctorName = TextEditingController();
 
   final hospitalName = TextEditingController();
@@ -30,7 +30,6 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
   bool val = false;
   bool select = false;
   List<String> selectedAppoinments = [];
-
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 500), () {
@@ -52,7 +51,7 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
             ),
             child: Consumer(
               builder: (context, ref, _) {
-                final userResult = ref.watch(upcomingAppoinmentProvider);
+                final userResult = ref.watch(completedAppoinmentProvider);
 
                 return userResult.when(
                   data: (appoinments) {
@@ -78,12 +77,6 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                               String formattedDate =
                                   DateFormat('MMMM dd, yyyy').format(time);
                               return GestureDetector(
-                                onLongPress: () {
-                                  HapticFeedback.heavyImpact();
-                                  setState(() {
-                                    select = true;
-                                  });
-                                },
                                 onTap: () {
                                   Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -107,6 +100,12 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                                   ref.refresh(missedAppoinmentProvider);
                                   ref.refresh(upcomingAppoinmentProvider);
                                   ref.refresh(completedAppoinmentProvider);
+                                },
+                                onLongPress: () {
+                                  HapticFeedback.heavyImpact();
+                                  setState(() {
+                                    select = true;
+                                  });
                                 },
                                 child: AppointmentListTile(
                                   index: index + 1,
@@ -147,7 +146,7 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                                     ref.refresh(appoinmentProvider);
                                     ref.refresh(missedAppoinmentProvider);
                                     ref.refresh(upcomingAppoinmentProvider);
-                                    ref.refresh(completedAppoinmentProvider);
+                                  ref.refresh(completedAppoinmentProvider);
                                   },
                                   deleteFunction: (context) async {
                                     await Appointments().deleteAppointments(
@@ -157,33 +156,9 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                                     ref.refresh(appoinmentProvider);
                                     ref.refresh(missedAppoinmentProvider);
                                     ref.refresh(upcomingAppoinmentProvider);
-                                    ref.refresh(completedAppoinmentProvider);
+                                  ref.refresh(completedAppoinmentProvider);
                                   },
-                                  editFunction: (context) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => AppoinmentsEdit(
-                                          doctorName:
-                                              appoinments[index].doctorName!,
-                                          hospitalName:
-                                              appoinments[index].hospitalName!,
-                                          note: appoinments[index].note!,
-                                          visitReason:
-                                              appoinments[index].visitReason!,
-                                          appointmentDateTime:
-                                              appoinments[index]
-                                                  .appointmentDateTime!,
-                                          id: appoinments[index].id!,
-                                          status: appoinments[index].status!,
-                                          uid: appoinments[index].uid!,
-                                        ),
-                                      ),
-                                    );
-                                    ref.refresh(appoinmentProvider);
-                                    ref.refresh(missedAppoinmentProvider);
-                                    ref.refresh(upcomingAppoinmentProvider);
-                                    ref.refresh(completedAppoinmentProvider);
-                                  },
+                                  editFunction: (context) {},
                                 ),
                               );
                             });
@@ -282,8 +257,7 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                                         ref.refresh(appoinmentProvider);
                                         ref.refresh(missedAppoinmentProvider);
                                         ref.refresh(upcomingAppoinmentProvider);
-                                        ref.refresh(
-                                            completedAppoinmentProvider);
+                                  ref.refresh(completedAppoinmentProvider);
                                         selectedAppoinments.clear();
                                         // ignore: use_build_context_synchronously
                                         Navigator.pop(context);

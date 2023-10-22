@@ -8,11 +8,11 @@ import 'package:medreminder/controllers/providers/doc_appointment_provider.dart'
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/pharmacies.dart';
-import 'package:medreminder/main.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all_meds.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
+import 'package:medreminder/views/Patient/home/notifications/notifications.dart';
 import 'package:medreminder/views/Patient/home/notifyRelatives/relative_list.dart';
 import 'package:medreminder/views/Patient/home/reports/report.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -87,7 +87,7 @@ class _HomeState extends State<Home> {
           load = false;
         });
       } else {
-        Get.snackbar('Suucess', 'Welcome ${doc.data()!['username']}');
+        // Get.snackbar('Success', 'Welcome ${doc.data()!['username']}');
         setState(() {
           load = false;
         });
@@ -100,6 +100,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    var notificationCount = 0;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minder Alert'),
@@ -144,16 +145,81 @@ class _HomeState extends State<Home> {
           //     );
           //   },
           // ),
-          IconButton(
-            onPressed: () {
-              notificationService.scheduleNotification('title', 'body');
-              print('object');
+          // IconButton(
+          //   onPressed: () {
+          //     // notificationService.sendNotification('title', 'body');
+          //     FlutterBackgroundService().invoke('setAsBackground');
+          //     print('object');
+          //   },
+          //   icon: const Icon(
+          //     Icons.notifications,
+          //     color: Colors.white,
+          //   ),
+          // ),
+          Consumer(
+            builder: (context, ref, _) {
+              final userResult = ref.watch(missedMedProvider);
+              final res = ref.watch(missedAppoinmentProvider);
+              return userResult.when(
+                  data: (med) {
+                    res.when(
+                        data: (appoinment) {
+                          notificationCount = appoinment.length + med.length;
+                        },
+                        loading: () => const Text("..."),
+                        error: (error, stackTrace) {
+                          print('Error: $error');
+                          return Text('Error: $error');
+                        });
+                    return IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeNotification(),
+                          ),
+                        );
+                      },
+                      icon: Stack(
+                        children: [
+                          const Icon(
+                            Icons.notifications,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                          if (notificationCount > 0)
+                            Positioned(
+                              right: 0.0,
+                              child: SizedBox(
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.red,
+                                  ),
+                                  child: Text(
+                                    notificationCount.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                  loading: () => const Text("..."),
+                  error: (error, stackTrace) {
+                    print('Error: $error');
+                    return Text('Error: $error');
+                  });
             },
-            icon: const Icon(
-              Icons.notifications,
-              color: Colors.white,
-            ),
           ),
+
           PopupMenuButton(
             color: Colors.white,
             itemBuilder: (context) => [
@@ -287,7 +353,7 @@ class _HomeState extends State<Home> {
                                             Text(
                                               "Notes",
                                               style: TextStyle(
-                                                fontSize: 18.sp,
+                                                fontSize: 16.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -564,7 +630,7 @@ class _HomeState extends State<Home> {
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const MedicineList(),
+                                  builder: (context) => const AllMeds(),
                                 ),
                               ),
                               child: Card(
@@ -593,7 +659,7 @@ class _HomeState extends State<Home> {
                                               child: Text(
                                                 "Medicine Schedules",
                                                 style: TextStyle(
-                                                  fontSize: 18.sp,
+                                                  fontSize: 16.sp,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                                 softWrap: true,
@@ -914,7 +980,7 @@ class _HomeState extends State<Home> {
                                             Text(
                                               "Appoinments",
                                               style: TextStyle(
-                                                fontSize: 18.sp,
+                                                fontSize: 16.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -1228,7 +1294,7 @@ class _HomeState extends State<Home> {
                                       Text(
                                         "Pharmacy Nearby",
                                         style: TextStyle(
-                                          fontSize: 18.sp,
+                                          fontSize: 16.sp,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -1283,9 +1349,9 @@ class _HomeState extends State<Home> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Relatives",
+                                              "Care Takers",
                                               style: TextStyle(
-                                                fontSize: 18.sp,
+                                                fontSize: 16.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -1424,7 +1490,7 @@ class _HomeState extends State<Home> {
                                             Text(
                                               "Report",
                                               style: TextStyle(
-                                                fontSize: 18.sp,
+                                                fontSize: 16.sp,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),

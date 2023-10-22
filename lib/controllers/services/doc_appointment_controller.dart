@@ -124,4 +124,23 @@ class Appointments {
       );
     }
   }
+  Future<void> deleteMultipleAppoinments(
+      BuildContext context, List<String> ids) async {
+    try {
+      for (var id in ids) {
+        await FirebaseFirestore.instance.collection('appointments').doc(id).delete();
+      }
+      Get.snackbar(
+        'Success',
+        'Appoinments deleted successfully',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } on FirebaseException catch (e) {
+      Get.snackbar(
+        'Error',
+        e.message.toString(),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+  }
 }

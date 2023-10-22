@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/notes_controller.dart';
+import 'package:medreminder/views/Patient/home/notes/notes_details.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_edit.dart';
 import 'package:medreminder/widgets/todolist_tile.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -23,25 +24,26 @@ class _AllNotesState extends State<AllNotes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 4.0,
-              right: 4.0,
-            ),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                '<== Swipe left for more options',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(
+          //     top: 4.0,
+          //     right: 4.0,
+          //   ),
+          //   child: Align(
+          //     alignment: Alignment.topRight,
+          //     child: Text(
+          //       '<== Swipe left for more options',
+          //       style: TextStyle(
+          //         fontSize: 14.sp,
+          //         fontWeight: FontWeight.bold,
+          //         fontStyle: FontStyle.italic,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.only(
               top: 12.0,
@@ -74,6 +76,21 @@ class _AllNotesState extends State<AllNotes> {
                                 String formattedDate =
                                     DateFormat.yMd().format(time);
                                 return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => NotesDetails(
+                                                  time: (time.year ==
+                                                              now.year &&
+                                                          time.month ==
+                                                              now.month &&
+                                                          time.day == now.day)
+                                                      ? formattedTime
+                                                      : formattedDate,
+                                                  notesModel: notes[index],
+                                                )));
+                                  },
                                   onLongPress: () {
                                     HapticFeedback.heavyImpact();
                                     setState(() {
