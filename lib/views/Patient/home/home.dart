@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
-import 'package:medreminder/controllers/providers/notes_provider.dart';
 import 'package:medreminder/controllers/services/pharmacies.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
@@ -1366,7 +1365,7 @@ class _HomeState extends State<Home> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "Total Relatives",
+                                              "Total CareTakers",
                                               style: TextStyle(
                                                 fontSize: 15.sp,
                                                 fontWeight: FontWeight.bold,
@@ -1525,83 +1524,6 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RefreshData extends ConsumerWidget {
-  const RefreshData({super.key});
-
-  //refreshing the data
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final note = ref.refresh(notesProvider);
-    final completedNotes = ref.refresh(completedNotesProvider);
-    final pendingNotes = ref.refresh(pendingNotesProvider);
-    final appoinment = ref.refresh(appoinmentProvider);
-    final upcomingAppoinment = ref.refresh(upcomingAppoinmentProvider);
-    final missedAppoinment = ref.refresh(missedAppoinmentProvider);
-    final pendingMed = ref.refresh(pendingMedProvider);
-    final takenMed = ref.refresh(takenMedProvider);
-    final missedMed = ref.refresh(missedMedProvider);
-
-    return note.when(
-      data: (notes) {
-        return completedNotes.when(
-          data: (completedNotes) {
-            return pendingNotes.when(
-              data: (pendingNotes) {
-                return appoinment.when(
-                  data: (appoinment) {
-                    return upcomingAppoinment.when(
-                      data: (upcomingAppoinment) {
-                        return missedAppoinment.when(
-                          data: (missedAppoinment) {
-                            return pendingMed.when(
-                              data: (pendingMed) {
-                                return takenMed.when(
-                                  data: (takenMed) {
-                                    return missedMed.when(
-                                      data: (missedMed) {
-                                        return const Text('Refreshed');
-                                      },
-                                      loading: () => const Text("..."),
-                                      error: (error, stackTrace) =>
-                                          Text('Error: $error'),
-                                    );
-                                  },
-                                  loading: () => const Text("..."),
-                                  error: (error, stackTrace) =>
-                                      Text('Error: $error'),
-                                );
-                              },
-                              loading: () => const Text("..."),
-                              error: (error, stackTrace) =>
-                                  Text('Error: $error'),
-                            );
-                          },
-                          loading: () => const Text("..."),
-                          error: (error, stackTrace) => Text('Error: $error'),
-                        );
-                      },
-                      loading: () => const Text("..."),
-                      error: (error, stackTrace) => Text('Error: $error'),
-                    );
-                  },
-                  loading: () => const Text("..."),
-                  error: (error, stackTrace) => Text('Error: $error'),
-                );
-              },
-              loading: () => const Text("..."),
-              error: (error, stackTrace) => Text('Error: $error'),
-            );
-          },
-          loading: () => const Text("..."),
-          error: (error, stackTrace) => Text('Error: $error'),
-        );
-      },
-      loading: () => const Text("..."),
-      error: (error, stackTrace) => Text('Error: $error'),
     );
   }
 }

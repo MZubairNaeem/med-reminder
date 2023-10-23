@@ -7,6 +7,7 @@ import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/Edit_Medicine.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
 import 'package:medreminder/widgets/med_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -133,7 +134,7 @@ class _MedicineListState extends State<AllMeds> {
         ],
       ),
       floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Visibility(
             visible: select,
@@ -245,6 +246,25 @@ class _MedicineListState extends State<AllMeds> {
                 child: const Icon(
                   Icons.delete_rounded,
                 ), // You can change the icon as needed
+              ),
+            ),
+          ),
+          Visibility(
+            visible: !select,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton.extended(
+                backgroundColor: secondary,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MedicineSchedule(),
+                    ),
+                  );
+                },
+                label: const Text("Add Medicine"),
+                icon: const Icon(Icons.add),
               ),
             ),
           ),

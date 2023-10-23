@@ -144,3 +144,31 @@ final missedSubMedProvider =
 
   return notes;
 });
+
+class SubMedModel {
+  MedModel? medModel;
+  DateTime? startDate;
+  DateTime? endDate;
+  SubMedModel({
+    this.medModel,
+    this.endDate,
+    this.startDate,
+  });
+}
+
+///sub med
+final subSedProvider =
+    FutureProvider.family<int, SubMedModel?>((ref, subMedModel) async {
+  String? medId = subMedModel?.medModel!.id;
+  DateTime? startDate = subMedModel?.startDate;
+  DateTime? endDate = subMedModel?.endDate;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  QuerySnapshot<Map<String, dynamic>> doc = await firestore
+      .collection('medSchedule')
+      .doc(medId)
+      .collection('intervals')
+      .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate!))
+      .where('time', isLessThan: Timestamp.fromDate(endDate!))
+      .get();
+  return doc.size;
+});

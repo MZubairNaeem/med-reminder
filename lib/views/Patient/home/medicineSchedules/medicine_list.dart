@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/models/med_model.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/missed.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/pending.dart';
@@ -93,19 +92,6 @@ class _MedicineListState extends State<MedicineList>
             ),
           )
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: secondary,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MedicineSchedule(),
-            ),
-          );
-        },
-        label: const Text("Add Medicine"),
-        icon: const Icon(Icons.add),
       ),
     );
   }

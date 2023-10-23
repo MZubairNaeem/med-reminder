@@ -64,7 +64,7 @@ class _AppoinmentsListState extends State<AppoinmentsList>
                   controller: _tabController,
                   tabs: const [
                     Tab(text: 'All'),
-                    Tab(text: 'Completed'),
+                    Tab(text: 'Attended'),
                     Tab(text: 'Upcoming'),
                     Tab(text: 'Missed'),
                   ],
