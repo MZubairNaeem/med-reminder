@@ -166,7 +166,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                     ),
                     SizedBox(height: 1.5.h),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
@@ -226,9 +226,9 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                         Column(
                           children: [
                             Text(
-                              'Hours/Days',
+                              'Hours/Day',
                               style: TextStyle(
-                                fontSize: 15.sp,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

@@ -68,7 +68,7 @@ class LoginController {
     } on FirebaseAuthException catch (e) {
       Get.snackbar(
         'Failed',
-        e.toString().replaceAll('FirebaseAuthException', '').trim(),
+        e.message!,
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,

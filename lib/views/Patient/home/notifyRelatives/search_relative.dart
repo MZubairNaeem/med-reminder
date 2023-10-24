@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/services/relative_controller.dart';
@@ -16,9 +15,15 @@ class SearchRelative extends StatefulWidget {
 class _SearchRelativeState extends State<SearchRelative> {
   final searchController = TextEditingController();
   bool load = false;
+  List phoneList = [];
 
   @override
   Widget build(BuildContext context) {
+    final relatives = Relative().relatives;
+    //print the value Instance of '_JsonQuery' to the console
+    relatives.get().then((value) => value.docs.forEach((element) {
+          phoneList.add(element['phone']);
+        }));
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -72,11 +77,9 @@ class _SearchRelativeState extends State<SearchRelative> {
               StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('users')
-                    .where('phone',
-                        isGreaterThanOrEqualTo: searchController.text.trim())
-                    .where("phone",
-                        isNotEqualTo:
-                            FirebaseAuth.instance.currentUser!.phoneNumber)
+                    .where('userType', isEqualTo: 'caretaker')
+                    .where('credentials',
+                        isEqualTo: searchController.text.trim())
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
@@ -99,32 +102,44 @@ class _SearchRelativeState extends State<SearchRelative> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: ListTile(
-                                  onTap: () async {
-                                    setState(() {
-                                      load = true;
-                                      //1 second delay
-                                      Future.delayed(const Duration(seconds: 1),
-                                          () {
-                                        setState(() {
-                                          load = false;
-                                        });
-                                      });
-                                    });
-                                    Relative().addRelative(
-                                        context,
-                                        searchUser.credentials!,
-                                        searchUser.uid!);
-                                  },
                                   title: Text(searchUser.credentials!),
                                   trailing: Container(
-                                    decoration: const BoxDecoration(
-                                      color: secondary,
+                                    decoration: BoxDecoration(
+                                      color: phoneList.contains(
+                                              searchUser.credentials.toString())
+                                          ? Colors.green
+                                          : secondary,
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: white,
-                                    ),
+                                    child: phoneList.contains(
+                                            searchUser.credentials.toString())
+                                        ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                          )
+                                        : GestureDetector(
+                                            onTap: () async {
+                                              setState(() {
+                                                load = true;
+                                                //1 second delay
+                                                Future.delayed(
+                                                    const Duration(seconds: 1),
+                                                    () {
+                                                  setState(() {
+                                                    load = false;
+                                                  });
+                                                });
+                                              });
+                                              Relative().addRelative(
+                                                  context,
+                                                  searchUser.credentials!,
+                                                  searchUser.uid!);
+                                            },
+                                            child: const Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                   ),
                                 ),
                               );

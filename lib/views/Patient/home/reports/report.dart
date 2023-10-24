@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +38,18 @@ class _ReportState extends State<Report> {
   bool load = true;
   bool report1 = false;
   bool report2 = false;
-  bool med1 = true;
-  bool med2 = true;
+  bool med1 = false;
+  bool med2 = false;
+  StreamController<int> takenCount = StreamController<int>.broadcast();
+  StreamController<int> PendingCount = StreamController<int>.broadcast();
+
+  //dispose the controller
+  @override
+  void dispose() {
+    takenCount.close();
+    PendingCount.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,70 +124,148 @@ class _ReportState extends State<Report> {
                     Visibility(
                       visible: med1 && med2,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Consumer(
-                            builder: (context, ref, _) {
-                              final userResult = ref.watch(medProvider);
-                              // ref.refresh(medProvider);
-                              return userResult.when(
-                                data: (data) {
-                                  int count = 0;
-                                  int documentCount = 0;
-                                  for (var id in data) {
-                                    final test = FirebaseFirestore.instance
-                                        .collection('medSchedule')
-                                        .doc(id.id)
-                                        .collection('intervals')
-                                        .get();
-                                    test.then((QuerySnapshot querySnapshot) {
-                                      documentCount = querySnapshot.size;
-                                      count = count + documentCount;
-                                      print(
-                                          "Total Document Count: $documentCount");
-                                    });
-                                  }
-                                  return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Total Dosages',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Consumer(
-                                        builder: (context, ref, _) {
-                                          final userResult =
-                                              ref.watch(medProvider);
-                                          // ref.refresh(medProvider);
-                                          return userResult.when(
-                                            data: (data) {
-                                              return Text(
-                                                data.toString(),
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              );
-                                            },
-                                            loading: () => const Text("..."),
-                                            error: (error, stackTrace) =>
-                                                Text('Error: $error'),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                                loading: () => const Text("..."),
-                                error: (error, stackTrace) =>
-                                    Text('Error: $error'),
+                          StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('medSchedule')
+                                .where('uid', isEqualTo: uid)
+                                .where('startTimeDate',
+                                    isGreaterThanOrEqualTo:
+                                        Timestamp.fromDate(medStartDate!))
+                                .where('startTimeDate',
+                                    isLessThan: Timestamp.fromDate(medEndDate!))
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                print(snapshot.error);
+                                return Text('Something went wrong');
+                              }
+
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Text("Loading");
+                              }
+                              int dcount = 0;
+                              if (snapshot.data!.docs.length != 0) {
+                                int total = snapshot.data!.docs.length;
+                                dcount = 0;
+                                for (var doc in snapshot.data!.docs) {
+                                  FirebaseFirestore.instance
+                                      .collection('medSchedule')
+                                      .doc(doc.id)
+                                      .collection('intervals')
+                                      .where('status', isEqualTo: false)
+                                      .get()
+                                      .then((QuerySnapshot querySnapshot) {
+                                    if (querySnapshot.size == 0) {
+                                      dcount++;
+                                    }
+                                    takenCount.add(dcount);
+                                    PendingCount.add(total - dcount);
+                                  });
+                                }
+                              }
+
+                              return Text(
+                                'Total Medicines: ${snapshot.data!.docs.length}',
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               );
                             },
                           ),
+                          //Display the count as taken medicine
+                          StreamBuilder<int>(
+                              stream: takenCount
+                                  .stream, // Use the stream from the controller
+                              builder: (BuildContext context, snapshot) {
+                                return Text(
+                                  "Taken ${snapshot.data ?? 0}",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              }),
+                          StreamBuilder<int>(
+                              stream: PendingCount
+                                  .stream, // Use the stream from the controller
+                              builder: (BuildContext context, snapshot) {
+                                return Text(
+                                  "Pending ${snapshot.data ?? 0}",
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              })
+                          // Consumer(
+                          //   builder: (context, ref, _) {
+                          //     final userResult = ref.watch(medProvider);
+                          //     // ref.refresh(medProvider);
+                          //     return userResult.when(
+                          //       data: (data) {
+                          //         int count = 0;
+                          //         int documentCount = 0;
+                          //         for (var id in data) {
+                          //           final test = FirebaseFirestore.instance
+                          //               .collection('medSchedule')
+                          //               .doc(id.id)
+                          //               .collection('intervals')
+                          //               .get();
+                          //           test.then((QuerySnapshot querySnapshot) {
+                          //             documentCount = querySnapshot.size;
+                          //             count = count + documentCount;
+                          //             print(
+                          //                 "Total Document Count: $documentCount");
+                          //           });
+                          //         }
+                          //         return Row(
+                          //           mainAxisAlignment:
+                          //               MainAxisAlignment.spaceBetween,
+                          //           children: [
+                          //             Text(
+                          //               'Total Dosages $documentCount.',
+                          //               style: TextStyle(
+                          //                 fontSize: 20,
+                          //                 fontWeight: FontWeight.bold,
+                          //               ),
+                          //             ),
+                          //             const SizedBox(width: 10),
+                          //             //   Consumer(
+                          //             //     builder: (context, ref, _) {
+                          //             //       final userResult =
+                          //             //           ref.watch(medProvider);
+                          //             //       // ref.refresh(medProvider);
+                          //             //       return userResult.when(
+                          //             //         data: (data) {
+                          //             //           return Text(
+                          //             //             data.toString(),
+                          //             //             style: TextStyle(
+                          //             //               fontSize: 20,
+                          //             //               fontWeight: FontWeight.bold,
+                          //             //             ),
+                          //             //           );
+                          //             //         },
+                          //             //         loading: () => const Text("..."),
+                          //             //         error: (error, stackTrace) =>
+                          //             //             Text('Error: $error'),
+                          //             //       );
+                          //             //     },
+                          //             //   ),
+                          //           ],
+                          //         );
+                          //       },
+                          //       loading: () => const Text("..."),
+                          //       error: (error, stackTrace) =>
+                          //           Text('Error: $error'),
+                          //     );
+                          //   },
+                          // ),
                           // const SizedBox(height: 10),
                           // Consumer(
                           //   builder: (context, ref, _) {

@@ -5,6 +5,11 @@ import 'package:get/get.dart';
 import 'package:medreminder/models/relative_model.dart';
 
 class Relative {
+  final relatives = FirebaseFirestore.instance.collection('relative').where(
+        'uid',
+        isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+      );
+
   addRelative(BuildContext context, String credentials, String uid) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -46,15 +51,18 @@ class Relative {
       );
     }
     //check if the user is already added
+
+    return 'success';
   }
 
   //delete relative
   deleteRelative(BuildContext context, String credentials) async {
     try {
+      print(credentials);
       //remove the relative from the list
       await FirebaseFirestore.instance
           .collection('relative')
-          .where('credentials', isEqualTo: credentials)
+          .where('phone', isEqualTo: credentials)
           .get()
           .then((snapshot) {
         snapshot.docs.first.reference.delete();
@@ -76,5 +84,29 @@ class Relative {
       );
     }
     //check if the user is already added
+  }
+
+  //get all relatives
+  Future<List<RelativeModel>> getAllRelatives(BuildContext context) async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('relative')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get();
+      List<RelativeModel> relativeModel = [];
+      querySnapshot.docs.forEach((element) {
+        relativeModel.add(RelativeModel.fromSnap(element));
+      });
+      return relativeModel;
+    } on FirebaseAuthException catch (e) {
+      Get.snackbar(
+        'Error',
+        e.toString(),
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
+    return [];
   }
 }

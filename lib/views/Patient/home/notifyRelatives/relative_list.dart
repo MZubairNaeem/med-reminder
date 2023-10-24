@@ -66,7 +66,8 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
             Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(relativelist);
-                // ref.refresh(relativelist);
+                ref.refresh(relativelist);
+
                 return userResult.when(
                     data: (relative) {
                       return relative.isEmpty
@@ -83,6 +84,7 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
                           : Expanded(
                               child: ListView.builder(
                                 itemCount: relative.length,
+                                padding: EdgeInsets.only(left: 2.w, right: 2.w),
                                 itemBuilder: (context, index) {
                                   return load
                                       ? const Center(
@@ -98,17 +100,19 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
                                                   label: 'Remove',
                                                   backgroundColor: secondary,
                                                   onPressed: (value) async {
-                                                    setState(() {
-                                                      load = true;
-                                                    });
-                                                    await Relative()
+                                                    // setState(() {
+                                                    //   load = true;
+                                                    // });
+                                                    var result;
+                                                    result = await Relative()
                                                         .deleteRelative(
                                                             context,
                                                             relative[index]
                                                                 .phone!);
-                                                    setState(() {
-                                                      load = false;
-                                                    });
+                                                    print(result);
+                                                    // setState(() {
+                                                    //   load = false;
+                                                    // });
                                                   },
                                                   icon: Icons
                                                       .delete_forever_rounded,
