@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
+import 'package:medreminder/controllers/providers/get_patients.dart';
+import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/providers/patient_list_provider.dart';
 import 'package:medreminder/controllers/services/relative_controller.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
@@ -89,9 +91,9 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
           children: [
             Consumer(
               builder: (context, ref, _) {
-                final userResult = ref.watch(patientlist);
-                // ref.refresh(patientlist);
-                return userResult.when(
+                final patientsList = ref.watch(patientlistforrelative);
+                ref.refresh(patientlist);
+                return patientsList.when(
                     data: (list) {
                       return list.isEmpty
                           ? Center(
@@ -124,7 +126,8 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
                                                 load = true;
                                               });
                                               await Relative().deleteRelative(
-                                                  context, list[index].phone!);
+                                                  context,
+                                                  list[index].username!);
                                               setState(() {
                                                 load = false;
                                               });
@@ -146,7 +149,7 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
                                           ),
                                         ),
                                         title: Text(
-                                          list[index].phone!,
+                                          list[index].credentials!,
                                           style: TextStyle(
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.bold,
@@ -166,16 +169,43 @@ class _CaretakerHomeState extends State<Caretaker_Home> {
                     });
               },
             ),
-            ListView.builder(
-              itemCount: 1,
-              itemBuilder: (context, index) {
-                return const Card(
-                  elevation: 5,
-                  child: ListTile(
-                    title: Text('+92 318 00 72 413'),
-                    subtitle: Text('Missed 2 doses of medicine'),
-                  ),
-                );
+            Consumer(
+              builder: (context, ref, child) {
+                final missedMedicines = ref.watch(missedMedProvider);
+
+                return missedMedicines.when(
+                    data: (mediNotificationList) {
+                      return mediNotificationList.isEmpty
+                          ? Center(
+                              child: Text(
+                                '-- You have no list yet --',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: mediNotificationList.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  elevation: 5,
+                                  child: ListTile(
+                                    title: Text(
+                                        '${mediNotificationList[index].medName}'),
+                                    subtitle: Text(
+                                        'Missed doses of ${mediNotificationList[index].medName}'),
+                                  ),
+                                );
+                              },
+                            );
+                    },
+                    loading: () => const Text("..."),
+                    error: (error, stackTrace) {
+                      print('Error: $error');
+                      return Text('Error: $error');
+                    });
               },
             ),
           ],
