@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
-import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class Report extends StatefulWidget {
@@ -127,82 +125,201 @@ class _ReportState extends State<Report> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('medSchedule')
-                                .where('uid', isEqualTo: uid)
-                                .where('startTimeDate',
-                                    isGreaterThanOrEqualTo:
-                                        Timestamp.fromDate(medStartDate!))
-                                .where('startTimeDate',
-                                    isLessThan: Timestamp.fromDate(medEndDate!))
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.hasError) {
-                                print(snapshot.error);
-                                return Text('Something went wrong');
-                              }
+                          // StreamBuilder<QuerySnapshot>(
+                          //   stream: FirebaseFirestore.instance
+                          //       .collection('medSchedule')
+                          //       .where('uid', isEqualTo: uid)
+                          //       .where('time',
+                          //           isGreaterThanOrEqualTo:
+                          //               Timestamp.fromDate(medStartDate!))
+                          //       .where('startTimeDate',
+                          //           isLessThan: Timestamp.fromDate(medEndDate!))
+                          //       .snapshots(),
+                          //   builder: (BuildContext context,
+                          //       AsyncSnapshot<QuerySnapshot> snapshot) {
+                          //     if (snapshot.hasError) {
+                          //       print(snapshot.error);
+                          //       return const Text('Something went wrong');
+                          //     }
 
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Text("Loading");
-                              }
-                              int dcount = 0;
-                              if (snapshot.data!.docs.length != 0) {
-                                int total = snapshot.data!.docs.length;
-                                dcount = 0;
-                                for (var doc in snapshot.data!.docs) {
-                                  FirebaseFirestore.instance
-                                      .collection('medSchedule')
-                                      .doc(doc.id)
-                                      .collection('intervals')
-                                      .where('status', isEqualTo: false)
-                                      .get()
-                                      .then((QuerySnapshot querySnapshot) {
-                                    if (querySnapshot.size == 0) {
-                                      dcount++;
-                                    }
-                                    takenCount.add(dcount);
-                                    PendingCount.add(total - dcount);
-                                  });
-                                }
-                              }
+                          //     if (snapshot.connectionState ==
+                          //         ConnectionState.waiting) {
+                          //       return const Text("Loading");
+                          //     }
 
-                              return Text(
-                                'Total Medicines: ${snapshot.data!.docs.length}',
-                                style: const TextStyle(
+                          //     return Text(
+                          //       'Total Medicines: ${snapshot.data!.docs.length}',
+                          //       style: const TextStyle(
+                          //         fontSize: 20,
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+                          //Display the count as taken medicine
+                          // StreamBuilder<int>(
+                          //     stream: takenCount
+                          //         .stream, // Use the stream from the controller
+                          //     builder: (BuildContext context, snapshot) {
+                          //       return Text(
+                          //         "Taken ${snapshot.data ?? 0}",
+                          //         style: const TextStyle(
+                          //           fontSize: 20,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //       );
+                          //     }),
+                          // StreamBuilder<int>(
+                          //     stream: PendingCount
+                          //         .stream, // Use the stream from the controller
+                          //     builder: (BuildContext context, snapshot) {
+                          //       return Text(
+                          //         "Pending ${snapshot.data ?? 0}",
+                          //         style: const TextStyle(
+                          //           fontSize: 20,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //       );
+                          //     }),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Total Appointments',
+                                style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            },
+                              ),
+                              SizedBox(width: 1.h),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('medSchedule')
+                                    .where('uid', isEqualTo: uid)
+                                    .where('time',
+                                        isGreaterThanOrEqualTo:
+                                            Timestamp.fromDate(medStartDate!))
+                                    .where('time',
+                                        isLessThan:
+                                            Timestamp.fromDate(medEndDate!))
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.data!.docs.length.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
-                          //Display the count as taken medicine
-                          StreamBuilder<int>(
-                              stream: takenCount
-                                  .stream, // Use the stream from the controller
-                              builder: (BuildContext context, snapshot) {
-                                return Text(
-                                  "Taken ${snapshot.data ?? 0}",
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              }),
-                          StreamBuilder<int>(
-                              stream: PendingCount
-                                  .stream, // Use the stream from the controller
-                              builder: (BuildContext context, snapshot) {
-                                return Text(
-                                  "Pending ${snapshot.data ?? 0}",
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                );
-                              })
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Attended',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 1.h),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('medSchedule')
+                                    .where('uid', isEqualTo: uid)
+                                    .where('time',
+                                        isGreaterThanOrEqualTo:
+                                            Timestamp.fromDate(medStartDate!))
+                                    .where('time',
+                                        isLessThan:
+                                            Timestamp.fromDate(medEndDate!))
+                                    .where('status', isEqualTo: true)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.data!.docs.length.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Upcoming',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 1.h),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('medSchedule')
+                                    .where('uid', isEqualTo: uid)
+                                    .where('status', isEqualTo: false)
+                                    .where('time',
+                                        isGreaterThanOrEqualTo: Timestamp.now())
+                                    .where('time',
+                                        isLessThan:
+                                            Timestamp.fromDate(medEndDate!))
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.data!.docs.length.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Missed',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 1.h),
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('medSchedule')
+                                    .where('uid', isEqualTo: uid)
+                                    .where('status', isEqualTo: false)
+                                    .where('time',
+                                        isGreaterThanOrEqualTo:
+                                            Timestamp.fromDate(medStartDate!))
+                                    .where('time', isLessThan: Timestamp.now())
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    snapshot.data!.docs.length.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
+                          ),
                           // Consumer(
                           //   builder: (context, ref, _) {
                           //     final userResult = ref.watch(medProvider);
