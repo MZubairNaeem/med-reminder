@@ -3,22 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
+import 'package:medreminder/models/med_model.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class EditMedicineSchedule extends StatefulWidget {
-  final String medicineName;
-  final String dosage;
-  final String medicineType;
-  final String medicineInterval;
-  final String id;
+  MedModel medModel;
 
-  const EditMedicineSchedule({
+  EditMedicineSchedule({
     super.key,
-    required this.medicineName,
-    required this.dosage,
-    required this.medicineType,
-    required this.medicineInterval,
-    required this.id,
+    required this.medModel,
   });
 
   @override
@@ -36,20 +29,15 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
   String? selectedInterval; // Declare selectedInterval as nullable
   bool showHint = true;
   final _formKey = GlobalKey<FormState>();
-  final List<String> intervals = [
-    '6 hours',
-    '8 hours',
-    '12 hours',
-    '24 hours',
-  ];
   TimeOfDay? selectedTime = TimeOfDay.now(); // Update the type to TimeOfDay?
   @override
   void initState() {
     super.initState();
-    med.text = widget.medicineName;
-    dosage.text = widget.dosage;
-    selectedMedicineType = widget.medicineType;
-    selectedInterval = widget.medicineInterval;
+    med.text = widget.medModel.medName!;
+    dosage.text = widget.medModel.dosageQuantity!;
+    selectedMedicineType = widget.medModel.medType!;
+    dosage.text = widget.medModel.dosageQuantity!;
+    qty.text = widget.medModel.quantity!;
   }
 
   // Function to show the time picker
@@ -65,20 +53,44 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
     }
   }
 
+  final qty = TextEditingController();
+  bool intervalCheck = false;
+
+  final List<String> intervalsDays = [
+    '1 Day',
+    '2 Days',
+    '3 Days',
+    '4 Days',
+    '5 Days',
+    '6 Days',
+    '1 Week',
+    '2 Weeks',
+    '3 Weeks',
+    '1 Month',
+  ];
+  final List<String> intervalsHours = [
+    '6 hours',
+    '8 hours',
+    '12 hours',
+    '24 hours',
+  ];
+  int intervalHours = 0;
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: secondary,
-          centerTitle: true,
-          title: const Text("Edit Medminder"),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(16.sp),
-            child: Form(
-              key: _formKey,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondary,
+        centerTitle: true,
+        title: const Text("Edit Medicine"),
+      ),
+      body: Builder(builder: (BuildContext scaffoldContext) {
+        return SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.all(16.sp),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -90,12 +102,20 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                     ),
                   ),
                   SizedBox(height: 2.h),
-                  TextField(
+                  TextFormField(
                     controller: med,
                     decoration: const InputDecoration(
                       hintText: "Enter Medicine Name",
                       border: OutlineInputBorder(),
                     ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Medicine name is required';
+                      } else if (value.length > 25) {
+                        return 'Medicine name should be at most 25 characters';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 2.h),
                   Text(
@@ -118,21 +138,38 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                     ],
                   ),
                   SizedBox(height: 3.h),
-                  Text(
-                    "Dosage",
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.bold,
+                  TextFormField(
+                    controller: qty,
+                    decoration: const InputDecoration(
+                      hintText: 'Total no of dosages',
+                      border: OutlineInputBorder(),
                     ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Total no of dosages are required';
+                      } else if (value.length > 5) {
+                        return 'Total no of dosages should be at most 4 characters';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 2.h),
-                  TextField(
+                  TextFormField(
                     controller: dosage,
                     decoration: InputDecoration(
-                      hintText: getHintText(
-                          selectedMedicineType), // Get the hint text dynamically
+                      hintText: getHintText(selectedMedicineType),
                       border: const OutlineInputBorder(),
                     ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Dosage is required';
+                      } else if (value.length > 25) {
+                        return 'Dosage should be at most 25 characters';
+                      }
+                      return null;
+                    },
                   ),
                   SizedBox(height: 2.5.h),
                   Text(
@@ -144,36 +181,80 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                   ),
                   SizedBox(height: 1.5.h),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         'Remind me every',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 17.sp,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(width: 1.5.w),
+                      SizedBox(width: 2.w),
                       DropdownButton<String>(
-                        value: selectedInterval,
+                        value: showHint ? null : selectedInterval,
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedInterval = newValue;
+                            showHint =
+                                false; // Hide the hint once an item is selected
+                            intervalHours = int.parse(newValue!.split(' ')[0]);
                           });
                         },
-                        items: intervals.map((String interval) {
-                          return DropdownMenuItem<String>(
-                            value: interval,
-                            child: Text(
-                              interval,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17.sp,
-                              ),
+                        hint: Text(
+                          'Select an interval',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15.sp,
+                          ),
+                        ), // Set the hint text
+                        //underline: Container(),
+                        items: intervalCheck
+                            ? intervalsDays.map((String interval) {
+                                return DropdownMenuItem<String>(
+                                  value: interval,
+                                  child: Text(
+                                    interval,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                );
+                              }).toList()
+                            : intervalsHours.map((String interval) {
+                                return DropdownMenuItem<String>(
+                                  value: interval,
+                                  child: Text(
+                                    interval,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Hours/Day',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        }).toList(),
+                          ),
+                          Checkbox(
+                              value: intervalCheck,
+                              onChanged: (value) {
+                                selectedInterval = null;
+                                setState(() {
+                                  intervalCheck = value!;
+                                });
+                              }),
+                        ],
                       ),
                     ],
                   ),
@@ -209,76 +290,146 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                   ),
                   SizedBox(height: 3.h),
                   Center(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        setState(() {
-                          load = true;
-                        });
-                        if (!_formKey.currentState!.validate()) {
-                          setState(() {
-                            load = false;
-                          });
-                          return;
-                        }
-                        await Med().updateMed(
-                          context,
-                          widget.id,
-                          med.text,
-                          dosage.text,
-                          selectedMedicineType,
-                          selectedInterval!,
-                        );
-                        setState(() {
-                          load = false;
-                        });
-                        med.clear();
-                        dosage.clear();
-                        refresh;
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primary, // Primary background color
-                        foregroundColor: Colors.white, // Text color
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(14.sp),
-                        child: load
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              )
-                            : Consumer(
-                                builder: (context, ref, _) {
-                                  final userResult = ref.watch(medProvider);
-                                  refresh = ref.refresh(medProvider);
-                                  ref.refresh(missedMedProvider);
-                                  ref.refresh(takenMedProvider);
-                                  ref.refresh(pendingMedProvider);
-                                  return userResult.when(
-                                    data: (notes) {
-                                      return Text(
-                                        'Update',
-                                        style: TextStyle(
-                                          fontSize: 17.sp,
-                                        ),
-                                      );
-                                    },
-                                    loading: () => const Text("..."),
-                                    error: (error, stackTrace) =>
-                                        Text('Error: $error'),
-                                  );
-                                },
-                              ),
-                      ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Consumer(
+                            builder: (context, ref, _) {
+                              final userResult = ref.watch(medProvider);
+                              // ref.refresh(medProvider);
+                              return userResult.when(
+                                  data: (medicine) {
+                                    return ElevatedButton(
+                                      onPressed: () async {
+                                        print(intervalHours);
+                                        print(selectedTime);
+                                        // Get.snackbar(
+                                        //   selectedTime.toString(),
+                                        //   intervalHours.toString(),
+                                        //   snackPosition: SnackPosition.BOTTOM,
+                                        // );
+                                        if (_formKey.currentState!.validate()) {
+                                          if (selectedInterval == null) {
+                                            ScaffoldMessenger.of(
+                                                    scaffoldContext)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Please select an interval.'),
+                                                duration: Duration(
+                                                    seconds:
+                                                        2), // Adjust the duration as needed
+                                              ),
+                                            );
+                                            return;
+                                          } else if (selectedTime ==
+                                              TimeOfDay.now()) {
+                                            ScaffoldMessenger.of(
+                                                    scaffoldContext)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Please select a time.'),
+                                                duration: Duration(
+                                                    seconds:
+                                                        2), // Adjust the duration as needed
+                                              ),
+                                            );
+                                            return;
+                                          }
+
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          await Med().updateMed(
+                                            context,
+                                            widget.medModel.id!,
+                                            med.text,
+                                            selectedMedicineType,
+                                            selectedTime!,
+                                            dosage.text,
+                                            intervalHours,
+                                            qty.text,
+                                            widget.medModel.time!,
+                                          );
+
+                                          // ignore: unused_result
+                                          ref.refresh(medProvider);
+                                          ref.refresh(missedMedProvider);
+                                          ref.refresh(takenMedProvider);
+                                          ref.refresh(pendingMedProvider);
+
+                                          setState(() {
+                                            med.clear();
+                                            dosage.clear();
+                                            qty.clear();
+                                            selectedInterval = null;
+                                            selectedTime = null;
+                                            loading = false;
+                                          });
+                                          refresh;
+                                          // setState(() {
+                                          //   loading = false;
+                                          // });
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            primary, // Primary background color
+                                        foregroundColor:
+                                            Colors.white, // Text color
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(14.sp),
+                                        child: loading
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Consumer(
+                                                builder: (context, ref, _) {
+                                                  final userResult =
+                                                      ref.watch(medProvider);
+                                                  refresh =
+                                                      ref.refresh(medProvider);
+                                                  return userResult.when(
+                                                    data: (notes) {
+                                                      return Text(
+                                                        'Update',
+                                                        style: TextStyle(
+                                                          fontSize: 17.sp,
+                                                        ),
+                                                      );
+                                                    },
+                                                    loading: () =>
+                                                        const Text("..."),
+                                                    error: (error,
+                                                            stackTrace) =>
+                                                        Text('Error: $error'),
+                                                  );
+                                                },
+                                              ),
+                                      ),
+                                    );
+                                  },
+                                  loading: () => const Text("..."),
+                                  error: (error, stackTrace) {
+                                    return Text('Error: $error');
+                                  });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -326,14 +477,14 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
 
   String getHintText(String medicineType) {
     switch (medicineType) {
-      case 'Bottle':
-        return 'Qty of Spoon';
+      case 'Syrup':
+        return 'Spoons per dosage';
       case 'Pill':
-        return 'Qty of Pills';
+        return 'Pill per dosage';
       case 'Syringe':
-        return 'Qty of Syringes';
+        return 'Syringes per dosage';
       case 'Tablet':
-        return 'Qty of Tablets';
+        return 'Tablets per dosage';
       default:
         return 'Enter Quantity';
     }

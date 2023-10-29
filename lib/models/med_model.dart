@@ -11,6 +11,7 @@ class MedModel {
   bool? status;
   String? id;
   String? uid;
+  Timestamp? time;
 
   MedModel({
     this.medName,
@@ -23,6 +24,7 @@ class MedModel {
     this.status,
     this.id,
     this.uid,
+this.time,
   });
 
   MedModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class MedModel {
     status = json['status'];
     id = json['id'];
     uid = json['uid'];
+    time = json['time'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +55,7 @@ class MedModel {
     data['status'] = status;
     data['id'] = id;
     data['uid'] = uid;
+    data['time'] = time;
     return data;
   }
 }

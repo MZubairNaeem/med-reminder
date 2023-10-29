@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -25,8 +26,6 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
       child: Scaffold(
         backgroundColor: Colors.grey[50],
         appBar: AppBar(
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
           backgroundColor: secondary,
           title: const Text(
             "Relatives List",
@@ -141,6 +140,31 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
                                                     fontSize: 16.sp,
                                                     fontWeight: FontWeight.bold,
                                                   ),
+                                                ),
+                                                subtitle: StreamBuilder(
+                                                  stream: FirebaseFirestore
+                                                      .instance
+                                                      .collection('users')
+                                                      .where('uid',
+                                                          isEqualTo:
+                                                              relative[index]
+                                                                  .uid)
+                                                      .snapshots(),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.hasData) {
+                                                      return Text(
+                                                        //user name
+                                                        'Username: ${snapshot.data!.docs[0]['username']}',
+                                                        style: TextStyle(
+                                                            fontSize: 16.sp,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: secondary),
+                                                      );
+                                                    } else {
+                                                      return const Text("...");
+                                                    }
+                                                  },
                                                 ),
                                                 trailing: Text(
                                                   '<- Swipe to remove',

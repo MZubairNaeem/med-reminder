@@ -162,96 +162,6 @@ class _LoginState extends State<EmailLogin> {
                       ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      //or text
-                      Text(
-                        'or',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: gray,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 15, left: 15, right: 15),
-                        child: SizedBox(
-                          width: 100.w,
-                          height: 12.w,
-                          child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()),
-                                );
-                              },
-                              child: Text(
-                                'Continue with Phone Number',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                        ),
-                      ),
-                      // Center(
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       // Navigate to CareTakerLogin() when the button is pressed
-                      //       // Navigator.push(
-                      //       //   context,
-                      //       //   MaterialPageRoute(
-                      //       //       builder: (context) => CareTakerLogin()),
-                      //       // );
-                      //     },
-                      //     child: const Text(
-                      //       'Continue as Caretaker',
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Don\'t have an account?',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: gray,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const EmailSignup()),
-                          );
-                        },
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: secondary,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Padding(
                     padding:
                         const EdgeInsets.only(bottom: 15, left: 15, right: 15),
@@ -289,7 +199,81 @@ class _LoginState extends State<EmailLogin> {
                             : const Text('Continue'),
                       ),
                     ),
-                  )
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 2.h,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            bottom: 15, left: 15, right: 15),
+                        child: SizedBox(
+                          width: 100.w,
+                          height: 12.w,
+                          child: OutlinedButton(
+                              style: OutlinedButton.styleFrom(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Login()),
+                                );
+                              },
+                              child: Text(
+                                'Continue with Phone Number',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )),
+                        ),
+                      ),
+                      Text(
+                        'or',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: gray,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Don\'t have an account?',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: gray,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EmailSignup()),
+                          );
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: secondary,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               )),
         ),

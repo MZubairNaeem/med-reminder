@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/Edit_Medicine.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
 import 'package:medreminder/widgets/med_card.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -25,11 +22,6 @@ class _MedicineListState extends State<AllMeds> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: secondary,
-        centerTitle: true,
-        title: const Text("All Medicines"),
-      ),
       body: Stack(
         children: [
           Padding(
@@ -37,7 +29,6 @@ class _MedicineListState extends State<AllMeds> {
             child: Consumer(
               builder: (context, ref, _) {
                 final userResult = ref.watch(medProvider);
-                // ref.refresh(medProvider);
                 return userResult.when(
                   data: (med) {
                     return med.isEmpty
@@ -59,7 +50,8 @@ class _MedicineListState extends State<AllMeds> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => MedicineList(
+                                      builder: (context) =>
+                                          EditMedicineSchedule(
                                         medModel: med[index],
                                       ),
                                     ),
@@ -69,6 +61,12 @@ class _MedicineListState extends State<AllMeds> {
                                   HapticFeedback.heavyImpact();
                                   setState(() {
                                     select = true;
+                                    //add index to list
+                                    if (selectedMeds.contains(med[index].id!)) {
+                                      selectedMeds.remove(med[index].id!);
+                                    } else {
+                                      selectedMeds.add(med[index].id!);
+                                    }
                                   });
                                 },
                                 child: MedicineCard(
@@ -77,6 +75,7 @@ class _MedicineListState extends State<AllMeds> {
                                   medicineType: med[index].medType!,
                                   medicineInterval: med[index].interval!,
                                   qty: med[index].quantity!,
+                                  time: med[index].time!,
                                   onSelect: (p0) {
                                     setState(() {
                                       checkList = p0!;
@@ -92,31 +91,36 @@ class _MedicineListState extends State<AllMeds> {
                                       selectedMeds.contains(med[index].id!)
                                           ? true
                                           : false,
-                                  deleteFunction: (context) {
-                                    Med().deleteMed(
+                                  medStatus: med[index].status!,
+                                  onStatusChanged: (val) {
+                                    Med().changeStatus(
                                       context,
                                       med[index].id!,
+                                      med[index].status! ? false : true,
+                                      med[index].quantity!,
+                                      med[index].dosageQuantity!,
                                     );
+
                                     ref.refresh(medProvider);
                                     ref.refresh(missedMedProvider);
                                     ref.refresh(takenMedProvider);
                                     ref.refresh(pendingMedProvider);
                                   },
                                   editFunction: (context) async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditMedicineSchedule(
-                                          medicineName: med[index].medName!,
-                                          dosage: med[index].dosageQuantity!,
-                                          medicineType: med[index].medType!,
-                                          medicineInterval:
-                                              med[index].interval!,
-                                          id: med[index].id!,
-                                        ),
-                                      ),
-                                    );
+                                    // await Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) =>
+                                    //         EditMedicineSchedule(
+                                    //       medicineName: med[index].medName!,
+                                    //       dosage: med[index].dosageQuantity!,
+                                    //       medicineType: med[index].medType!,
+                                    //       medicineInterval:
+                                    //           med[index].interval!,
+                                    //       id: med[index].id!,
+                                    //     ),
+                                    //   ),
+                                    // );
                                   },
                                 ),
                               );
@@ -134,7 +138,7 @@ class _MedicineListState extends State<AllMeds> {
         ],
       ),
       floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
             visible: select,
@@ -208,10 +212,12 @@ class _MedicineListState extends State<AllMeds> {
                                   data: (notes) {
                                     return TextButton(
                                       onPressed: () async {
+                                        print(selectedMeds);
                                         await Med().deleteMultipleMeds(
                                           context,
                                           selectedMeds,
                                         );
+                                        print('deleted');
                                         setState(() {
                                           select = false;
                                         });
@@ -246,25 +252,6 @@ class _MedicineListState extends State<AllMeds> {
                 child: const Icon(
                   Icons.delete_rounded,
                 ), // You can change the icon as needed
-              ),
-            ),
-          ),
-          Visibility(
-            visible: !select,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton.extended(
-                backgroundColor: secondary,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MedicineSchedule(),
-                    ),
-                  );
-                },
-                label: const Text("Add Medicine"),
-                icon: const Icon(Icons.add),
               ),
             ),
           ),

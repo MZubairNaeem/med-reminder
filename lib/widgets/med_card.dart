@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -9,10 +11,12 @@ class MedicineCard extends StatelessWidget {
   final String medicineType;
   final String medicineInterval;
   String? qty;
+  Timestamp? time;
   bool? select;
   bool? checkList;
+  bool? medStatus;
   Function(bool?)? onSelect;
-  Function(BuildContext)? deleteFunction;
+  Function(bool?)? onStatusChanged;
   Function(BuildContext)? editFunction;
 
   MedicineCard({
@@ -22,15 +26,21 @@ class MedicineCard extends StatelessWidget {
     required this.medicineType,
     required this.medicineInterval,
     this.qty,
+    this.time,
     this.select,
+    this.medStatus,
     this.checkList,
     required this.onSelect,
-    required this.deleteFunction,
+    required this.onStatusChanged,
     required this.editFunction,
+    // required bool status,
   });
 
   @override
   Widget build(BuildContext context) {
+    DateTime time = this.time!.toDate();
+    String formattedTime = DateFormat.jm().format(time);
+    String formattedDate = DateFormat('MMMM dd, yyyy').format(time);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10.sp),
       child: Card(
@@ -100,28 +110,28 @@ class MedicineCard extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Text(
-                    'Quantity:',
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    qty!,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
+              // SizedBox(height: 1.h),
+              // Row(
+              //   children: [
+              //     Text(
+              //       'Quantity:',
+              //       style: TextStyle(
+              //         fontSize: 17.sp,
+              //         fontWeight: FontWeight.w500,
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 2.w,
+              //     ),
+              //     Text(
+              //       qty!,
+              //       style: TextStyle(
+              //         fontSize: 17.sp,
+              //         fontWeight: FontWeight.w400,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               SizedBox(height: 1.h),
               Row(
                 children: [
@@ -148,7 +158,7 @@ class MedicineCard extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "Medicine Interval:",
+                    "Medicine Time:",
                     style: TextStyle(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w500,
@@ -158,7 +168,51 @@ class MedicineCard extends StatelessWidget {
                     width: 2.w,
                   ),
                   Text(
-                    medicineInterval,
+                    // time into am pm
+                    formattedTime,
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 1.h),
+              Row(
+                children: [
+                  Text(
+                    "Medicine Date:",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Text(
+                    // date only
+                    formattedDate,
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 1.h),
+              Row(
+                children: [
+                  Checkbox(
+                    value: medStatus,
+                    onChanged: onStatusChanged,
+                    activeColor: Color.fromARGB(255, 40, 157, 5),
+                  ),
+                  SizedBox(
+                    width: 2.w,
+                  ),
+                  Text(
+                    'Med Taken',
                     style: TextStyle(
                       fontSize: 17.sp,
                       fontWeight: FontWeight.w400,

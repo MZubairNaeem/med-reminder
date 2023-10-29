@@ -137,7 +137,7 @@ class _AllAppoinmentsState extends State<AllAppoinments> {
                                     setState(() {});
                                   },
                                   onChanged: (value) async {
-                                    //change status of task to completed
+                                    
                                     Appointments().changeStatus(
                                       context,
                                       appoinments[index].id!,

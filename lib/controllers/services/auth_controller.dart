@@ -73,12 +73,18 @@ class Auth {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     //create user in firestore with uid
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    firestore.collection('users').doc(uid).set({
-      'uid': uid,
-      'credentials': phoneNo,
-      'userType': 'patient',
-      'username': '@username',
-    });
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (doc.exists) {
+      print('user exists');
+    } else {
+      firestore.collection('users').doc(uid).set({
+        'uid': uid,
+        'credentials': phoneNo,
+        'userType': 'patient',
+        'username': '@username',
+      });
+    }
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setString('uid', uid);

@@ -7,39 +7,20 @@ import 'package:uuid/uuid.dart';
 
 class Med {
   String uid = FirebaseAuth.instance.currentUser!.uid;
-  String medId = const Uuid().v4();
+
   Future<void> addMed(
-      BuildContext context,
-      String medName,
-      String medType,
-      String dosageQuantity,
-      String interval,
-      String qty,
-      int intervelHours,
-      TimeOfDay startTimeDate) async {
+    BuildContext context,
+    String medName,
+    String medType,
+    String dosageQuantity,
+    String interval,
+    String qty,
+    int intervelHours,
+    TimeOfDay startTimeDate,
+  ) async {
     try {
       // int intervalHours =
-      MedModel med = MedModel(
-        medName: medName,
-        medType: medType,
-        medCreated: Timestamp.now(),
-        startTimeDate: Timestamp.fromDate(DateTime(
-            DateTime.now().year,
-            DateTime.now().month,
-            DateTime.now().day,
-            startTimeDate.hour,
-            startTimeDate.minute)),
-        dosageQuantity: dosageQuantity,
-        interval: interval,
-        quantity: qty,
-        status: false,
-        id: medId,
-        uid: uid,
-      );
-      await FirebaseFirestore.instance
-          .collection('medSchedule')
-          .doc(medId)
-          .set(med.toJson());
+
       double totalDays = double.parse(qty) / double.parse(dosageQuantity);
       int loop;
       if (totalDays % 1 != 0) {
@@ -61,20 +42,63 @@ class Med {
 
       // create a subcollection for each med according to the quantity
       for (int i = 0; i < loop; i++) {
+        // MedModel med = MedModel(
+        //   medName: medName,
+        //   medType: medType,
+        //   medCreated: Timestamp.now(),
+        //   startTimeDate: Timestamp.fromDate(DateTime(
+        //       DateTime.now().year,
+        //       DateTime.now().month,
+        //       DateTime.now().day,
+        //       startTimeDate.hour,
+        //       startTimeDate.minute)),
+        //   dosageQuantity: dosageQuantity,
+        //   interval: intervelHours.toString(),
+        //   quantity: qty,
+        //   status: false,
+        //   id: medId,
+        //   uid: uid,
+        //   time: time.add(Duration(hours: intervelHours * i)),
+        // );
+        String medId = const Uuid().v4();
         await FirebaseFirestore.instance
             .collection('medSchedule')
             .doc(medId)
-            .collection('intervals')
-            .doc(i.toString())
-            .set(
-          {
-            'time': time.add(Duration(hours: intervelHours * i)),
-            'status': false,
-            'id': const Uuid().v4(),
-            'uid': uid,
-            'interval': intervelHours.toString(),
-          },
-        );
+            .set({
+          'medName': medName,
+          'medType': medType,
+          'medCreated': Timestamp.now(),
+          'startTimeDate': Timestamp.fromDate(
+            DateTime(
+              DateTime.now().year,
+              DateTime.now().month,
+              DateTime.now().day,
+              startTimeDate.hour,
+              startTimeDate.minute,
+            ),
+          ),
+          'dosageQuantity': dosageQuantity,
+          'interval': intervelHours.toString(),
+          'quantity': qty,
+          'status': false,
+          'id': medId,
+          'uid': uid,
+          'time': time.add(Duration(hours: intervelHours * i)),
+        });
+        //   await FirebaseFirestore.instance
+        //       .collection('medSchedule')
+        //       .doc(medId)
+        //       .collection('intervals')
+        //       .doc(i.toString())
+        //       .set(
+        //     {
+        //       'time': time.add(Duration(hours: intervelHours * i)),
+        //       'status': false,
+        //       'id': const Uuid().v4(),
+        //       'uid': uid,
+        //       'interval': intervelHours.toString(),
+        //     },
+        //   );
       }
       Get.snackbar(
         'Success',
@@ -138,20 +162,33 @@ class Med {
     String id,
     String medName,
     String medType,
+    TimeOfDay startTimeDate,
     String dosageQuantity,
-    String interval,
+    int intervelHours,
+    String qty,
+    Timestamp time,
   ) async {
     try {
       MedModel med = MedModel(
         medName: medName,
         medType: medType,
         medCreated: Timestamp.now(),
-        startTimeDate: Timestamp.now(),
+        startTimeDate: Timestamp.fromDate(
+          DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            startTimeDate.hour,
+            startTimeDate.minute,
+          ),
+        ),
         dosageQuantity: dosageQuantity,
-        interval: interval,
+        interval: intervelHours.toString(),
+        quantity: qty,
         status: false,
         id: id,
-        uid: FirebaseAuth.instance.currentUser!.uid,
+        uid: uid,
+        time: time,
       );
       await FirebaseFirestore.instance
           .collection('medSchedule')
@@ -172,13 +209,15 @@ class Med {
   }
 
   //change status of task to completed
-  Future<void> changeStatus(
-      BuildContext context, String id, bool status) async {
+  Future<void> changeStatus(BuildContext context, String id, bool status,
+      String qty, String dosage) async {
     try {
       await FirebaseFirestore.instance
           .collection('medSchedule')
           .doc(id)
-          .update({'status': status});
+          .update({
+        'status': status,
+      });
       Get.snackbar(
         'Success',
         'Med status changed successfully',

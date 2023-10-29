@@ -38,308 +38,298 @@ class _EmailSignupState extends State<EmailSignup> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  Container(
-                    height: 30.h,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: secondary,
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(10.w),
-                        bottomRight: Radius.circular(10.w),
-                      ),
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            appName,
-                            style: TextStyle(
-                              fontSize: 24.sp,
-                              fontWeight: FontWeight.bold,
-                              color: white,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 1.h,
-                          ),
-                          SizedBox(
-                            width: 90.w,
-                            child: Text(
-                              onBoardRegText,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                color: white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+            key: formKey,
+            child: Column(
+              children: [
+                Container(
+                  height: 30.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: secondary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.w),
+                      bottomRight: Radius.circular(10.w),
                     ),
                   ),
-                  SizedBox(
-                    height: 5.h,
-                  ),
-                  SizedBox(
-                    width: 90.w,
-                    child: Text(
-                      'Enter your email to create an account',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        color: gray,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10.sp, horizontal: 15.sp),
-                    child: TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        prefixIcon: const Icon(Icons.person_2),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        //email regex
-                        if (value!.isEmpty) {
-                          return 'Please enter your username';
-                        } else if (value.length < 3) {
-                          return 'Username must be at least 3 characters';
-                        }
-
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10.sp, horizontal: 15.sp),
-                    child: TextFormField(
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        prefixIcon: const Icon(Icons.email),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        //email regex
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        } else if (!emailRegex.hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10.sp, horizontal: 15.sp),
-                    child: TextFormField(
-                      controller: passController,
-                      keyboardType: TextInputType.visiblePassword,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        prefixIcon: const Icon(Icons.lock),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        //email regex
-                        if (value!.isEmpty) {
-                          return 'Please enter your password';
-                        } else if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-
-                        return null;
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 15.sp, top: 15.sp),
-                    child: Row(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 30.0, // Adjust the size of the checkbox
-                          height: 30.0,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(8.0), // Rounded corners
-                            border: Border.all(
-                              color: Colors.blue, // Border color
-                              width: 2.0, // Border width
-                            ),
-                          ),
-                          child: Checkbox(
-                            value: _user,
-                            onChanged: (value) {
-                              setState(() {
-                                _user == false
-                                    ? user = 'caretaker'
-                                    : user = 'patient';
-                                _user = value!;
-                                print(user);
-                              });
-                            },
+                        Text(
+                          appName,
+                          style: TextStyle(
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                            color: white,
                           ),
                         ),
                         SizedBox(
-                          width: 5.w,
+                          height: 1.h,
                         ),
-                        Text(
-                          'Continue as Caretaker',
-                          style: GoogleFonts.dmSans(fontSize: 17.sp),
+                        SizedBox(
+                          width: 90.w,
+                          child: Text(
+                            onBoardRegText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  Column(
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                  width: 90.w,
+                  child: Text(
+                    'Enter your email to create an account',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      color: gray,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
+                  child: TextFormField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      hintText: 'Username',
+                      prefixIcon: const Icon(Icons.person_2),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      //email regex
+                      if (value!.isEmpty) {
+                        return 'Please enter your username';
+                      } else if (value.length < 3) {
+                        return 'Username must be at least 3 characters';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
+                  child: TextFormField(
+                    controller: emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      prefixIcon: const Icon(Icons.email),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      //email regex
+                      if (value!.isEmpty) {
+                        return 'Please enter your email';
+                      } else if (!emailRegex.hasMatch(value)) {
+                        return 'Please enter a valid email';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.sp, horizontal: 15.sp),
+                  child: TextFormField(
+                    controller: passController,
+                    keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      prefixIcon: const Icon(Icons.lock),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      //email regex
+                      if (value!.isEmpty) {
+                        return 'Please enter your password';
+                      } else if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+
+                      return null;
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 15.sp, top: 15.sp),
+                  child: Row(
                     children: [
-                      //or text
-                      Text(
-                        'or',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: gray,
+                      Container(
+                        width: 30.0, // Adjust the size of the checkbox
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(8.0), // Rounded corners
+                          border: Border.all(
+                            color: Colors.blue, // Border color
+                            width: 2.0, // Border width
+                          ),
+                        ),
+                        child: Checkbox(
+                          value: _user,
+                          onChanged: (value) {
+                            setState(() {
+                              _user == false
+                                  ? user = 'caretaker'
+                                  : user = 'patient';
+                              _user = value!;
+                              print(user);
+                            });
+                          },
                         ),
                       ),
                       SizedBox(
-                        height: 2.h,
+                        width: 5.w,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            bottom: 15, left: 15, right: 15),
-                        child: SizedBox(
-                          width: 100.w,
-                          height: 12.w,
-                          child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
+                      Text(
+                        'Continue as Caretaker',
+                        style: GoogleFonts.dmSans(fontSize: 17.sp),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+                  child: SizedBox(
+                    width: 100.w,
+                    height: 12.w,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          focusNode.unfocus();
+                          setState(() {
+                            loading = true;
+                          });
+                          await RegisterController().register(
+                            context: context,
+                            email: emailController.text,
+                            password: passController.text,
+                            username: nameController.text,
+                            userType: user,
+                          );
+                          setState(() {
+                            loading = false;
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: loading
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                                color: white,
+                              ),
+                            )
+                          : const Text('Continue'),
+                    ),
+                  ),
+                ),
+                Column(
+                  children: [
+                    //or text
+
+                    SizedBox(
+                      height: 1.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 15, left: 15, right: 15),
+                      child: SizedBox(
+                        width: 100.w,
+                        height: 12.w,
+                        child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10),
                                 ),
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Login()),
-                                );
-                              },
-                              child: Text(
-                                'Continue with Phone Number',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              )),
-                        ),
-                      ),
-                      // Center(
-                      //   child: ElevatedButton(
-                      //     onPressed: () {
-                      //       // Navigate to CareTakerLogin() when the button is pressed
-                      //       // Navigator.push(
-                      //       //   context,
-                      //       //   MaterialPageRoute(
-                      //       //       builder: (context) => CareTakerLogin()),
-                      //       // );
-                      //     },
-                      //     child: const Text(
-                      //       'Continue as Caretaker',
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already have an account?',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: gray,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const EmailLogin()),
-                              (route) => false);
-                        },
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            color: secondary,
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-                    child: SizedBox(
-                      width: 100.w,
-                      height: 12.w,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (formKey.currentState!.validate()) {
-                            focusNode.unfocus();
-                            setState(() {
-                              loading = true;
-                            });
-                            await RegisterController().register(
-                              context: context,
-                              email: emailController.text,
-                              password: passController.text,
-                              username: nameController.text,
-                              userType: user,
-                            );
-                            setState(() {
-                              loading = false;
-                            });
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: loading
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: white,
-                                ),
-                              )
-                            : const Text('Continue'),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Login()),
+                              );
+                            },
+                            child: Text(
+                              'Continue with Phone Number',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
                       ),
                     ),
-                  )
-                ],
-              )),
+                    Text(
+                      'or',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: gray,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Already have an account?',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: gray,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EmailLogin()),
+                            (route) => false);
+                      },
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          color: secondary,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

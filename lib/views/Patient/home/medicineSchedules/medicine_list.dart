@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/models/med_model.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_add.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all_meds.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/missed.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/pending.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/taken.dart';
@@ -64,19 +65,11 @@ class _MedicineListState extends State<MedicineList>
                 Expanded(
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      AllMedicine(
-                        medModel: widget.medModel!,
-                      ),
-                      PendingMedicine(
-                        medModel: widget.medModel!,
-                      ),
-                      MissedMedicine(
-                        medModel: widget.medModel!,
-                      ),
-                      TakenMedicine(
-                        medModel: widget.medModel!,
-                      )
+                    children: const [
+                      AllMeds(),
+                      PendingMedicine(),
+                      MissedMedicine(),
+                      TakenMedicine()
                     ],
                   ),
                 ),
@@ -92,6 +85,22 @@ class _MedicineListState extends State<MedicineList>
             ),
           )
         ],
+      ),
+      floatingActionButton: Align(
+        alignment: Alignment.bottomRight,
+        child: FloatingActionButton.extended(
+          backgroundColor: secondary,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const MedicineSchedule(),
+              ),
+            );
+          },
+          label: const Text("Add Medicine"),
+          icon: const Icon(Icons.add),
+        ),
       ),
     );
   }

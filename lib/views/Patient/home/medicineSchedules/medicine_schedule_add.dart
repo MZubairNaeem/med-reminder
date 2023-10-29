@@ -13,7 +13,6 @@ class MedicineSchedule extends StatefulWidget {
 }
 
 class _MedicineScheduleState extends State<MedicineSchedule> {
-  //med text editing controller
   final med = TextEditingController();
   final dosage = TextEditingController();
   final qty = TextEditingController();
@@ -62,347 +61,342 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: secondary,
-          centerTitle: true,
-          title: const Text("Add New Medminder"),
-        ),
-        body: Builder(builder: (BuildContext scaffoldContext) {
-          return SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.all(16.sp),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Medicine Name",
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondary,
+        centerTitle: true,
+        title: const Text("Add New Medicine"),
+      ),
+      body: Builder(builder: (BuildContext scaffoldContext) {
+        return SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.all(16.sp),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Medicine Name",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  TextFormField(
+                    controller: med,
+                    decoration: const InputDecoration(
+                      hintText: "Enter Medicine Name",
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Medicine name is required';
+                      } else if (value.length > 25) {
+                        return 'Medicine name should be at most 25 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    "Medicine Type",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      medicineType('lib/constants/assets/bottles.png', 'Syrup'),
+                      medicineType('lib/constants/assets/pills.png', 'Pill'),
+                      medicineType(
+                          'lib/constants/assets/syringe.png', 'Syringe'),
+                      medicineType(
+                          'lib/constants/assets/tablets.png', 'Tablet'),
+                    ],
+                  ),
+                  SizedBox(height: 3.h),
+                  TextFormField(
+                    controller: qty,
+                    decoration: const InputDecoration(
+                      hintText: 'Total no of dosages',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Total no of dosages are required';
+                      } else if (value.length > 5) {
+                        return 'Total no of dosages should be at most 4 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 2.h),
+                  TextFormField(
+                    controller: dosage,
+                    decoration: InputDecoration(
+                      hintText: getHintText(selectedMedicineType),
+                      border: const OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Dosage is required';
+                      } else if (value.length > 25) {
+                        return 'Dosage should be at most 25 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 2.5.h),
+                  Text(
+                    "Interval Selection",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 1.5.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Remind me every',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 2.h),
-                    TextFormField(
-                      controller: med,
-                      decoration: const InputDecoration(
-                        hintText: "Enter Medicine Name",
-                        border: OutlineInputBorder(),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Medicine name is required';
-                        } else if (value.length > 25) {
-                          return 'Medicine name should be at most 25 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      "Medicine Type",
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 2.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        medicineType(
-                            'lib/constants/assets/bottles.png', 'Syrup'),
-                        medicineType('lib/constants/assets/pills.png', 'Pill'),
-                        medicineType(
-                            'lib/constants/assets/syringe.png', 'Syringe'),
-                        medicineType(
-                            'lib/constants/assets/tablets.png', 'Tablet'),
-                      ],
-                    ),
-                    SizedBox(height: 3.h),
-                    TextFormField(
-                      controller: qty,
-                      decoration: const InputDecoration(
-                        hintText: 'Total no of dosages',
-                        border: OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Total no of dosages are required';
-                        } else if (value.length > 5) {
-                          return 'Total no of dosages should be at most 4 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 2.h),
-                    TextFormField(
-                      controller: dosage,
-                      decoration: InputDecoration(
-                        hintText: getHintText(selectedMedicineType),
-                        border: const OutlineInputBorder(),
-                      ),
-                      keyboardType: TextInputType.number,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Dosage is required';
-                        } else if (value.length > 25) {
-                          return 'Dosage should be at most 25 characters';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 2.5.h),
-                    Text(
-                      "Interval Selection",
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 1.5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Remind me every',
+                      SizedBox(width: 2.w),
+                      DropdownButton<String>(
+                        value: showHint ? null : selectedInterval,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedInterval = newValue;
+                            showHint =
+                                false; // Hide the hint once an item is selected
+                            intervalHours = int.parse(newValue!.split(' ')[0]);
+                          });
+                        },
+                        hint: Text(
+                          'Select an interval',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15.sp,
-                            fontWeight: FontWeight.bold,
+                          ),
+                        ), // Set the hint text
+                        //underline: Container(),
+                        items: intervalCheck
+                            ? intervalsDays.map((String interval) {
+                                return DropdownMenuItem<String>(
+                                  value: interval,
+                                  child: Text(
+                                    interval,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                );
+                              }).toList()
+                            : intervalsHours.map((String interval) {
+                                return DropdownMenuItem<String>(
+                                  value: interval,
+                                  child: Text(
+                                    interval,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17.sp,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Hours/Day',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Checkbox(
+                              value: intervalCheck,
+                              onChanged: (value) {
+                                selectedInterval = null;
+                                setState(() {
+                                  intervalCheck = value!;
+                                });
+                              }),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.5.h),
+                  Text(
+                    "Starting Time",
+                    style: TextStyle(
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 3.h),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _selectTime(
+                            context); // Call the time picker when the button is pressed
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primary, // Primary background color
+                        foregroundColor: Colors.white, // Text color
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(14.sp),
+                        child: Text(
+                          'Pick Time',
+                          style: TextStyle(
+                            fontSize: 17.sp,
                           ),
                         ),
-                        SizedBox(width: 2.w),
-                        DropdownButton<String>(
-                          value: showHint ? null : selectedInterval,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              selectedInterval = newValue;
-                              showHint =
-                                  false; // Hide the hint once an item is selected
-                              intervalHours =
-                                  int.parse(newValue!.split(' ')[0]);
-                            });
-                          },
-                          hint: Text(
-                            'Select an interval',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 15.sp,
-                            ),
-                          ), // Set the hint text
-                          //underline: Container(),
-                          items: intervalCheck
-                              ? intervalsDays.map((String interval) {
-                                  return DropdownMenuItem<String>(
-                                    value: interval,
-                                    child: Text(
-                                      interval,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 3.h),
+                  Center(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Consumer(
+                            builder: (context, ref, _) {
+                              final userResult = ref.watch(medProvider);
+                              // ref.refresh(medProvider);
+                              return userResult.when(
+                                  data: (medicine) {
+                                    return ElevatedButton(
+                                      onPressed: () async {
+                                        print(intervalHours);
+                                        print(selectedTime);
+                                        // Get.snackbar(
+                                        //   selectedTime.toString(),
+                                        //   intervalHours.toString(),
+                                        //   snackPosition: SnackPosition.BOTTOM,
+                                        // );
+                                        if (_formKey.currentState!.validate()) {
+                                          if (selectedInterval == null) {
+                                            ScaffoldMessenger.of(
+                                                    scaffoldContext)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Please select an interval.'),
+                                                duration: Duration(
+                                                    seconds:
+                                                        2), // Adjust the duration as needed
+                                              ),
+                                            );
+                                            return;
+                                          }
+
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          await Med().addMed(
+                                            context,
+                                            med.text,
+                                            selectedMedicineType,
+                                            dosage.text,
+                                            selectedInterval.toString(),
+                                            qty.text,
+                                            intervalHours,
+                                            selectedTime!,
+                                          );
+
+                                          // ignore: unused_result
+                                          ref.refresh(medProvider);
+                                          ref.refresh(missedMedProvider);
+                                          ref.refresh(takenMedProvider);
+                                          ref.refresh(pendingMedProvider);
+
+                                          setState(() {
+                                            med.clear();
+                                            dosage.clear();
+                                            qty.clear();
+                                            selectedInterval = null;
+                                            selectedTime = null;
+                                            loading = false;
+                                          });
+                                          refresh;
+                                          // setState(() {
+                                          //   loading = false;
+                                          // });
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            primary, // Primary background color
+                                        foregroundColor:
+                                            Colors.white, // Text color
                                       ),
-                                    ),
-                                  );
-                                }).toList()
-                              : intervalsHours.map((String interval) {
-                                  return DropdownMenuItem<String>(
-                                    value: interval,
-                                    child: Text(
-                                      interval,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 17.sp,
+                                      child: Padding(
+                                        padding: EdgeInsets.all(14.sp),
+                                        child: loading
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
+                                                ),
+                                              )
+                                            : Consumer(
+                                                builder: (context, ref, _) {
+                                                  final userResult =
+                                                      ref.watch(medProvider);
+                                                  refresh =
+                                                      ref.refresh(medProvider);
+                                                  return userResult.when(
+                                                    data: (notes) {
+                                                      return Text(
+                                                        'Add',
+                                                        style: TextStyle(
+                                                          fontSize: 17.sp,
+                                                        ),
+                                                      );
+                                                    },
+                                                    loading: () =>
+                                                        const Text("..."),
+                                                    error: (error,
+                                                            stackTrace) =>
+                                                        Text('Error: $error'),
+                                                  );
+                                                },
+                                              ),
                                       ),
-                                    ),
-                                  );
-                                }).toList(),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              'Hours/Day',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Checkbox(
-                                value: intervalCheck,
-                                onChanged: (value) {
-                                  selectedInterval = null;
-                                  setState(() {
-                                    intervalCheck = value!;
+                                    );
+                                  },
+                                  loading: () => const Text("..."),
+                                  error: (error, stackTrace) {
+                                    return Text('Error: $error');
                                   });
-                                }),
-                          ],
+                            },
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 1.5.h),
-                    Text(
-                      "Starting Time",
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 3.h),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          _selectTime(
-                              context); // Call the time picker when the button is pressed
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primary, // Primary background color
-                          foregroundColor: Colors.white, // Text color
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.all(14.sp),
-                          child: Text(
-                            'Pick Time',
-                            style: TextStyle(
-                              fontSize: 17.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 3.h),
-                    Center(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Consumer(
-                              builder: (context, ref, _) {
-                                final userResult = ref.watch(medProvider);
-                                // ref.refresh(medProvider);
-                                return userResult.when(
-                                    data: (medicine) {
-                                      return ElevatedButton(
-                                        onPressed: () async {
-                                          print(intervalHours);
-                                          print(selectedTime);
-                                          // Get.snackbar(
-                                          //   selectedTime.toString(),
-                                          //   intervalHours.toString(),
-                                          //   snackPosition: SnackPosition.BOTTOM,
-                                          // );
-                                          if (_formKey.currentState!
-                                              .validate()) {
-                                            if (selectedInterval == null) {
-                                              ScaffoldMessenger.of(
-                                                      scaffoldContext)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                      'Please select an interval.'),
-                                                  duration: Duration(
-                                                      seconds:
-                                                          2), // Adjust the duration as needed
-                                                ),
-                                              );
-                                              return;
-                                            }
-
-                                            setState(() {
-                                              loading = true;
-                                            });
-                                            await Med().addMed(
-                                              context,
-                                              med.text,
-                                              selectedMedicineType,
-                                              dosage.text,
-                                              selectedInterval.toString(),
-                                              qty.text,
-                                              intervalHours,
-                                              selectedTime!,
-                                            );
-
-                                            // ignore: unused_result
-                                            ref.refresh(medProvider);
-                                            ref.refresh(missedMedProvider);
-                                            ref.refresh(takenMedProvider);
-                                            ref.refresh(pendingMedProvider);
-
-                                            setState(() {
-                                              med.clear();
-                                              dosage.clear();
-                                              qty.clear();
-                                              selectedInterval = null;
-                                              selectedTime = null;
-                                              loading = false;
-                                            });
-                                            refresh;
-                                            // setState(() {
-                                            //   loading = false;
-                                            // });
-                                          }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              primary, // Primary background color
-                                          foregroundColor:
-                                              Colors.white, // Text color
-                                        ),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(14.sp),
-                                          child: loading
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: Colors.white,
-                                                  ),
-                                                )
-                                              : Consumer(
-                                                  builder: (context, ref, _) {
-                                                    final userResult =
-                                                        ref.watch(medProvider);
-                                                    refresh = ref
-                                                        .refresh(medProvider);
-                                                    return userResult.when(
-                                                      data: (notes) {
-                                                        return Text(
-                                                          'Confirm',
-                                                          style: TextStyle(
-                                                            fontSize: 17.sp,
-                                                          ),
-                                                        );
-                                                      },
-                                                      loading: () =>
-                                                          const Text("..."),
-                                                      error: (error,
-                                                              stackTrace) =>
-                                                          Text('Error: $error'),
-                                                    );
-                                                  },
-                                                ),
-                                        ),
-                                      );
-                                    },
-                                    loading: () => const Text("..."),
-                                    error: (error, stackTrace) {
-                                      return Text('Error: $error');
-                                    });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
-          );
-        }),
-      ),
+          ),
+        );
+      }),
     );
   }
 

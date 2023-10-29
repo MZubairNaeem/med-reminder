@@ -9,7 +9,7 @@ import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/pharmacies.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
-import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_schedule_tabs/all_meds.dart';
+import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
 import 'package:medreminder/views/Patient/home/notifications/notifications.dart';
 import 'package:medreminder/views/Patient/home/notifyRelatives/relative_list.dart';
@@ -629,7 +629,7 @@ class _HomeState extends State<Home> {
                               onTap: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const AllMeds(),
+                                  builder: (context) => MedicineList(),
                                 ),
                               ),
                               child: Card(
@@ -703,7 +703,7 @@ class _HomeState extends State<Home> {
                                                                   .uid)
                                                       .where('status',
                                                           isEqualTo: false)
-                                                      .where('startTimeDate',
+                                                      .where('time',
                                                           isGreaterThan:
                                                               Timestamp.now())
                                                       .snapshots(),
@@ -876,7 +876,7 @@ class _HomeState extends State<Home> {
                                                                   .uid)
                                                       .where('status',
                                                           isEqualTo: false)
-                                                      .where('startTimeDate',
+                                                      .where('time',
                                                           isLessThan:
                                                               Timestamp.now())
                                                       .snapshots(),

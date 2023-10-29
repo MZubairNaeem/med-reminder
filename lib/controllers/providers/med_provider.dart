@@ -25,6 +25,7 @@ final medProvider = FutureProvider<List<MedModel>>((ref) async {
       quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
+      time: data['time'],
     );
   }).toList();
 
@@ -53,6 +54,7 @@ final takenMedProvider = FutureProvider<List<MedModel>>((ref) async {
       quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
+      time: data['time'],
     );
   }).toList();
 
@@ -65,7 +67,7 @@ final missedMedProvider = FutureProvider<List<MedModel>>((ref) async {
       .collection('medSchedule')
       .where('uid', isEqualTo: uid)
       .where('status', isEqualTo: false)
-      .where('startTimeDate', isLessThan: Timestamp.now())
+      .where('time', isLessThan: Timestamp.now())
       .get();
 
   List<MedModel> notes = doc.docs.map((snapshot) {
@@ -81,6 +83,7 @@ final missedMedProvider = FutureProvider<List<MedModel>>((ref) async {
       quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
+      time: data['time'],
     );
   }).toList();
 
@@ -93,7 +96,7 @@ final pendingMedProvider = FutureProvider<List<MedModel>>((ref) async {
       .collection('medSchedule')
       .where('uid', isEqualTo: uid)
       .where('status', isEqualTo: false)
-      .where('startTimeDate', isGreaterThan: Timestamp.now())
+      .where('time', isGreaterThan: Timestamp.now())
       .get();
 
   List<MedModel> notes = doc.docs.map((snapshot) {
@@ -109,66 +112,9 @@ final pendingMedProvider = FutureProvider<List<MedModel>>((ref) async {
       quantity: data['quantity'],
       status: data['status'],
       uid: data['uid'],
+      time: data['time'],
     );
   }).toList();
 
   return notes;
-});
-
-final missedSubMedProvider =
-    FutureProvider.family<List<MedModel>, String?>((ref, medId) async {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  QuerySnapshot<Map<String, dynamic>> doc = await firestore
-      .collection('medSchedule')
-      .doc(medId)
-      .collection('intervals')
-      .where('status', isEqualTo: false)
-      .where('time', isLessThanOrEqualTo: DateTime.now())
-      .get();
-
-  List<MedModel> notes = doc.docs.map((snapshot) {
-    Map<String, dynamic> data = snapshot.data();
-    return MedModel(
-      id: snapshot.id,
-      medName: data['medName'],
-      medType: data['medType'],
-      medCreated: data['medCreated'],
-      startTimeDate: data['startTimeDate'],
-      dosageQuantity: data['dosageQuantity'],
-      interval: data['interval'],
-      quantity: data['quantity'],
-      status: data['status'],
-      uid: data['uid'],
-    );
-  }).toList();
-
-  return notes;
-});
-
-class SubMedModel {
-  MedModel? medModel;
-  DateTime? startDate;
-  DateTime? endDate;
-  SubMedModel({
-    this.medModel,
-    this.endDate,
-    this.startDate,
-  });
-}
-
-///sub med
-final subSedProvider =
-    FutureProvider.family<int, SubMedModel?>((ref, subMedModel) async {
-  String? medId = subMedModel?.medModel!.id;
-  DateTime? startDate = subMedModel?.startDate;
-  DateTime? endDate = subMedModel?.endDate;
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  QuerySnapshot<Map<String, dynamic>> doc = await firestore
-      .collection('medSchedule')
-      .doc(medId)
-      .collection('intervals')
-      .where('time', isGreaterThanOrEqualTo: Timestamp.fromDate(startDate!))
-      .where('time', isLessThan: Timestamp.fromDate(endDate!))
-      .get();
-  return doc.size;
 });

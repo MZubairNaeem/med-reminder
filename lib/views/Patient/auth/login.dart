@@ -35,141 +35,105 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         body: Form(
           key: formKey,
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 30.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: secondary,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10.w),
-                          bottomRight: Radius.circular(10.w),
-                        ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              appName,
-                              style: TextStyle(
-                                fontSize: 24.sp,
-                                fontWeight: FontWeight.bold,
-                                color: white,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 1.h,
-                            ),
-                            SizedBox(
-                              width: 90.w,
-                              child: Text(
-                                onBoardText,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  color: white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 30.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: secondary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10.w),
+                      bottomRight: Radius.circular(10.w),
                     ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    SizedBox(
-                      width: 90.w,
-                      child: Text(
-                        smsOTP,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          color: gray,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    SizedBox(
-                      width: 90.w,
-                      child: InternationalPhoneNumberInput(
-                        onInputChanged: (PhoneNumber number) {
-                          phoneNo = number.phoneNumber;
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your number';
-                          }
-
-                          return null;
-                        },
-                        selectorConfig: const SelectorConfig(
-                          selectorType: PhoneInputSelectorType.DROPDOWN,
-                        ),
-                        ignoreBlank: true,
-                        autoValidateMode: AutovalidateMode.disabled,
-                        selectorTextStyle: const TextStyle(color: gray),
-                        initialValue: number,
-                        textFieldController: controller,
-                        formatInput: true,
-                        focusNode: focusNode,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
-                        inputBorder: const OutlineInputBorder(),
-                        onSaved: (PhoneNumber number) {
-                          print('On Saved: $number');
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Column(
+                  ),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        //or text
                         Text(
-                          'or',
+                          appName,
                           style: TextStyle(
-                            fontSize: 16.sp,
-                            color: gray,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
+                            color: white,
                           ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          height: 1.h,
                         ),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Navigate to CareTakerLogin() when the button is pressed
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const CareTakerLogin()),
-                              );
-                            },
-                            child: const Text(
-                              'Login as Caretaker',
+                        SizedBox(
+                          width: 90.w,
+                          child: Text(
+                            onBoardText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: white,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-                child: Align(
-                  alignment: Alignment.bottomCenter,
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                  width: 90.w,
+                  child: Text(
+                    smsOTP,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      color: gray,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 5.h,
+                ),
+                SizedBox(
+                  width: 90.w,
+                  child: InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      phoneNo = number.phoneNumber;
+                    },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please enter your number';
+                      }
+
+                      return null;
+                    },
+                    selectorConfig: const SelectorConfig(
+                      selectorType: PhoneInputSelectorType.DROPDOWN,
+                    ),
+                    ignoreBlank: true,
+                    autoValidateMode: AutovalidateMode.disabled,
+                    selectorTextStyle: const TextStyle(color: gray),
+                    initialValue: number,
+                    textFieldController: controller,
+                    formatInput: true,
+                    focusNode: focusNode,
+                    keyboardType: const TextInputType.numberWithOptions(
+                        signed: true, decimal: true),
+                    inputBorder: const OutlineInputBorder(),
+                    onSaved: (PhoneNumber number) {
+                      print('On Saved: $number');
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: 15.h,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 15, left: 15, right: 15),
                   child: SizedBox(
                     width: 100.w,
                     height: 12.w,
@@ -201,8 +165,55 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-              )
-            ],
+                Column(
+                  children: [
+                    //or text
+                    Text(
+                      'or',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: gray,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 15, left: 15, right: 15),
+                      child: SizedBox(
+                        width: 100.w,
+                        height: 12.w,
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const CareTakerLogin()),
+                            );
+                          },
+                          child: Text(
+                            'Login as Caretaker',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -2,21 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
-import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
-import 'package:medreminder/controllers/providers/med_provider.dart';
+import 'package:medreminder/controllers/providers/relative_list_provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
-class HomeNotification extends StatefulWidget {
-  const HomeNotification({
+class CareTakerNotification extends StatefulWidget {
+  String uid;
+  String? name;
+  CareTakerNotification({
     super.key,
+    required this.uid,
+    required this.name,
   });
 
   @override
-  State<HomeNotification> createState() => _HomeNotificationState();
+  State<CareTakerNotification> createState() => _HomeNotificationState();
 }
 
-class _HomeNotificationState extends State<HomeNotification>
+class _HomeNotificationState extends State<CareTakerNotification>
     with SingleTickerProviderStateMixin {
   //form key
   late TabController _tabController;
@@ -40,9 +43,8 @@ class _HomeNotificationState extends State<HomeNotification>
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('MedReminder  Notifications'),
+        title: const Text('Notifications'),
         centerTitle: true,
-        backgroundColor: secondary,
       ),
       body: Stack(
         children: [
@@ -72,8 +74,8 @@ class _HomeNotificationState extends State<HomeNotification>
                           ),
                           child: Consumer(
                             builder: (context, ref, _) {
-                              final userResult =
-                                  ref.watch(missedAppoinmentProvider);
+                              final userResult = ref.watch(
+                                  missedRelativeAppoinmentProvider(widget.uid));
                               // ref.refresh(notesProvider);
                               return userResult.when(
                                   data: (appointments) {
@@ -109,12 +111,20 @@ class _HomeNotificationState extends State<HomeNotification>
                           ),
                           child: Consumer(
                             builder: (context, ref, _) {
-                              final userResult = ref.watch(missedMedProvider);
+                              final userResult = ref
+                                  .watch(missedRelativeMedProvider(widget.uid));
                               // ref.refresh(notesProvider);
                               return userResult.when(
                                   data: (appointments) {
                                     return appointments.isEmpty
-                                        ? const Center(child: Text('0'))
+                                        ? const Center(
+                                            child: Text(
+                                            '0',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ))
                                         : Text(
                                             appointments.length.toString(),
                                             style: const TextStyle(
@@ -141,8 +151,8 @@ class _HomeNotificationState extends State<HomeNotification>
                     children: [
                       Consumer(
                         builder: (context, ref, _) {
-                          final userResult =
-                              ref.watch(missedAppoinmentProvider);
+                          final userResult = ref.watch(
+                              missedRelativeAppoinmentProvider(widget.uid));
                           // ref.refresh(notesProvider);
                           return userResult.when(
                               data: (appointments) {
@@ -198,7 +208,7 @@ class _HomeNotificationState extends State<HomeNotification>
                                                               SizedBox(
                                                                 width: 70.w,
                                                                 child: Text(
-                                                                  'You have an appointment with ${appointments[index].doctorName!}',
+                                                                  '${widget.name} Missed appointment with ${appointments[index].doctorName!}',
                                                                   style:
                                                                       TextStyle(
                                                                     fontSize:
@@ -262,7 +272,8 @@ class _HomeNotificationState extends State<HomeNotification>
                       ),
                       Consumer(
                         builder: (context, ref, _) {
-                          final userResult = ref.watch(missedMedProvider);
+                          final userResult =
+                              ref.watch(missedRelativeMedProvider(widget.uid));
                           return userResult.when(
                               data: (med) {
                                 return med.isEmpty
@@ -307,7 +318,7 @@ class _HomeNotificationState extends State<HomeNotification>
                                                       SizedBox(
                                                         width: 70.w,
                                                         child: Text(
-                                                          'You have missed your medicine ${med[index].dosageQuantity} ${med[index].medType}s of ${med[index].medName!} at $formattedTime on $formattedDate',
+                                                          '${widget.name} Missed medicine ${med[index].dosageQuantity} ${med[index].medType}s of ${med[index].medName!} at $formattedTime on $formattedDate',
                                                           style: TextStyle(
                                                             fontSize: 16.sp,
                                                             color: primary,
@@ -354,19 +365,3 @@ class _HomeNotificationState extends State<HomeNotification>
     );
   }
 }
-// StreamBuilder(
-//                                             stream: FirebaseFirestore.instance
-//                                                 .collection('medSchedule')
-//                                                 .doc(med[index].id)
-//                                                 .collection('intervals')
-//                                                 .where('status',
-//                                                     isEqualTo: false)
-//                                                 .where('time',
-//                                                     isGreaterThan:
-//                                                         DateTime.now())
-//                                                 .snapshots(),
-//                                             builder: (context, snapshot) {
-//                                               return
-
-//                                             },
-//                                           );
