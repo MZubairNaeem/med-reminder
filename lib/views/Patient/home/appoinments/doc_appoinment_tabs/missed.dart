@@ -106,7 +106,8 @@ class _MissedAppoinmentsState extends State<MissedAppoinments> {
                                   ref.refresh(upcomingAppoinmentProvider);
                                   ref.refresh(completedAppoinmentProvider);
                                 },
-                                child: AppointmentListTile(
+                                child: AppointmentListTile(                                  timeStatus: appoinments[index].appointmentDateTime!,
+
                                   index: index + 1,
                                   reason: appoinments[index].visitReason!,
                                   doctorName: appoinments[index].doctorName!,

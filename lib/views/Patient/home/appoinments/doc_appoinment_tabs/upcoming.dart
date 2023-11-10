@@ -108,7 +108,8 @@ class _UpcomingAppoinmentsState extends State<UpcomingAppoinments> {
                                   ref.refresh(upcomingAppoinmentProvider);
                                   ref.refresh(completedAppoinmentProvider);
                                 },
-                                child: AppointmentListTile(
+                                child: AppointmentListTile(                                  timeStatus: appoinments[index].appointmentDateTime!,
+
                                   index: index + 1,
                                   reason: appoinments[index].visitReason!,
                                   doctorName: appoinments[index].doctorName!,

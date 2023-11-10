@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/services/doc_appointment_controller.dart';
+import 'package:medreminder/widgets/regex_validations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 // ignore: must_be_immutable
@@ -54,6 +55,8 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     validator: (val) {
                       if (val!.isEmpty) {
                         return 'Please enter visit reasone';
+                      } else if (!letterOnlyRegex.hasMatch(val)) {
+                        return 'Medicine name should only contain letters (a-zA-Z)';
                       }
                       return null;
                     },
@@ -71,6 +74,12 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     //number of characters
                     maxLength: 25,
                     controller: doctorName,
+                    validator: (val) {
+                      if (!letterOnlyRegex.hasMatch(val!) && val.isNotEmpty) {
+                        return 'Doctor name should only contain letters (a-zA-Z)';
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
                       border:
                           OutlineInputBorder(), // Use OutlineInputBorder to make it rectangular
@@ -84,6 +93,12 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                   TextFormField(
                     maxLength: 25,
                     controller: hospitalName,
+                    validator: (val) {
+                      if (!letterOnlyRegex.hasMatch(val!) && val.isNotEmpty) {
+                        return 'Hospital name should only contain letters (a-zA-Z)';
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
                       border:
                           OutlineInputBorder(), // Use OutlineInputBorder to make it rectangular
@@ -98,9 +113,14 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     maxLength: 100,
                     maxLines: 3,
                     controller: note,
+                    validator: (val) {
+                      if (!letterOnlyRegex.hasMatch(val!) && val.isNotEmpty) {
+                        return 'Note should only contain letters (a-zA-Z)';
+                      }
+                      return null;
+                    },
                     decoration: const InputDecoration(
-                      border:
-                          OutlineInputBorder(), // Use OutlineInputBorder to make it rectangular
+                      border: OutlineInputBorder(),
                       labelText: 'Note',
                       hintText: 'Add any note...',
                     ),
@@ -250,7 +270,7 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                             ref.refresh(upcomingAppoinmentProvider);
                             return userResult.when(
                               data: (notes) {
-                                return const Text('Update');
+                                return const Text('Add');
                               },
                               loading: () => const Text("..."),
                               error: (error, stackTrace) =>

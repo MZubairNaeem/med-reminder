@@ -108,6 +108,7 @@ class _AllAppoinmentsState extends State<AllAppoinments> {
                                   });
                                 },
                                 child: AppointmentListTile(
+                                  timeStatus: appoinments[index].appointmentDateTime!,
                                   index: index + 1,
                                   reason: appoinments[index].visitReason!,
                                   doctorName: appoinments[index].doctorName!,

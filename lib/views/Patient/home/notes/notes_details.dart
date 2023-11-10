@@ -36,66 +36,62 @@ class _NotesDetailsState extends State<NotesDetails> {
           title: const Text('Notes'),
           centerTitle: true,
           backgroundColor: secondary,
-          actions: [],
         ),
         body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.notesModel.title!,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      widget.notesModel.title!,
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Consumer(
-                        builder: (context, ref, _) {
-                          final userResult = ref.watch(notesProvider);
-                          // ref.refresh(notesProvider);
-                          return userResult.when(
-                              data: (notes) {
-                                return Checkbox(
-                                  value: val,
-                                  onChanged: (value) async {
-                                    val = value!;
-                                    Notes().changeStatus(
-                                      context,
-                                      widget.notesModel.id!,
-                                      widget.notesModel.status! ? false : true,
-                                    );
-                                    ref.refresh(notesProvider);
-                                    ref.refresh(pendingNotesProvider);
-                                    ref.refresh(completedNotesProvider);
-                                  },
-                                  activeColor: secondary,
-                                );
-                              },
-                              loading: () => const Text("..."),
-                              error: (error, stackTrace) {
-                                print('Error: $error');
-                                return Text('Error: $error');
-                              });
-                        },
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.notesModel.description!,
-                    style: TextStyle(
-                      fontSize: 18,
                     ),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final userResult = ref.watch(notesProvider);
+                        // ref.refresh(notesProvider);
+                        return userResult.when(
+                            data: (notes) {
+                              return Checkbox(
+                                value: val,
+                                onChanged: (value) async {
+                                  val = value!;
+                                  Notes().changeStatus(
+                                    context,
+                                    widget.notesModel.id!,
+                                    widget.notesModel.status! ? false : true,
+                                  );
+                                  ref.refresh(notesProvider);
+                                  ref.refresh(pendingNotesProvider);
+                                  ref.refresh(completedNotesProvider);
+                                },
+                                activeColor: secondary,
+                              );
+                            },
+                            loading: () => const Text("..."),
+                            error: (error, stackTrace) {
+                              print('Error: $error');
+                              return Text('Error: $error');
+                            });
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  widget.notesModel.description!,
+                  style: TextStyle(
+                    fontSize: 18,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

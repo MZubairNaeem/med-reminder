@@ -4,6 +4,7 @@ import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:medreminder/models/med_model.dart';
+import 'package:medreminder/widgets/regex_validations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class EditMedicineSchedule extends StatefulWidget {
@@ -113,6 +114,8 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                         return 'Medicine name is required';
                       } else if (value.length > 25) {
                         return 'Medicine name should be at most 25 characters';
+                      } else if (!letterOnlyRegex.hasMatch(value)) {
+                        return 'Medicine name should only contain letters (a-zA-Z)';
                       }
                       return null;
                     },
@@ -150,6 +153,8 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                         return 'Total no of dosages are required';
                       } else if (value.length > 5) {
                         return 'Total no of dosages should be at most 4 characters';
+                      }else if (!numberOnlyRegex.hasMatch(value)) {
+                        return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
                     },
@@ -167,6 +172,8 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                         return 'Dosage is required';
                       } else if (value.length > 25) {
                         return 'Dosage should be at most 25 characters';
+                      }else if (!numberOnlyRegex.hasMatch(value)) {
+                        return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
                     },

@@ -111,7 +111,7 @@ class _LoginState extends State<Login> {
                       return null;
                     },
                     selectorConfig: const SelectorConfig(
-                      selectorType: PhoneInputSelectorType.DROPDOWN,
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                     ),
                     ignoreBlank: true,
                     autoValidateMode: AutovalidateMode.disabled,

@@ -137,7 +137,7 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                   SizedBox(
                     height: 2.h,
                   ),
-                  TextButton(
+                  ElevatedButton(
                     onPressed: () async {
                       DateTime? selectedDateTime = await showDatePicker(
                         context: context,
@@ -169,13 +169,9 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                     },
                     child: Column(
                       children: [
-                        Text(
+                        const Text(
                           'Tap to Select Appointment Date and Time',
-                          style: TextStyle(
-                              fontSize: 18.sp, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(
-                          height: 5,
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         val
                             ? Text(

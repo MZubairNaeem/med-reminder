@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
+import 'package:medreminder/widgets/regex_validations.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MedicineSchedule extends StatefulWidget {
@@ -86,6 +87,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                   SizedBox(height: 2.h),
                   TextFormField(
                     controller: med,
+                    keyboardType: TextInputType.name,
                     decoration: const InputDecoration(
                       hintText: "Enter Medicine Name",
                       border: OutlineInputBorder(),
@@ -95,6 +97,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                         return 'Medicine name is required';
                       } else if (value.length > 25) {
                         return 'Medicine name should be at most 25 characters';
+                      } else if (!letterOnlyRegex.hasMatch(value)) {
+                        return 'Medicine name should only contain letters (a-zA-Z)';
                       }
                       return null;
                     },
@@ -132,6 +136,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                         return 'Total no of dosages are required';
                       } else if (value.length > 5) {
                         return 'Total no of dosages should be at most 4 characters';
+                      } else if (!numberOnlyRegex.hasMatch(value)) {
+                        return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
                     },
@@ -149,6 +155,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                         return 'Dosage is required';
                       } else if (value.length > 25) {
                         return 'Dosage should be at most 25 characters';
+                      } else if (!numberOnlyRegex.hasMatch(value)) {
+                        return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
                     },

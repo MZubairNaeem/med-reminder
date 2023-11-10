@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';
@@ -19,8 +20,8 @@ class _LoginState extends State<EmailLogin> {
   final focusNode = FocusNode();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passController = TextEditingController();
-  final RegExp emailRegex =
-      RegExp(r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-zA-Z0-9.-]+$');
+  final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
   bool loading = false;
   @override
   void dispose() {
@@ -108,7 +109,7 @@ class _LoginState extends State<EmailLogin> {
                         //email regex
                         if (value!.isEmpty) {
                           return 'Please enter your email';
-                        } else if (!emailRegex.hasMatch(value)) {
+                        } else if (!EmailValidator.validate(value)) {
                           return 'Please enter a valid email';
                         }
 

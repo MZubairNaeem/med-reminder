@@ -107,7 +107,8 @@ class _CompletedAppoinmentsState extends State<CompletedAppoinments> {
                                     select = true;
                                   });
                                 },
-                                child: AppointmentListTile(
+                                child: AppointmentListTile(                                  timeStatus: appoinments[index].appointmentDateTime!,
+
                                   index: index + 1,
                                   reason: appoinments[index].visitReason!,
                                   doctorName: appoinments[index].doctorName!,

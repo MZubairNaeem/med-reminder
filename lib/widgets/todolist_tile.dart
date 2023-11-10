@@ -48,62 +48,99 @@ class ToDoList extends StatelessWidget {
             horizontal: 4.w,
             vertical: 2.h,
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: 45.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 45.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                taskName.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 17.sp,
+                                  decoration: taskCompleted
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                  color: taskCompleted ? gray2 : primary,
+                                  fontWeight: FontWeight.bold,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                            //add green dot if task is completed
+                          ],
+                        ),
+                      ),
+                      // popup menu
+
+                      SizedBox(height: 1.h),
+                      SizedBox(
+                        width: 65.w,
+                        height: 4.h,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
                           child: Text(
-                            taskName.toUpperCase(),
+                            description,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              fontSize: 17.sp,
-                              decoration: taskCompleted
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              color: taskCompleted ? gray2 : primary,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
+                              letterSpacing: 0.5,
+                              fontSize: 15.sp,
+                              color: taskCompleted ? gray2 : gray,
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  // popup menu
-
-                  SizedBox(height: 1.h),
-                  SizedBox(
-                    width: 65.w,
-                    height: 4.h,
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          letterSpacing: 0.5,
-                          fontSize: 15.sp,
-                          color: taskCompleted ? gray2 : gray,
-                        ),
                       ),
+                    ],
+                  ),
+                  Visibility(
+                    visible: select!,
+                    child: Checkbox(
+                      value: checkList,
+                      onChanged: onSelect,
+                      activeColor: const Color.fromARGB(255, 221, 44, 31),
                     ),
                   ),
                 ],
               ),
-              Visibility(
-                visible: select!,
-                child: Checkbox(
-                  value: checkList,
-                  onChanged: onSelect,
-                  activeColor: const Color.fromARGB(255, 221, 44, 31),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 5.w,
+                      height: 5.w,
+                      decoration: BoxDecoration(
+                        color: taskCompleted ? Colors.green : Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Container(
+                      width: 4.w,
+                      height: 4.w,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    Container(
+                      width: 2.w,
+                      height: 2.w,
+                      decoration: BoxDecoration(
+                        color: taskCompleted ? Colors.green : Colors.orange,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],

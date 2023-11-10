@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:medreminder/constants/colors/colors.dart';
@@ -136,7 +137,7 @@ class _EmailSignupState extends State<EmailSignup> {
                       //email regex
                       if (value!.isEmpty) {
                         return 'Please enter your email';
-                      } else if (!emailRegex.hasMatch(value)) {
+                      } else if (!EmailValidator.validate(value)) {
                         return 'Please enter a valid email';
                       }
 

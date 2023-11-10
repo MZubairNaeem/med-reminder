@@ -35,21 +35,14 @@ class _CareTakerLogin extends State<CareTakerLogin> {
       child: Scaffold(
         body: Form(
           key: formKey,
-          child: Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                // gradient: LinearGradient(
-                //   colors: [Colors.blue, primary],
-                //   begin: Alignment.topCenter,
-                //   end: Alignment.bottomCenter,
-                // ),
-                ),
+          child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 100.w,
+                  height: 30.h,
+                  width: double.infinity,
                   decoration: BoxDecoration(
                     color: secondary,
                     borderRadius: BorderRadius.only(
@@ -57,41 +50,38 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                       bottomRight: Radius.circular(10.w),
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 13.h,
-                      ),
-                      Text(
-                        appName,
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                          color: white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      SizedBox(
-                        width: 85.w,
-                        child: Text(
-                          onBoardText,
-                          textAlign: TextAlign.center,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          appName,
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.bold,
                             color: white,
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 7.h,
-                      ),
-                    ],
+                        SizedBox(
+                          height: 1.h,
+                        ),
+                        SizedBox(
+                          width: 90.w,
+                          child: Text(
+                            onBoardText,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: 7.h,
+                  height: 5.h,
                 ),
                 SizedBox(
                   width: 90.w,
@@ -99,12 +89,13 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                     smsOTP,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 17.sp,
+                      fontSize: 18.sp,
+                      color: gray,
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 4.h,
+                  height: 5.h,
                 ),
                 SizedBox(
                   width: 90.w,
@@ -127,7 +118,7 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                       return null;
                     },
                     selectorConfig: const SelectorConfig(
-                      selectorType: PhoneInputSelectorType.DROPDOWN,
+                      selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                     ),
                     ignoreBlank: true,
                     autoValidateMode: AutovalidateMode.disabled,
@@ -144,41 +135,44 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                   ),
                 ),
                 SizedBox(
-                  height: 5.h,
+                  height: 15.h,
                 ),
-                SizedBox(
-                  width: 90.w,
-                  height: 6.h,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        focusNode.unfocus();
-                        setState(() {
-                          loading = true;
-                        });
-                        await Auth_.sendCode(context, phoneNo.toString());
-                        setState(() {
-                          loading = false;
-                        });
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+                  child: SizedBox(
+                    width: 100.w,
+                    height: 12.w,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          focusNode.unfocus();
+                          setState(() {
+                            loading = true;
+                          });
+                          await Auth_.sendCode(context, phoneNo.toString());
+                          setState(() {
+                            loading = false;
+                          });
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: loading
-                        ? const Center(
-                            child: CircularProgressIndicator(
-                            color: white,
-                          ))
-                        : Text(
-                            'Continue',
-                            style: TextStyle(
-                              fontSize: 17.sp,
+                      child: loading
+                          ? const Center(
+                              child: CircularProgressIndicator(
                               color: white,
+                            ))
+                          : Text(
+                              'Continue',
+                              style: TextStyle(
+                                color: white,
+                              ),
                             ),
-                          ),
+                    ),
                   ),
                 ),
               ],

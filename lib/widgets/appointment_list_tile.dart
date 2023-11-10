@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -18,6 +19,7 @@ class AppointmentListTile extends StatelessWidget {
     required this.date,
     required this.onChanged,
     required this.index,
+    required this.timeStatus,
     this.onSelect,
     this.select,
   }) : super(key: key);
@@ -28,6 +30,7 @@ class AppointmentListTile extends StatelessWidget {
   final String reason;
   final String note;
   final String time;
+  Timestamp timeStatus;
   final String date;
   bool? checklist;
   final int index;
@@ -39,6 +42,7 @@ class AppointmentListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime timeStatus = this.timeStatus.toDate();
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 5,
@@ -56,203 +60,248 @@ class AppointmentListTile extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Appointment #$index',
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              color: taskCompleted ? gray2 : primary,
+                              decoration: taskCompleted
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                          Visibility(
+                            visible: select!,
+                            child: Checkbox(
+                              value: checklist,
+                              onChanged: onSelect,
+                              activeColor:
+                                  const Color.fromARGB(255, 221, 44, 31),
+                            ),
+                          ),
+                          // Visibility(
+                          //   visible: !select!,
+                          //   child: Stack(
+                          //     alignment: Alignment.center,
+                          //     children: [
+                          //       Container(
+                          //         width: 20.sp,
+                          //         height: 20.sp,
+                          //         decoration: const BoxDecoration(
+                          //           color: Colors.red,
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //       Container(
+                          //         width: 18.sp,
+                          //         height: 18.sp,
+                          //         decoration: const BoxDecoration(
+                          //           color: Colors.white,
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //       Container(
+                          //         width: 15.sp,
+                          //         height: 15.sp,
+                          //         decoration: const BoxDecoration(
+                          //           color: Color.fromARGB(255, 221, 44, 31),
+                          //           shape: BoxShape.circle,
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                        ],
+                      ),
+                      SizedBox(height: 1.h),
                       Text(
-                        'Appointment #$index',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          color: taskCompleted ? gray2 : primary,
-                          decoration: taskCompleted
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                      Visibility(
-                        visible: select!,
-                        child: Checkbox(
-                          value: checklist,
-                          onChanged: onSelect,
-                          activeColor: const Color.fromARGB(255, 221, 44, 31),
-                        ),
-                      ),
-                      // Visibility(
-                      //   visible: !select!,
-                      //   child: Stack(
-                      //     alignment: Alignment.center,
-                      //     children: [
-                      //       Container(
-                      //         width: 20.sp,
-                      //         height: 20.sp,
-                      //         decoration: const BoxDecoration(
-                      //           color: Colors.red,
-                      //           shape: BoxShape.circle,
-                      //         ),
-                      //       ),
-                      //       Container(
-                      //         width: 18.sp,
-                      //         height: 18.sp,
-                      //         decoration: const BoxDecoration(
-                      //           color: Colors.white,
-                      //           shape: BoxShape.circle,
-                      //         ),
-                      //       ),
-                      //       Container(
-                      //         width: 15.sp,
-                      //         height: 15.sp,
-                      //         decoration: const BoxDecoration(
-                      //           color: Color.fromARGB(255, 221, 44, 31),
-                      //           shape: BoxShape.circle,
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                  SizedBox(height: 1.h),
-                  Text(
-                    reason,
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      color: primary.withOpacity(0.4),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Row(
-                    children: [
-                      Text(
-                        'Doctor: ',
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        doctorName,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        'Hospital: ',
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        hospitalName,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: taskCompleted,
-                        onChanged: onChanged,
-                        activeColor: secondary,
-                      ),
-                      Text(
-                        'Appointment Scheduled',
+                        reason,
                         style: TextStyle(
                           fontSize: 18.sp,
-                          color: primary,
+                          color: primary.withOpacity(0.4),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Date: ',
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(height: 2.h),
+                      Row(
+                        children: [
+                          Text(
+                            'Doctor: ',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            doctorName,
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        date,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            'Hospital: ',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            hospitalName,
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Time: ',
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      SizedBox(
+                        height: 2.h,
                       ),
-                      Text(
-                        time,
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          color: lightBlue,
-                        ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: taskCompleted,
+                            onChanged: onChanged,
+                            activeColor: secondary,
+                          ),
+                          Text(
+                            'Appointment Scheduled',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 80.w,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Date: ',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            date,
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Time: ',
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            time,
+                            style: TextStyle(
+                              fontSize: 17.sp,
+                              color: lightBlue,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: 80.w,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Note: ',
-                              style: TextStyle(
-                                fontSize: 17.sp,
-                                color: lightBlue,
-                                fontWeight: FontWeight.bold,
+                            Column(
+                              children: [
+                                Text(
+                                  'Note: ',
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    color: lightBlue,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    note,
+                                    style: TextStyle(
+                                      fontSize: 17.sp,
+                                      color: lightBlue,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                note,
-                                style: TextStyle(
-                                  fontSize: 17.sp,
-                                  color: lightBlue,
-                                ),
-                                softWrap: true,
-                              ),
-                            ],
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 5.w,
+                          height: 5.w,
+                          decoration: BoxDecoration(
+                            color: taskCompleted
+                                ? Colors.green
+                                : (timeStatus.isBefore(DateTime.now())
+                                    ? Colors.orange
+                                    : primary),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Container(
+                          width: 4.w,
+                          height: 4.w,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        Container(
+                          width: 2.w,
+                          height: 2.w,
+                          decoration: BoxDecoration(
+                            color: taskCompleted
+                                ? Colors.green
+                                : (timeStatus.isBefore(DateTime.now())
+                                    ? Colors.orange
+                                    : primary),
+                            shape: BoxShape.circle,
                           ),
                         ),
                       ],

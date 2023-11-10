@@ -29,21 +29,21 @@ class _NumberVerificationState extends State<NumberVerification> {
     super.dispose();
   }
 
+  final defaultPinTheme = PinTheme(
+    width: 56,
+    height: 56,
+    textStyle: const TextStyle(
+      fontSize: 22,
+      color: Color.fromRGBO(30, 60, 87, 1),
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(19),
+      border: Border.all(color: tertiary),
+    ),
+  );
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle: const TextStyle(
-        fontSize: 22,
-        color: Color.fromRGBO(30, 60, 87, 1),
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(19),
-        border: Border.all(color: tertiary),
-      ),
-    );
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
@@ -204,7 +204,7 @@ class _NumberVerificationState extends State<NumberVerification> {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

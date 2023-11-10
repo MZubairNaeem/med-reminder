@@ -52,173 +52,217 @@ class MedicineCard extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Stack(
             children: [
-              Row(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Medicine Name:",
-                    style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.bold,
-                        color: primary),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Medicine Name:",
+                        style: TextStyle(
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.bold,
+                            color: primary),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      SizedBox(
+                        width: 30.w,
+                        child: Text(
+                          medicineName,
+                          style: TextStyle(
+                            fontSize: 17.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: select!,
+                        child: Checkbox(
+                          value: checkList,
+                          onChanged: onSelect,
+                          activeColor: const Color.fromARGB(255, 221, 44, 31),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 2.w,
+                  SizedBox(height: 1.h),
+                  Row(
+                    children: [
+                      Text(
+                        'Dosage:',
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        dosage,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: 30.w,
-                    child: Text(
-                      medicineName,
-                      style: TextStyle(
-                        fontSize: 17.sp,
-                        fontWeight: FontWeight.w400,
+                  // SizedBox(height: 1.h),
+                  // Row(
+                  //   children: [
+                  //     Text(
+                  //       'Quantity:',
+                  //       style: TextStyle(
+                  //         fontSize: 17.sp,
+                  //         fontWeight: FontWeight.w500,
+                  //       ),
+                  //     ),
+                  //     SizedBox(
+                  //       width: 2.w,
+                  //     ),
+                  //     Text(
+                  //       qty!,
+                  //       style: TextStyle(
+                  //         fontSize: 17.sp,
+                  //         fontWeight: FontWeight.w400,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  SizedBox(height: 1.h),
+                  Row(
+                    children: [
+                      Text(
+                        "Medicine Type:",
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        medicineType,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  Row(
+                    children: [
+                      Text(
+                        "Medicine Time:",
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        // time into am pm
+                        formattedTime,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  Row(
+                    children: [
+                      Text(
+                        "Medicine Date:",
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        // date only
+                        formattedDate,
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 1.h),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: medStatus,
+                        onChanged: onStatusChanged,
+                        activeColor: Color.fromARGB(255, 40, 157, 5),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Text(
+                        'Med Taken',
+                        style: TextStyle(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: 5.w,
+                      height: 5.w,
+                      decoration: BoxDecoration(
+                        color: medStatus!
+                            ? Colors.green
+                            : (time.isBefore(DateTime.now())
+                                ? Colors.orange
+                                : primary),
+                        shape: BoxShape.circle,
                       ),
                     ),
-                  ),
-                  Visibility(
-                    visible: select!,
-                    child: Checkbox(
-                      value: checkList,
-                      onChanged: onSelect,
-                      activeColor: const Color.fromARGB(255, 221, 44, 31),
+                    Container(
+                      width: 4.w,
+                      height: 4.w,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Text(
-                    'Dosage:',
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
+                    Container(
+                      width: 2.w,
+                      height: 2.w,
+                      decoration: BoxDecoration(
+                        color: medStatus!
+                            ? Colors.green
+                            : (time.isBefore(DateTime.now())
+                                ? Colors.orange
+                                : primary),
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    dosage,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              // SizedBox(height: 1.h),
-              // Row(
-              //   children: [
-              //     Text(
-              //       'Quantity:',
-              //       style: TextStyle(
-              //         fontSize: 17.sp,
-              //         fontWeight: FontWeight.w500,
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       width: 2.w,
-              //     ),
-              //     Text(
-              //       qty!,
-              //       style: TextStyle(
-              //         fontSize: 17.sp,
-              //         fontWeight: FontWeight.w400,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Text(
-                    "Medicine Type:",
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    medicineType,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Text(
-                    "Medicine Time:",
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    // time into am pm
-                    formattedTime,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Text(
-                    "Medicine Date:",
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    // date only
-                    formattedDate,
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 1.h),
-              Row(
-                children: [
-                  Checkbox(
-                    value: medStatus,
-                    onChanged: onStatusChanged,
-                    activeColor: Color.fromARGB(255, 40, 157, 5),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Text(
-                    'Med Taken',
-                    style: TextStyle(
-                      fontSize: 17.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
