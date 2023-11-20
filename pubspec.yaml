@@ -61,6 +61,7 @@ dependencies:
   flutter_background_service_android: ^6.1.0
   permission_handler: ^11.0.1
   email_validator: ^2.1.17
+  gif: ^2.2.0
 
 dev_dependencies:
   flutter_test:
