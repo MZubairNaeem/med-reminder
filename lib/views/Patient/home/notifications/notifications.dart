@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -76,27 +78,28 @@ class _HomeNotificationState extends State<HomeNotification>
                                   ref.watch(missedAppoinmentProvider);
                               // ref.refresh(notesProvider);
                               return userResult.when(
-                                  data: (appointments) {
-                                    return appointments.isEmpty
-                                        ? const Center(
-                                            child: Text(
-                                              '0',
-                                              style: TextStyle(color: white),
-                                            ),
-                                          )
-                                        : Text(
-                                            appointments.length.toString(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                            ),
-                                          );
-                                  },
-                                  loading: () => const Text("..."),
-                                  error: (error, stackTrace) {
-                                    print('Error: $error');
-                                    return Text('Error: $error');
-                                  });
+                                data: (appointments) {
+                                  return appointments.isEmpty
+                                      ? const Center(
+                                          child: Text(
+                                            '0',
+                                            style: TextStyle(color: white),
+                                          ),
+                                        )
+                                      : Text(
+                                          appointments.length.toString(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                          ),
+                                        );
+                                },
+                                loading: () => const Text("..."),
+                                error: (error, stackTrace) {
+                                  print('Error: $error');
+                                  return Text('Error: $error');
+                                },
+                              );
                             },
                           ),
                         )
@@ -273,6 +276,11 @@ class _HomeNotificationState extends State<HomeNotification>
                       Consumer(
                         builder: (context, ref, _) {
                           final userResult = ref.watch(missedMedProvider);
+                          Timer.periodic(Duration(seconds: 10), (timer) {
+                            ref.refresh(missedMedProvider);
+                            print('refreshed');
+                          });
+
                           return userResult.when(
                               data: (med) {
                                 return med.isEmpty

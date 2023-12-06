@@ -69,7 +69,7 @@ class _SearchRelativeState extends State<SearchRelative> {
                 onPressed: () {
                   setState(() {});
                 },
-                child: const Text("Search"),
+                child: const Text("Search by name"),
               ),
               SizedBox(
                 height: 5.h,
@@ -79,7 +79,7 @@ class _SearchRelativeState extends State<SearchRelative> {
                     .collection('users')
                     .where('userType', isEqualTo: 'caretaker')
                     .where('credentials',
-                        isEqualTo: searchController.text.trim())
+                        isGreaterThanOrEqualTo: searchController.text.trim())
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.active) {
@@ -102,7 +102,7 @@ class _SearchRelativeState extends State<SearchRelative> {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: ListTile(
-                                  title: Text(searchUser.credentials!),
+                                  title: Text(searchUser.username!),
                                   trailing: Container(
                                     decoration: BoxDecoration(
                                       color: phoneList.contains(

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +10,7 @@ import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/pharmacies.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
 import 'package:medreminder/views/Patient/home/appoinments/doc_appointments_list.dart';
+import 'package:medreminder/views/Patient/home/medRefill/med_refill.dart';
 import 'package:medreminder/views/Patient/home/medicineSchedules/medicine_list.dart';
 import 'package:medreminder/views/Patient/home/notes/notes_list.dart';
 import 'package:medreminder/views/Patient/home/notifications/notifications.dart';
@@ -237,103 +236,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Padding(
-            //   padding: EdgeInsets.all(10.sp),
-            //   child: SizedBox(
-            //     width: 95.w,
-            //     height: 30.h,
-            //     child: Card(
-            //       elevation: 2,
-            //       shadowColor: secondary,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(5.w),
-            //       ),
-            //       child: StreamBuilder(
-            //         stream: FirebaseFirestore.instance
-            //             .collection('medSchedule')
-            //             .where('uid',
-            //                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            //             .snapshots(),
-            //         builder: (context, snapshot) {
-            //           if (snapshot.hasData) {
-            //             // Use a Map to track the status of each medicine
-            //             Map<String, List<bool>> medicineStatusMap = {};
-
-            //             // Iterate through the documents in the snapshot
-            //             snapshot.data?.docs.forEach((doc) {
-            //               var medName = doc['medName'];
-            //               var medStatus = doc['status'];
-
-            //               if (medName != null && medStatus != null) {
-            //                 // Initialize the status list if not already set
-            //                 medicineStatusMap.putIfAbsent(medName, () => []);
-
-            //                 // Add the status to the list
-            //                 medicineStatusMap[medName]!.add(medStatus);
-            //               }
-            //             });
-
-            //             // Filter medicines where all status values are true
-            //             List<String> filteredMedicines = medicineStatusMap
-            //                 .entries
-            //                 .where((entry) =>
-            //                     entry.value.every((status) => status == true))
-            //                 .map((entry) => entry.key)
-            //                 .toList();
-
-            //             return Padding(
-            //               padding: const EdgeInsets.all(8.0),
-            //               child: ListView.builder(
-            //                 itemCount: min(filteredMedicines.length,
-            //                     5), // Limit to 3 medicines
-            //                 itemBuilder: (context, index) {
-            //                   var medName = filteredMedicines[index];
-            //                   return Row(
-            //                     mainAxisAlignment:
-            //                         MainAxisAlignment.spaceBetween,
-            //                     children: [
-            //                       SizedBox(
-            //                         width: 50.w,
-            //                         child: Text(
-            //                           'Refill: ${medName.toUpperCase()}',
-            //                           style: TextStyle(
-            //                             fontSize: 16.sp,
-            //                             fontWeight: FontWeight.bold,
-            //                           ),
-            //                           overflow: TextOverflow.ellipsis,
-            //                         ),
-            //                       ),
-            //                       Gif(
-            //                         height: 5.h,
-            //                         width: 20.w,
-            //                         image: const AssetImage(
-            //                             "lib/constants/assets/refresh.gif"),
-            //                         controller:
-            //                             _controller, // if duration and fps is null, original gif fps will be used.
-            //                         //fps: 30,
-            //                         //duration: const Duration(seconds: 3),
-            //                         autostart: Autostart.loop,
-            //                         placeholder: (context) =>
-            //                             const Text('Loading...'),
-            //                         onFetchCompleted: () {
-            //                           _controller.reset();
-            //                           _controller.forward();
-            //                         },
-            //                       ),
-            //                     ],
-            //                   );
-            //                 },
-            //               ),
-            //             );
-            //           } else {
-            //             return const Text("...");
-            //           }
-            //         },
-            //       ),
-            //     ),
-            //   ),
-            // ),
-
+            
             // Grid of containers (3 by 2)
             Column(
               children: [
@@ -933,7 +836,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => {},
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MedRefill(),
+                        ),
+                      ),
                       child: Card(
                         margin: EdgeInsets.all(3.w),
                         elevation: 2,

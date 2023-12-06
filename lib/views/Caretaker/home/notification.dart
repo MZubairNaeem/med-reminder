@@ -80,7 +80,13 @@ class _HomeNotificationState extends State<CareTakerNotification>
                               return userResult.when(
                                   data: (appointments) {
                                     return appointments.isEmpty
-                                        ? const Center(child: Text('0'))
+                                        ? const Center(
+                                            child: Text(
+                                            '0',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ))
                                         : Text(
                                             appointments.length.toString(),
                                             style: const TextStyle(
@@ -122,7 +128,6 @@ class _HomeNotificationState extends State<CareTakerNotification>
                                             '0',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 12,
                                             ),
                                           ))
                                         : Text(
@@ -156,14 +161,6 @@ class _HomeNotificationState extends State<CareTakerNotification>
                           // ref.refresh(notesProvider);
                           return userResult.when(
                               data: (appointments) {
-                                print(appointments.length);
-                                DateTime time = appointments[0]
-                                    .appointmentDateTime!
-                                    .toDate();
-                                String formattedTime =
-                                    DateFormat.jm().format(time);
-                                String formattedDate =
-                                    DateFormat('MMMM dd, yyyy').format(time);
                                 return appointments.isEmpty
                                     ? const Center(
                                         child: Text(
@@ -171,6 +168,15 @@ class _HomeNotificationState extends State<CareTakerNotification>
                                     : ListView.builder(
                                         itemCount: appointments.length,
                                         itemBuilder: (context, index) {
+                                          print(appointments.length);
+                                          DateTime time = appointments[0]
+                                              .appointmentDateTime!
+                                              .toDate();
+                                          String formattedTime =
+                                              DateFormat.jm().format(time);
+                                          String formattedDate =
+                                              DateFormat('MMMM dd, yyyy')
+                                                  .format(time);
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 4.w,
