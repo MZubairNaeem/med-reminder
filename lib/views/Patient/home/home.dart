@@ -109,15 +109,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       }
     });
 
-    // Start the rotation animation
-    // _controller.forward();
     super.initState();
   }
 
   late final GifController _controller;
   late AnimationController controller;
-
-  // GifController _controller = GifController(vsync: this);
   @override
   Widget build(BuildContext context) {
     var notificationCount = 0;
@@ -125,57 +121,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Minder Alert'),
         backgroundColor: secondary,
-        // 3 dots menu
         actions: [
-          // Consumer(
-          //   builder: (context, ref, _) {
-          //     final userResult = ref.watch(notesProvider);
-          //     // ref.refresh(notesProvider);
-          //     return userResult.when(
-          //       data: (notes) {
-          //         return IconButton(
-          //           onPressed: () {
-          //             setState(() {
-          //               load = true;
-          //             });
-          //             note = ref.refresh(notesProvider);
-          //             completedNotes = ref.refresh(completedNotesProvider);
-          //             pendingNotes = ref.refresh(pendingNotesProvider);
-          //             appoinment = ref.refresh(appoinmentProvider);
-          //             upcomingAppoinment =
-          //                 ref.refresh(upcomingAppoinmentProvider);
-          //             missedAppoinment = ref.refresh(missedAppoinmentProvider);
-          //             pendingMed = ref.refresh(pendingMedProvider);
-          //             takenMed = ref.refresh(takenMedProvider);
-          //             missedMed = ref.refresh(missedMedProvider);
-          //             Future.delayed(const Duration(milliseconds: 500), () {
-          //               setState(() {
-          //                 load = false;
-          //               });
-          //             });
-          //           },
-          //           icon: const Icon(
-          //             Icons.refresh,
-          //             color: Colors.white,
-          //           ),
-          //         );
-          //       },
-          //       loading: () => const Text("..."),
-          //       error: (error, stackTrace) => Text('Error: $error'),
-          //     );
-          //   },
-          // ),
-          // IconButton(
-          //   onPressed: () {
-          //     // notificationService.sendNotification('title', 'body');
-          //     FlutterBackgroundService().invoke('setAsBackground');
-          //     print('object');
-          //   },
-          //   icon: const Icon(
-          //     Icons.notifications,
-          //     color: Colors.white,
-          //   ),
-          // ),
           Consumer(
             builder: (context, ref, _) {
               final userResult = ref.watch(missedMedProvider);
@@ -239,7 +185,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   });
             },
           ),
-
           PopupMenuButton(
             color: Colors.white,
             itemBuilder: (context) => [
@@ -292,114 +237,103 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.all(10.sp),
-              child: SizedBox(
-                width: 95.w,
-                height: 30.h,
-                child: Card(
-                  elevation: 2,
-                  shadowColor: secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.w),
-                  ),
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('medSchedule')
-                        .where('uid',
-                            isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        // Use a Map to track the status of each medicine
-                        Map<String, List<bool>> medicineStatusMap = {};
+            // Padding(
+            //   padding: EdgeInsets.all(10.sp),
+            //   child: SizedBox(
+            //     width: 95.w,
+            //     height: 30.h,
+            //     child: Card(
+            //       elevation: 2,
+            //       shadowColor: secondary,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(5.w),
+            //       ),
+            //       child: StreamBuilder(
+            //         stream: FirebaseFirestore.instance
+            //             .collection('medSchedule')
+            //             .where('uid',
+            //                 isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            //             .snapshots(),
+            //         builder: (context, snapshot) {
+            //           if (snapshot.hasData) {
+            //             // Use a Map to track the status of each medicine
+            //             Map<String, List<bool>> medicineStatusMap = {};
 
-                        // Iterate through the documents in the snapshot
-                        snapshot.data?.docs.forEach((doc) {
-                          var medName = doc['medName'];
-                          var medStatus = doc['status'];
+            //             // Iterate through the documents in the snapshot
+            //             snapshot.data?.docs.forEach((doc) {
+            //               var medName = doc['medName'];
+            //               var medStatus = doc['status'];
 
-                          if (medName != null && medStatus != null) {
-                            // Initialize the status list if not already set
-                            medicineStatusMap.putIfAbsent(medName, () => []);
+            //               if (medName != null && medStatus != null) {
+            //                 // Initialize the status list if not already set
+            //                 medicineStatusMap.putIfAbsent(medName, () => []);
 
-                            // Add the status to the list
-                            medicineStatusMap[medName]!.add(medStatus);
-                          }
-                        });
+            //                 // Add the status to the list
+            //                 medicineStatusMap[medName]!.add(medStatus);
+            //               }
+            //             });
 
-                        // Filter medicines where all status values are true
-                        List<String> filteredMedicines = medicineStatusMap
-                            .entries
-                            .where((entry) =>
-                                entry.value.every((status) => status == true))
-                            .map((entry) => entry.key)
-                            .toList();
+            //             // Filter medicines where all status values are true
+            //             List<String> filteredMedicines = medicineStatusMap
+            //                 .entries
+            //                 .where((entry) =>
+            //                     entry.value.every((status) => status == true))
+            //                 .map((entry) => entry.key)
+            //                 .toList();
 
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            itemCount: min(filteredMedicines.length,
-                                5), // Limit to 3 medicines
-                            itemBuilder: (context, index) {
-                              var medName = filteredMedicines[index];
-                              return Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SizedBox(
-                                    width: 50.w,
-                                    child: Text(
-                                      'Refill: ${medName.toUpperCase()}',
-                                      style: TextStyle(
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Gif(
-                                    height: 5.h,
-                                    width: 20.w,
-                                    image: const AssetImage(
-                                        "lib/constants/assets/refresh.gif"),
-                                    controller:
-                                        _controller, // if duration and fps is null, original gif fps will be used.
-                                    //fps: 30,
-                                    //duration: const Duration(seconds: 3),
-                                    autostart: Autostart.loop,
-                                    placeholder: (context) =>
-                                        const Text('Loading...'),
-                                    onFetchCompleted: () {
-                                      _controller.reset();
-                                      _controller.forward();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        );
-                      } else {
-                        return const Text("...");
-                      }
-                    },
-                  ),
-                ),
-              ),
-            ),
-            // Horizontal scrollable containers
-            // SizedBox(
-            //   width: 100.w,
-            //   height: 30.h,
-            //   child: ListView.builder(
-            //     scrollDirection: Axis.horizontal,
-            //     itemCount: 1,
-            //     itemBuilder: (context, index) {
-            //       return
-            //     },
+            //             return Padding(
+            //               padding: const EdgeInsets.all(8.0),
+            //               child: ListView.builder(
+            //                 itemCount: min(filteredMedicines.length,
+            //                     5), // Limit to 3 medicines
+            //                 itemBuilder: (context, index) {
+            //                   var medName = filteredMedicines[index];
+            //                   return Row(
+            //                     mainAxisAlignment:
+            //                         MainAxisAlignment.spaceBetween,
+            //                     children: [
+            //                       SizedBox(
+            //                         width: 50.w,
+            //                         child: Text(
+            //                           'Refill: ${medName.toUpperCase()}',
+            //                           style: TextStyle(
+            //                             fontSize: 16.sp,
+            //                             fontWeight: FontWeight.bold,
+            //                           ),
+            //                           overflow: TextOverflow.ellipsis,
+            //                         ),
+            //                       ),
+            //                       Gif(
+            //                         height: 5.h,
+            //                         width: 20.w,
+            //                         image: const AssetImage(
+            //                             "lib/constants/assets/refresh.gif"),
+            //                         controller:
+            //                             _controller, // if duration and fps is null, original gif fps will be used.
+            //                         //fps: 30,
+            //                         //duration: const Duration(seconds: 3),
+            //                         autostart: Autostart.loop,
+            //                         placeholder: (context) =>
+            //                             const Text('Loading...'),
+            //                         onFetchCompleted: () {
+            //                           _controller.reset();
+            //                           _controller.forward();
+            //                         },
+            //                       ),
+            //                     ],
+            //                   );
+            //                 },
+            //               ),
+            //             );
+            //           } else {
+            //             return const Text("...");
+            //           }
+            //         },
+            //       ),
+            //     ),
             //   ),
             // ),
+
             // Grid of containers (3 by 2)
             Column(
               children: [
@@ -538,37 +472,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult = ref.watch(
-                                        //         completedNotesProvider);
-                                        //     // ref.refresh(
-                                        //     //     completedNotesProvider);
-                                        //     return userResult.when(
-                                        //       data: (notes) {
-                                        //         return Center(
-                                        //           child: Text(
-                                        //             notes.isNotEmpty
-                                        //                 ? notes.length
-                                        //                     .toString()
-                                        //                 : "0",
-                                        //             style: TextStyle(
-                                        //                 fontSize: 16.sp,
-                                        //                 fontWeight:
-                                        //                     FontWeight
-                                        //                         .bold,
-                                        //                 color: white),
-                                        //           ),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -617,41 +520,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult = ref.watch(
-                                        //         pendingNotesProvider);
-                                        //     // ref.refresh(
-                                        //     //     pendingNotesProvider);
-                                        //     return userResult.when(
-                                        //         data: (notes) {
-                                        //           return Center(
-                                        //             child: Text(
-                                        //               notes.isNotEmpty
-                                        //                   ? notes.length
-                                        //                       .toString()
-                                        //                   : "0",
-                                        //               style: TextStyle(
-                                        //                   fontSize:
-                                        //                       16.sp,
-                                        //                   fontWeight:
-                                        //                       FontWeight
-                                        //                           .bold,
-                                        //                   color: white),
-                                        //             ),
-                                        //           );
-                                        //         },
-                                        //         loading: () =>
-                                        //             const Text("..."),
-                                        //         error: (error,
-                                        //             stackTrace) {
-                                        //           print(
-                                        //               'Error: $error');
-                                        //           return Text(
-                                        //               'Error: $error');
-                                        //         });
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -753,35 +621,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult =
-                                        //         ref.watch(
-                                        //             pendingMedProvider);
-                                        //     // ref.refresh(pendingMedProvider);
-                                        //     return userResult.when(
-                                        //       data: (notes) {
-                                        //         return Text(
-                                        //           notes.isNotEmpty
-                                        //               ? notes.length
-                                        //                   .toString()
-                                        //               : "0",
-                                        //           style: TextStyle(
-                                        //               fontSize: 16.sp,
-                                        //               fontWeight:
-                                        //                   FontWeight
-                                        //                       .bold,
-                                        //               color: white),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -830,37 +669,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult =
-                                        //         ref.watch(
-                                        //             takenMedProvider);
-                                        //     // ref.refresh(takenMedProvider);
-                                        //     return userResult.when(
-                                        //       data: (notes) {
-                                        //         return Center(
-                                        //           child: Text(
-                                        //             notes.isNotEmpty
-                                        //                 ? notes.length
-                                        //                     .toString()
-                                        //                 : "0",
-                                        //             style: TextStyle(
-                                        //                 fontSize: 16.sp,
-                                        //                 fontWeight:
-                                        //                     FontWeight
-                                        //                         .bold,
-                                        //                 color: white),
-                                        //           ),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -911,41 +719,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult =
-                                        //         ref.watch(
-                                        //             missedMedProvider);
-                                        //     // ref.refresh(missedMedProvider);
-                                        //     return userResult.when(
-                                        //         data: (notes) {
-                                        //           return Center(
-                                        //             child: Text(
-                                        //               notes.isNotEmpty
-                                        //                   ? notes.length
-                                        //                       .toString()
-                                        //                   : "0",
-                                        //               style: TextStyle(
-                                        //                   fontSize:
-                                        //                       16.sp,
-                                        //                   fontWeight:
-                                        //                       FontWeight
-                                        //                           .bold,
-                                        //                   color: white),
-                                        //             ),
-                                        //           );
-                                        //         },
-                                        //         loading: () =>
-                                        //             const Text("..."),
-                                        //         error: (error,
-                                        //             stackTrace) {
-                                        //           print(
-                                        //               'Error: $error');
-                                        //           return Text(
-                                        //               'Error: $error');
-                                        //         });
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -1045,36 +818,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult =
-                                        //         ref.watch(
-                                        //             appoinmentProvider);
-                                        //     // ref.refresh(appoinmentProvider);
-                                        //     return userResult.when(
-                                        //       data: (appoinment) {
-                                        //         return Text(
-                                        //           appoinment.isNotEmpty
-                                        //               ? appoinment
-                                        //                   .length
-                                        //                   .toString()
-                                        //               : "0",
-                                        //           style: TextStyle(
-                                        //               fontSize: 16.sp,
-                                        //               fontWeight:
-                                        //                   FontWeight
-                                        //                       .bold,
-                                        //               color: white),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -1127,39 +870,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult = ref.watch(
-                                        //         upcomingAppoinmentProvider);
-                                        //     // ref.refresh(
-                                        //     //     upcomingAppoinmentProvider);
-                                        //     return userResult.when(
-                                        //       data: (appointment) {
-                                        //         return Center(
-                                        //           child: Text(
-                                        //             appointment
-                                        //                     .isNotEmpty
-                                        //                 ? appointment
-                                        //                     .length
-                                        //                     .toString()
-                                        //                 : "0",
-                                        //             style: TextStyle(
-                                        //                 fontSize: 16.sp,
-                                        //                 fontWeight:
-                                        //                     FontWeight
-                                        //                         .bold,
-                                        //                 color: white),
-                                        //           ),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -1212,39 +922,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult = ref.watch(
-                                        //         missedAppoinmentProvider);
-                                        //     // ref.refresh(
-                                        //     //     missedAppoinmentProvider);
-                                        //     return userResult.when(
-                                        //       data: (appoinment) {
-                                        //         return Center(
-                                        //           child: Text(
-                                        //             appoinment
-                                        //                     .isNotEmpty
-                                        //                 ? appoinment
-                                        //                     .length
-                                        //                     .toString()
-                                        //                 : "0",
-                                        //             style: TextStyle(
-                                        //                 fontSize: 16.sp,
-                                        //                 fontWeight:
-                                        //                     FontWeight
-                                        //                         .bold,
-                                        //                 color: white),
-                                        //           ),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -1256,7 +933,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => PharmaciesController().openGoogleMaps(),
+                      onTap: () => {},
                       child: Card(
                         margin: EdgeInsets.all(3.w),
                         elevation: 2,
@@ -1267,31 +944,266 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         child: SizedBox(
                           height: 20.h,
                           width: 43.w,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                'lib/constants/assets/map.png',
-                                width: 20.w,
-                              ),
-                              Text(
-                                "Pharmacy Nearby",
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 5.w,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      "Med Refill",
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Image.asset(
+                                      'lib/constants/assets/med-refill.png',
+                                      width: 18.sp,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Total Meds",
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('medSchedule')
+                                          .where('uid',
+                                              isEqualTo: FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          // Use a Map to track the status of each medicine
+                                          Map<String, List<bool>>
+                                              medicineStatusMap = {};
+
+                                          // Iterate through the documents in the snapshot
+                                          snapshot.data?.docs.forEach((doc) {
+                                            var medName = doc['medName'];
+                                            var medStatus = doc['status'];
+
+                                            if (medName != null &&
+                                                medStatus != null) {
+                                              // Initialize the status list if not already set
+                                              medicineStatusMap.putIfAbsent(
+                                                  medName, () => []);
+
+                                              // Add the status to the list
+                                              medicineStatusMap[medName]!
+                                                  .add(medStatus);
+                                            }
+                                          });
+
+                                          // Filter medicines where all status values are true
+                                          List<String> filteredMedicines =
+                                              medicineStatusMap.entries
+                                                  .map((entry) => entry.key)
+                                                  .toList();
+                                          return Container(
+                                            width:
+                                                5.w, // Using responsive width
+                                            height:
+                                                5.w, // Using responsive height
+                                            decoration: const BoxDecoration(
+                                              color: secondary,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                filteredMedicines.length
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: white,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text("...");
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Unfilled",
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('medSchedule')
+                                          .where('uid',
+                                              isEqualTo: FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          // Use a Map to track the status of each medicine
+                                          Map<String, List<bool>>
+                                              medicineStatusMap = {};
+
+                                          // Iterate through the documents in the snapshot
+                                          snapshot.data?.docs.forEach((doc) {
+                                            var medName = doc['medName'];
+                                            var medStatus = doc['status'];
+
+                                            if (medName != null &&
+                                                medStatus != null) {
+                                              // Initialize the status list if not already set
+                                              medicineStatusMap.putIfAbsent(
+                                                  medName, () => []);
+
+                                              // Add the status to the list
+                                              medicineStatusMap[medName]!
+                                                  .add(medStatus);
+                                            }
+                                          });
+
+                                          // Filter medicines where all status values are true
+                                          List<String> filteredMedicines =
+                                              medicineStatusMap.entries
+                                                  .where((entry) => entry.value
+                                                      .every((status) =>
+                                                          status == true))
+                                                  .map((entry) => entry.key)
+                                                  .toList();
+
+                                          return Container(
+                                            width:
+                                                5.w, // Using responsive width
+                                            height:
+                                                5.w, // Using responsive height
+                                            decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                filteredMedicines.length
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: white,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text("...");
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Filled",
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                      stream: FirebaseFirestore.instance
+                                          .collection('medSchedule')
+                                          .where('uid',
+                                              isEqualTo: FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          // Use a Map to track the status of each medicine
+                                          Map<String, List<bool>>
+                                              medicineStatusMap = {};
+
+                                          // Iterate through the documents in the snapshot
+                                          snapshot.data?.docs.forEach((doc) {
+                                            var medName = doc['medName'];
+                                            var medStatus = doc['status'];
+
+                                            if (medName != null &&
+                                                medStatus != null) {
+                                              // Initialize the status list if not already set
+                                              medicineStatusMap.putIfAbsent(
+                                                  medName, () => []);
+
+                                              // Add the status to the list
+                                              medicineStatusMap[medName]!
+                                                  .add(medStatus);
+                                            }
+                                          });
+
+                                          // Filter medicines where all status values are true
+                                          List<String> filteredMedicines =
+                                              medicineStatusMap.entries
+                                                  .where((entry) => entry.value
+                                                      .every((status) =>
+                                                          status == false))
+                                                  .map((entry) => entry.key)
+                                                  .toList();
+
+                                          return Container(
+                                            width:
+                                                5.w, // Using responsive width
+                                            height:
+                                                5.w, // Using responsive height
+                                            decoration: const BoxDecoration(
+                                              color: Colors.orange,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                filteredMedicines.length
+                                                    .toString(),
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: white,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text("...");
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                    // CustomCard(
-                    //   text: 'Pharmacy Nearby',
-                    //   onTap: () => PharmaciesController().openGoogleMaps(),
-                    //   height: 20.h,
-                    //   width: 43.w,
-                    // ),
                   ],
                 ),
                 Row(
@@ -1384,34 +1296,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                             }
                                           },
                                         ),
-                                        // child: Consumer(
-                                        //   builder: (context, ref, _) {
-                                        //     final userResult =
-                                        // ref.watch(relativelist);
-                                        //     // ref.refresh(relativelist);
-                                        //     return userResult.when(
-                                        //       data: (relatives) {
-                                        //         return Text(
-                                        //           relatives.isNotEmpty
-                                        //               ? relatives.length
-                                        //                   .toString()
-                                        //               : "0",
-                                        //           style: TextStyle(
-                                        //               fontSize: 16.sp,
-                                        //               fontWeight:
-                                        //                   FontWeight
-                                        //                       .bold,
-                                        //               color: white),
-                                        //         );
-                                        //       },
-                                        //       loading: () =>
-                                        //           const Text("..."),
-                                        //       error: (error,
-                                        //               stackTrace) =>
-                                        //           Text('Error: $error'),
-                                        //     );
-                                        //   },
-                                        // ),
                                       ),
                                     )
                                   ],
@@ -1480,6 +1364,42 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () => PharmaciesController().openGoogleMaps(),
+                      child: Card(
+                        margin: EdgeInsets.all(3.w),
+                        elevation: 2,
+                        shadowColor: secondary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.w),
+                        ),
+                        child: SizedBox(
+                          height: 20.h,
+                          width: 43.w,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                'lib/constants/assets/map.png',
+                                width: 20.w,
+                              ),
+                              Text(
+                                "Pharmacy Nearby",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
@@ -1488,106 +1408,3 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 }
-//       body: RefreshIndicator(
-//         onRefresh: () {
-//           //refresh data using RefreshData class
-//           // const RefreshData().refreshData(context);
-//           return Future.delayed(const Duration(milliseconds: 500), () {
-//             setState(() {
-//               load = false;
-//             });
-//           });
-//         },
-//         child: Stack(
-//           children: [
-//             Visibility(
-//               visible: !load,
-//               child: CustomScrollView(
-//                 slivers: [
-//                   SliverToBoxAdapter(
-//                     child: Padding(
-//                       padding: EdgeInsets.all(10.sp),
-//                       child: SizedBox(
-//                         width: 80.w,
-//                         height: 30.h,
-//                         child: Card(
-//                           elevation: 2,
-//                           shadowColor: secondary,
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(5.w),
-//                           ),
-//                           child: StreamBuilder(
-//                             stream: FirebaseFirestore.instance
-//                                 .collection('medSchedule')
-//                                 .where('uid',
-//                                     isEqualTo:
-//                                         FirebaseAuth.instance.currentUser!.uid)
-//                                 .snapshots(),
-//                             builder: (context, snapshot) {
-//                               if (snapshot.hasData) {
-//                                 // Use a Map to track the status of each medicine
-//                                 Map<String, List<bool>> medicineStatusMap = {};
-
-//                                 // Iterate through the documents in the snapshot
-//                                 snapshot.data?.docs.forEach((doc) {
-//                                   var medName = doc['medName'];
-//                                   var medStatus = doc['status'];
-
-//                                   if (medName != null && medStatus != null) {
-//                                     // Initialize the status list if not already set
-//                                     medicineStatusMap.putIfAbsent(
-//                                         medName, () => []);
-
-//                                     // Add the status to the list
-//                                     medicineStatusMap[medName]!.add(medStatus);
-//                                   }
-//                                 });
-
-//                                 // Filter medicines where all status values are true
-//                                 List<String> filteredMedicines =
-//                                     medicineStatusMap.entries
-//                                         .where((entry) => entry.value
-//                                             .every((status) => status == true))
-//                                         .map((entry) => entry.key)
-//                                         .toList();
-
-//                                 return ListView.builder(
-//                                   itemCount: filteredMedicines.length,
-//                                   itemBuilder: (context, index) {
-//                                     var medName = filteredMedicines[index];
-//                                     return Text(
-//                                       medName,
-//                                       style: TextStyle(
-//                                         fontSize: 16.sp,
-//                                         fontWeight: FontWeight.bold,
-//                                       ),
-//                                     );
-//                                   },
-//                                 );
-//                               } else {
-//                                 return const Text("...");
-//                               }
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   SliverToBoxAdapter(
-//                     child: Column(
-//
-//             ),
-//             Visibility(
-//               visible: load,
-//               child: const Center(
-//                 child: CircularProgressIndicator(
-//                   color: tertiary,
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
