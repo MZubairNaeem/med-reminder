@@ -160,11 +160,15 @@ class _EmailSignupState extends State<EmailSignup> {
                       ),
                     ),
                     validator: (value) {
-                      //email regex
-                      if (value!.isEmpty) {
+                      if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       } else if (value.length < 6) {
                         return 'Password must be at least 6 characters';
+                      } else if (!RegExp(
+                              r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$')
+                          .hasMatch(value)) {
+                        // The regex checks for at least one uppercase letter and at least one special character
+                        return 'Password must contain at least one uppercase letter and one special character';
                       }
 
                       return null;

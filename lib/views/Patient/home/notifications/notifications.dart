@@ -78,7 +78,12 @@ class _HomeNotificationState extends State<HomeNotification>
                               return userResult.when(
                                   data: (appointments) {
                                     return appointments.isEmpty
-                                        ? const Center(child: Text('0'))
+                                        ? const Center(
+                                            child: Text(
+                                              '0',
+                                              style: TextStyle(color: white),
+                                            ),
+                                          )
                                         : Text(
                                             appointments.length.toString(),
                                             style: const TextStyle(
@@ -114,7 +119,12 @@ class _HomeNotificationState extends State<HomeNotification>
                               return userResult.when(
                                   data: (appointments) {
                                     return appointments.isEmpty
-                                        ? const Center(child: Text('0'))
+                                        ? const Center(
+                                            child: Text(
+                                              '0',
+                                              style: TextStyle(color: white),
+                                            ),
+                                          )
                                         : Text(
                                             appointments.length.toString(),
                                             style: const TextStyle(
@@ -146,14 +156,6 @@ class _HomeNotificationState extends State<HomeNotification>
                           // ref.refresh(notesProvider);
                           return userResult.when(
                               data: (appointments) {
-                                print(appointments.length);
-                                DateTime time = appointments[0]
-                                    .appointmentDateTime!
-                                    .toDate();
-                                String formattedTime =
-                                    DateFormat.jm().format(time);
-                                String formattedDate =
-                                    DateFormat('MMMM dd, yyyy').format(time);
                                 return appointments.isEmpty
                                     ? const Center(
                                         child: Text(
@@ -161,6 +163,14 @@ class _HomeNotificationState extends State<HomeNotification>
                                     : ListView.builder(
                                         itemCount: appointments.length,
                                         itemBuilder: (context, index) {
+                                          DateTime time = appointments[0]
+                                              .appointmentDateTime!
+                                              .toDate();
+                                          String formattedTime =
+                                              DateFormat.jm().format(time);
+                                          String formattedDate =
+                                              DateFormat('MMMM dd, yyyy')
+                                                  .format(time);
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                               horizontal: 4.w,
