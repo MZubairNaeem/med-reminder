@@ -66,7 +66,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
       appBar: AppBar(
         backgroundColor: secondary,
         centerTitle: true,
-        title: const Text("Add New Medicine"),
+        title: const Text("Add New Medicine", style: TextStyle(color: white)),
       ),
       body: Builder(builder: (BuildContext scaffoldContext) {
         return SingleChildScrollView(

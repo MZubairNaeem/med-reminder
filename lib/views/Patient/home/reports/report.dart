@@ -53,7 +53,7 @@ class _ReportState extends State<Report> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Report'),
+        title: const Text('Report', style: TextStyle(color: white)),
         backgroundColor: secondary,
       ),
       body: Stack(

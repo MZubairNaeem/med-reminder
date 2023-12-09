@@ -33,7 +33,7 @@ class _NotesDetailsState extends State<NotesDetails> {
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
-          title: const Text('Notes'),
+          title: const Text('Notes', style: TextStyle(color: white)),
           centerTitle: true,
           backgroundColor: secondary,
         ),

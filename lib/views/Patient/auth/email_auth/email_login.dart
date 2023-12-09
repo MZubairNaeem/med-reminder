@@ -187,6 +187,9 @@ class _LoginState extends State<EmailLogin> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
+                          
+                          foregroundColor: white,
+                          backgroundColor: secondary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

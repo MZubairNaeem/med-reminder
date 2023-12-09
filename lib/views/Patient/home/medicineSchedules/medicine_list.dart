@@ -38,7 +38,7 @@ class _MedicineListState extends State<MedicineList>
       appBar: AppBar(
         backgroundColor: secondary,
         centerTitle: true,
-        title: const Text("Medicine Schedule"),
+        title: const Text("Medicine Schedule", style: TextStyle(color: white)),
       ),
       body: Stack(
         children: [
@@ -98,8 +98,8 @@ class _MedicineListState extends State<MedicineList>
               ),
             );
           },
-          label: const Text("Add Medicine"),
-          icon: const Icon(Icons.add),
+          label: const Text("Add Medicine", style: TextStyle(color: white)),
+          icon: const Icon(Icons.add, color: white),
         ),
       ),
     );

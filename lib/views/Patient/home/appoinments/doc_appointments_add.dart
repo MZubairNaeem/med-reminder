@@ -36,7 +36,8 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Doctor Appointments'),
+        title:
+            const Text('Doctor Appointments', style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -129,6 +130,14 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     height: 2.h,
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // maximumSize: Size(size.width * 0.1, size.height * 0.04),
+                      foregroundColor: white,
+                      backgroundColor: secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     onPressed: () async {
                       DateTime? selectedDateTime = await showDatePicker(
                         context: context,
@@ -160,6 +169,7 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     },
                     child: const Text(
                       'Tap to Select Appointment Date and Time',
+                      style: TextStyle(color: white),
                     ),
                   ),
                   val
@@ -252,6 +262,8 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: white,
+                    backgroundColor: secondary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

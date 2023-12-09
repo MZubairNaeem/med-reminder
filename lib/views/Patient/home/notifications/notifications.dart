@@ -42,7 +42,8 @@ class _HomeNotificationState extends State<HomeNotification>
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('MedReminder  Notifications'),
+        title: const Text('MedReminder  Notifications',
+            style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),

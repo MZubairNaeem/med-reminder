@@ -241,7 +241,8 @@ class _EmailSignupState extends State<EmailSignup> {
                           });
                         }
                       },
-                      style: ElevatedButton.styleFrom(
+                      style: ElevatedButton.styleFrom( foregroundColor: white,
+                          backgroundColor: secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

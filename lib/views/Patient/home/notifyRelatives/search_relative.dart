@@ -31,6 +31,7 @@ class _SearchRelativeState extends State<SearchRelative> {
           backgroundColor: secondary,
           title: const Text(
             "Relatives List",
+            style: TextStyle(color: white),
           ),
           centerTitle: true,
         ),
@@ -61,6 +62,7 @@ class _SearchRelativeState extends State<SearchRelative> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   // maximumSize: Size(size.width * 0.1, size.height * 0.04),
+                  foregroundColor: white,
                   backgroundColor: secondary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),

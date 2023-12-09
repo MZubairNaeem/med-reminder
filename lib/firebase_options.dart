@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -49,20 +46,32 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAt8sDxSDkGACwsETE_4Tk05tblomTT4Iw',
+    appId: '1:475132050298:web:665f95e7c79b4c2edcb4c3',
+    messagingSenderId: '475132050298',
+    projectId: 'minder-alert',
+    authDomain: 'minder-alert.firebaseapp.com',
+    storageBucket: 'minder-alert.appspot.com',
+    measurementId: 'G-6NR70JV58V',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD9MTdhS-pn00yeC0c3oiT5BcSHXQenCJg',
-    appId: '1:903062986955:android:ce662f38f5f9109831bb4e',
-    messagingSenderId: '903062986955',
-    projectId: 'mideralert',
-    storageBucket: 'mideralert.appspot.com',
+    apiKey: 'AIzaSyBvWNGoRYSIYxo3VqhI6sJuqiCElDtjOBw',
+    appId: '1:475132050298:android:fc3d065920d54859dcb4c3',
+    messagingSenderId: '475132050298',
+    projectId: 'minder-alert',
+    storageBucket: 'minder-alert.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCZBCSxCE9M_09eORs-aFWX2KmGCt64cUk',
-    appId: '1:903062986955:ios:bbb650bf6dd04bcc31bb4e',
-    messagingSenderId: '903062986955',
-    projectId: 'mideralert',
-    storageBucket: 'mideralert.appspot.com',
+    apiKey: 'AIzaSyCPnowrYBKGpDci610pbjyrkUBkqqieiRM',
+    appId: '1:475132050298:ios:2693283ff86400bedcb4c3',
+    messagingSenderId: '475132050298',
+    projectId: 'minder-alert',
+    storageBucket: 'minder-alert.appspot.com',
+    androidClientId: '475132050298-o22cka269c4pisv6hjeghesl99p9chsa.apps.googleusercontent.com',
+    iosClientId: '475132050298-0a6co0v9pftbmid6pv41ch8ov7614ih4.apps.googleusercontent.com',
     iosBundleId: 'com.example.medreminder',
   );
 }

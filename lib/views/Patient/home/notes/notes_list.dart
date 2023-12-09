@@ -36,7 +36,7 @@ class _NotesListState extends State<NotesList>
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: const Text('Notes', style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -96,8 +96,8 @@ class _NotesListState extends State<NotesList>
               ),
             );
           },
-          label: const Text('Add Note'),
-          icon: const Icon(Icons.add),
+          label: const Text('Add Note', style: TextStyle(color: white)),
+          icon: const Icon(Icons.add, color: white),
         ),
       ),
     );

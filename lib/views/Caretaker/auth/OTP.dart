@@ -190,6 +190,8 @@ class _OTPVerification extends State<OTPVerification> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
+                         foregroundColor: white,
+                          backgroundColor: secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

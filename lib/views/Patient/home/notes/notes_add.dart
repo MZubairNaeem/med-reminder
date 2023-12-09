@@ -43,7 +43,8 @@ class _NotesAddState extends State<NotesAdd> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Add a Note'),
+          iconTheme: const IconThemeData(color: white),
+          title: const Text('Add a Note', style: TextStyle(color: white)),
           centerTitle: true,
           backgroundColor: secondary,
         ),
@@ -113,6 +114,14 @@ class _NotesAddState extends State<NotesAdd> {
                       SizedBox(
                         width: 90.w,
                         child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            // maximumSize: Size(size.width * 0.1, size.height * 0.04),
+                            foregroundColor: white,
+                            backgroundColor: secondary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
                           onPressed: () async {
                             setState(() {
                               load = true;

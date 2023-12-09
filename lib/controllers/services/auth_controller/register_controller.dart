@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:medreminder/models/user_model.dart';
 import 'package:medreminder/views/Patient/auth/email_auth/email_login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterController {
   Future<void> register({
@@ -23,11 +24,14 @@ class RegisterController {
       );
 
       if (userCredential.user != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        
         UserModel userModel = UserModel(
           username: username,
           credentials: email,
           uid: userCredential.user!.uid,
           userType: userType,
+          fcm: prefs.getString('fcm'),
         );
         await FirebaseFirestore.instance
             .collection('users')

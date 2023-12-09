@@ -49,7 +49,7 @@ class _NotesEditState extends State<NotesEdit> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Update this Note'),
+          title: const Text('Update this Note', style: TextStyle(color: white)),
           centerTitle: true,
           backgroundColor: secondary,
         ),

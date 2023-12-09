@@ -29,6 +29,7 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
           backgroundColor: secondary,
           title: const Text(
             "Relatives List",
+            style: TextStyle(color: white),
           ),
           centerTitle: true,
         ),

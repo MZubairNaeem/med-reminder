@@ -123,6 +123,8 @@ class _ForgorPasswordState extends State<ForgotPassword> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
+                           foregroundColor: white,
+                          backgroundColor: secondary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),

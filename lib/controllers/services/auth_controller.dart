@@ -78,11 +78,13 @@ class Auth {
     if (doc.exists) {
       print('user exists');
     } else {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       firestore.collection('users').doc(uid).set({
         'uid': uid,
         'credentials': phoneNo,
         'userType': 'patient',
         'username': '@username',
+        'fcm': prefs.getString('fcm'),
       });
     }
     final SharedPreferences sharedPreferences =

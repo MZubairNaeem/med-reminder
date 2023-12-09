@@ -64,7 +64,8 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(' Edit Doctor Appointments'),
+        title: const Text(' Edit Doctor Appointments',
+            style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -138,6 +139,14 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                     height: 2.h,
                   ),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // maximumSize: Size(size.width * 0.1, size.height * 0.04),
+                      foregroundColor: white,
+                      backgroundColor: secondary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                     onPressed: () async {
                       DateTime? selectedDateTime = await showDatePicker(
                         context: context,
@@ -171,7 +180,8 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                       children: [
                         const Text(
                           'Tap to Select Appointment Date and Time',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: white),
                         ),
                         val
                             ? Text(
@@ -255,6 +265,8 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: white,
+                    backgroundColor: secondary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

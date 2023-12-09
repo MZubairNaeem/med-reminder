@@ -43,7 +43,7 @@ class _AppoinmentsListState extends State<AppoinmentsList>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Doctor Appointments'),
+        title: const Text('Doctor Appointments',  style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -103,8 +103,8 @@ class _AppoinmentsListState extends State<AppoinmentsList>
                 MaterialPageRoute(
                     builder: (context) => const AppoinmentsAdd()));
           },
-          label: const Text('Schedule Appoinment'),
-          icon: const Icon(Icons.add),
+          label: const Text('Schedule Appoinment', style: TextStyle(color: white)),
+          icon: const Icon(Icons.add, color: white),
         ),
       ),
     );

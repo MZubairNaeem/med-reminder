@@ -191,6 +191,8 @@ class _NumberVerificationState extends State<NumberVerification> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
+                         foregroundColor: white,
+                          backgroundColor: secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

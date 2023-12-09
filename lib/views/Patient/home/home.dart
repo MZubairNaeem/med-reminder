@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
-import 'package:gif/gif.dart';
+import 'package:location/location.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/controllers/providers/doc_appointment_provider.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
@@ -41,7 +41,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _controller = GifController(vsync: this);
     //refreshing the data
     Future.delayed(const Duration(milliseconds: 500), () async {
       String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -102,23 +101,23 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     );
 
     // Add a listener to trigger the rotation every time the animation completes
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reset();
-      }
-    });
+    // _controller.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     _controller.reset();
+    //   }
+    // });
 
     super.initState();
   }
 
-  late final GifController _controller;
+  // late final GifController _controller;
   late AnimationController controller;
   @override
   Widget build(BuildContext context) {
     var notificationCount = 0;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Minder Alert'),
+        title: const Text('Minder Alert', style: TextStyle(color: white)),
         backgroundColor: secondary,
         actions: [
           Consumer(
@@ -236,7 +235,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            
             // Grid of containers (3 by 2)
             Column(
               children: [
@@ -1276,7 +1274,28 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: () => PharmaciesController().openGoogleMaps(),
+                      onTap: () async {
+                        LocationData? locationData;
+
+                        try {
+                          var location = Location();
+                          locationData = await location.getLocation();
+                        } catch (e) {
+                          print("Error getting location: $e");
+                        }
+
+                        if (locationData != null) {
+                          final String latitude =
+                              locationData.latitude.toString();
+                          final String longitude =
+                              locationData.longitude.toString();
+                          PharmaciesController.openGoogleMaps(
+                              latitude, longitude);
+                        } else {
+                          // Handle the case when location data is not available
+                          print("Location data not available");
+                        }
+                      },
                       child: Card(
                         margin: EdgeInsets.all(3.w),
                         elevation: 2,

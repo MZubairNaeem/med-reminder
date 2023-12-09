@@ -157,6 +157,8 @@ class _CareTakerLogin extends State<CareTakerLogin> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
+                         foregroundColor: white,
+                          backgroundColor: secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),

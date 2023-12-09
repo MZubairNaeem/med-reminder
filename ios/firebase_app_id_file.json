@@ -1,7 +1,7 @@
 {
   "file_generated_by": "FlutterFire CLI",
   "purpose": "FirebaseAppID & ProjectID for this Firebase app in this directory",
-  "GOOGLE_APP_ID": "1:903062986955:ios:bbb650bf6dd04bcc31bb4e",
-  "FIREBASE_PROJECT_ID": "mideralert",
-  "GCM_SENDER_ID": "903062986955"
+  "GOOGLE_APP_ID": "1:475132050298:ios:2693283ff86400bedcb4c3",
+  "FIREBASE_PROJECT_ID": "minder-alert",
+  "GCM_SENDER_ID": "475132050298"
 }

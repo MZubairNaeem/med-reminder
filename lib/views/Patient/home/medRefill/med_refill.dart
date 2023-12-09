@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gif/gif.dart';
+// import 'package:gif/gif.dart';
 import 'package:medreminder/controllers/providers/med_provider.dart';
 import 'package:medreminder/controllers/services/med_controller.dart';
 import 'package:medreminder/widgets/regex_validations.dart';
@@ -20,7 +20,7 @@ class MedRefill extends StatefulWidget {
 class _MedRefillState extends State<MedRefill> with TickerProviderStateMixin {
   @override
   void initState() {
-    _controller = GifController(vsync: this);
+    // _controller = GifController(vsync: this);
     //check if user has username or not
     controller = AnimationController(
       vsync: this,
@@ -28,21 +28,21 @@ class _MedRefillState extends State<MedRefill> with TickerProviderStateMixin {
     );
 
     // Add a listener to trigger the rotation every time the animation completes
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reset();
-      }
-    });
+    // _controller.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     _controller.reset();
+    //   }
+    // });
     super.initState();
   }
 
-  late final GifController _controller;
+  // late final GifController _controller;
   late AnimationController controller;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Med Refill'),
+        title: const Text('Med Refill', style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
@@ -100,23 +100,23 @@ class _MedRefillState extends State<MedRefill> with TickerProviderStateMixin {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            Gif(
-                              height: 5.h,
-                              // width: 20.w,
-                              image: const AssetImage(
-                                  "lib/constants/assets/medicine.gif"),
-                              controller:
-                                  _controller, // if duration and fps is null, original gif fps will be used.
-                              //fps: 30,
-                              //duration: const Duration(seconds: 3),
-                              autostart: Autostart.loop,
-                              placeholder: (context) =>
-                                  const Text('Loading...'),
-                              onFetchCompleted: () {
-                                _controller.reset();
-                                _controller.forward();
-                              },
-                            ),
+                            // Gif(
+                            //   height: 5.h,
+                            //   // width: 20.w,
+                            //   image: const AssetImage(
+                            //       "lib/constants/assets/medicine.gif"),
+                            //   controller:
+                            //       _controller, // if duration and fps is null, original gif fps will be used.
+                            //   //fps: 30,
+                            //   //duration: const Duration(seconds: 3),
+                            //   autostart: Autostart.loop,
+                            //   placeholder: (context) =>
+                            //       const Text('Loading...'),
+                            //   onFetchCompleted: () {
+                            //     _controller.reset();
+                            //     _controller.forward();
+                            //   },
+                            // ),
                             StreamBuilder(
                                 stream: //search for the medicine in the medSchedule collection and pick the first one
                                     FirebaseFirestore.instance
