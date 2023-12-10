@@ -116,7 +116,7 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       medicineType('lib/constants/assets/bottles.png', 'Syrup'),
-                      medicineType('lib/constants/assets/pills.png', 'Pill'),
+                      medicineType('lib/constants/assets/pills.png', 'Capsule'),
                       medicineType(
                           'lib/constants/assets/syringe.png', 'Syringe'),
                       medicineType(
@@ -278,6 +278,19 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 2.h),
+                  Center(
+                    child: Text(
+                      selectedTime == null
+                          ? 'No time selected'
+                          : 'Selected time: ${selectedTime!.format(context)}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 3.h),
                   Center(
                     child: Row(
@@ -319,11 +332,11 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
                                           });
                                           await Med().addMed(
                                             context,
-                                            med.text,
+                                            med.text.trim(),
                                             selectedMedicineType,
-                                            dosage.text,
+                                            dosage.text.trim(),
                                             selectedInterval.toString(),
-                                            qty.text,
+                                            qty.text.trim(),
                                             intervalHours,
                                             selectedTime!,
                                           );
@@ -454,8 +467,8 @@ class _MedicineScheduleState extends State<MedicineSchedule> {
     switch (medicineType) {
       case 'Syrup':
         return 'Spoons per dosage';
-      case 'Pill':
-        return 'Pill per dosage';
+      case 'Capsule':
+        return 'Capsule per dosage';
       case 'Syringe':
         return 'Syringes per dosage';
       case 'Tablet':

@@ -46,7 +46,7 @@ Future<void> main() async {
     print('Handling a foreground message ${message.messageId}');
     print(message.notification!.title);
     print(message.notification!.body);
-    Get.snackbar('Minder Alert', 'Time to take your medicine');
+    Get.snackbar('Minder Alert', 'You have a new reminder');
   });
 
   tzdata.initializeTimeZones();
@@ -77,10 +77,6 @@ class _MyAppState extends State<MyApp> {
               progressIndicatorTheme: ProgressIndicatorThemeData(
                 color: secondary,
               ),
-              iconTheme: IconThemeData(color: Colors.white),
-              appBarTheme: const AppBarTheme(
-                iconTheme: const IconThemeData(color: white),
-              ),
               fontFamily: GoogleFonts.poppins().fontFamily,
               pageTransitionsTheme: const PageTransitionsTheme(
                 builders: {
@@ -88,7 +84,6 @@ class _MyAppState extends State<MyApp> {
                   TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
                 },
               ),
-              primaryColor: Colors.blue,
               useMaterial3: false,
               primarySwatch: const MaterialColor(
                 0xff02569B,

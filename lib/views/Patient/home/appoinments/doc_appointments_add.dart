@@ -35,13 +35,15 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title:
             const Text('Doctor Appointments', style: TextStyle(color: white)),
         centerTitle: true,
         backgroundColor: secondary,
       ),
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
             padding: EdgeInsets.all(5.w),
@@ -239,11 +241,11 @@ class _AppoinmentsAddState extends State<AppoinmentsAdd> {
 
                     await Appointments().addAppointments(
                       context,
-                      doctorName.text,
-                      hospitalName.text,
+                      doctorName.text.trim(),
+                      hospitalName.text.trim(),
                       _selectedDateTime,
-                      note.text,
-                      visitReason.text,
+                      note.text.trim(),
+                      visitReason.text.trim(),
                       // Timestamp.now(),
                     );
                     //unfocus keyboard

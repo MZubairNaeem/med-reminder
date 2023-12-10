@@ -78,111 +78,128 @@ class _MedRefillState extends State<MedRefill> with TickerProviderStateMixin {
                   .map((entry) => entry.key)
                   .toList();
 
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: filteredMedicines.length,
-                  itemBuilder: (context, index) {
-                    var medName = filteredMedicines[index];
-                    return Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 50.w,
-                              child: Text(
-                                '${medName.toUpperCase()}',
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            // Gif(
-                            //   height: 5.h,
-                            //   // width: 20.w,
-                            //   image: const AssetImage(
-                            //       "lib/constants/assets/medicine.gif"),
-                            //   controller:
-                            //       _controller, // if duration and fps is null, original gif fps will be used.
-                            //   //fps: 30,
-                            //   //duration: const Duration(seconds: 3),
-                            //   autostart: Autostart.loop,
-                            //   placeholder: (context) =>
-                            //       const Text('Loading...'),
-                            //   onFetchCompleted: () {
-                            //     _controller.reset();
-                            //     _controller.forward();
-                            //   },
-                            // ),
-                            StreamBuilder(
-                                stream: //search for the medicine in the medSchedule collection and pick the first one
-                                    FirebaseFirestore.instance
-                                        .collection('medSchedule')
-                                        .where('medName', isEqualTo: medName)
-                                        .where('uid',
-                                            isEqualTo: FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                        .snapshots(),
-                                builder: (context, snapshot) {
-                                  final List<DocumentSnapshot> documents =
-                                      snapshot.data!.docs;
-                                  Map<String, dynamic> medData = documents[0]
-                                      .data() as Map<String, dynamic>;
-
-                                  return TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MedRefillAdd(
-                                            medName: medData['medName'],
-                                            medType: medData['medType'],
-                                            intervel: medData['intervel'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'Tap to fill',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 16.sp,
-                                        )
-                                      ],
+              return filteredMedicines.isEmpty
+                  ? Center(
+                      child: Text(
+                        '--  No medicines to refill --',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                        itemCount: filteredMedicines.length,
+                        itemBuilder: (context, index) {
+                          var medName = filteredMedicines[index];
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  SizedBox(
+                                    width: 50.w,
+                                    child: Text(
+                                      '${medName.toUpperCase()}',
+                                      style: TextStyle(
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  );
-                                })
+                                  ),
+                                  // Gif(
+                                  //   height: 5.h,
+                                  //   // width: 20.w,
+                                  //   image: const AssetImage(
+                                  //       "lib/constants/assets/medicine.gif"),
+                                  //   controller:
+                                  //       _controller, // if duration and fps is null, original gif fps will be used.
+                                  //   //fps: 30,
+                                  //   //duration: const Duration(seconds: 3),
+                                  //   autostart: Autostart.loop,
+                                  //   placeholder: (context) =>
+                                  //       const Text('Loading...'),
+                                  //   onFetchCompleted: () {
+                                  //     _controller.reset();
+                                  //     _controller.forward();
+                                  //   },
+                                  // ),
+                                  StreamBuilder(
+                                      stream: //search for the medicine in the medSchedule collection and pick the first one
+                                          FirebaseFirestore.instance
+                                              .collection('medSchedule')
+                                              .where('medName',
+                                                  isEqualTo: medName)
+                                              .where('uid',
+                                                  isEqualTo: FirebaseAuth
+                                                      .instance
+                                                      .currentUser!
+                                                      .uid)
+                                              .snapshots(),
+                                      builder: (context, snapshot) {
+                                        final List<DocumentSnapshot> documents =
+                                            snapshot.data!.docs;
+                                        Map<String, dynamic> medData =
+                                            documents[0].data()
+                                                as Map<String, dynamic>;
 
-                            //dotted line
-                          ],
-                        ),
-                        Container(
-                          height: 1,
-                          width: 90.w,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: secondary,
-                              width: 1,
-                            ),
-                            borderRadius: BorderRadius.circular(1),
-                          ),
-                        ),
-                      ],
+                                        return TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MedRefillAdd(
+                                                  medName: medData['medName'],
+                                                  medType: medData['medType'],
+                                                  intervel: medData['intervel'],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                'Tap to fill',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 16.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                size: 16.sp,
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      })
+
+                                  //dotted line
+                                ],
+                              ),
+                              Container(
+                                height: 1,
+                                width: 90.w,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: secondary,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(1),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
                     );
-                  },
-                ),
-              );
             } else {
               return const Text("...");
             }
@@ -316,7 +333,7 @@ class _MedicineScheduleState extends State<MedRefillAdd> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       medicineType('lib/constants/assets/bottles.png', 'Syrup'),
-                      medicineType('lib/constants/assets/pills.png', 'Pill'),
+                      medicineType('lib/constants/assets/pills.png', 'Capsule'),
                       medicineType(
                           'lib/constants/assets/syringe.png', 'Syringe'),
                       medicineType(
@@ -478,6 +495,21 @@ class _MedicineScheduleState extends State<MedRefillAdd> {
                       ),
                     ),
                   ),
+                  //show picked time
+                  SizedBox(height: 2.h),
+                  Center(
+                    child: Text(
+                      selectedTime == null
+                          ? 'No time selected'
+                          : 'Selected time: ${selectedTime!.format(context)}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
                   SizedBox(height: 3.h),
                   Center(
                     child: Row(
@@ -519,11 +551,11 @@ class _MedicineScheduleState extends State<MedRefillAdd> {
                                           });
                                           await Med().addMed(
                                             context,
-                                            med.text,
+                                            med.text.trim(),
                                             selectedMedicineType,
-                                            dosage.text,
+                                            dosage.text.trim(),
                                             selectedInterval.toString(),
-                                            qty.text,
+                                            qty.text.trim(),
                                             intervalHours,
                                             selectedTime!,
                                           );
@@ -654,8 +686,8 @@ class _MedicineScheduleState extends State<MedRefillAdd> {
     switch (medicineType) {
       case 'Syrup':
         return 'Spoons per dosage';
-      case 'Pill':
-        return 'Pill per dosage';
+      case 'Capsule':
+        return 'Capsule per dosage';
       case 'Syringe':
         return 'Syringes per dosage';
       case 'Tablet':

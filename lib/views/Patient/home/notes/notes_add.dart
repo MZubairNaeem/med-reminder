@@ -134,8 +134,8 @@ class _NotesAddState extends State<NotesAdd> {
                             }
                             await Notes().addNote(
                               context,
-                              title.text,
-                              description.text,
+                              title.text.trim(),
+                              description.text.trim(),
                             );
                             title.clear();
                             description.clear();

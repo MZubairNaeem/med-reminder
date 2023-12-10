@@ -251,11 +251,11 @@ class _AppoinmentsEdit extends State<AppoinmentsEdit> {
                     await Appointments().updateAppointments(
                       context,
                       widget.id,
-                      doctorName.text,
-                      hospitalName.text,
+                      doctorName.text.trim(),
+                      hospitalName.text.trim(),
                       _selectedDateTime,
-                      note.text,
-                      visitReason.text,
+                      note.text.trim(),
+                      visitReason.text.trim(),
                       widget.status,
                     );
                     setState(() {

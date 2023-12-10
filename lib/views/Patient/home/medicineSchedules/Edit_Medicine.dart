@@ -133,7 +133,7 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       medicineType('lib/constants/assets/bottles.png', 'Syrup'),
-                      medicineType('lib/constants/assets/pills.png', 'Pill'),
+                      medicineType('lib/constants/assets/pills.png', 'Capsule'),
                       medicineType(
                           'lib/constants/assets/syringe.png', 'Syringe'),
                       medicineType(
@@ -153,7 +153,7 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                         return 'Total no of dosages are required';
                       } else if (value.length > 5) {
                         return 'Total no of dosages should be at most 4 characters';
-                      }else if (!numberOnlyRegex.hasMatch(value)) {
+                      } else if (!numberOnlyRegex.hasMatch(value)) {
                         return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
@@ -172,7 +172,7 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                         return 'Dosage is required';
                       } else if (value.length > 25) {
                         return 'Dosage should be at most 25 characters';
-                      }else if (!numberOnlyRegex.hasMatch(value)) {
+                      } else if (!numberOnlyRegex.hasMatch(value)) {
                         return 'Please enter only numeric digits (0-9)';
                       }
                       return null;
@@ -295,6 +295,19 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 2.h),
+                  Center(
+                    child: Text(
+                      selectedTime == null
+                          ? 'No time selected'
+                          : 'Selected time: ${selectedTime!.format(context)}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 17.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 3.h),
                   Center(
                     child: Row(
@@ -351,10 +364,10 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
                                           await Med().updateMed(
                                             context,
                                             widget.medModel.id!,
-                                            med.text,
+                                            med.text.trim(),
                                             selectedMedicineType,
                                             selectedTime!,
-                                            dosage.text,
+                                            dosage.text.trim(),
                                             intervalHours,
                                             qty.text,
                                             widget.medModel.time!,
@@ -486,8 +499,8 @@ class EditMedicineScheduleState extends State<EditMedicineSchedule> {
     switch (medicineType) {
       case 'Syrup':
         return 'Spoons per dosage';
-      case 'Pill':
-        return 'Pill per dosage';
+      case 'Capsule':
+        return 'Capsule per dosage';
       case 'Syringe':
         return 'Syringes per dosage';
       case 'Tablet':

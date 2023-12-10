@@ -117,8 +117,8 @@ class _NotesEditState extends State<NotesEdit> {
                             await Notes().updateNote(
                               context,
                               widget.id,
-                              title.text,
-                              description.text,
+                              title.text.trim(),
+                              description.text.trim(),
                             );
                             setState(() {
                               load = false;

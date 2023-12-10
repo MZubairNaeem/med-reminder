@@ -116,7 +116,7 @@ class _ForgorPasswordState extends State<ForgotPassword> {
                               loading = true;
                             });
                             await ForgotPasswordController()
-                                .forgotPassword(emailController.text, context);
+                                .forgotPassword(emailController.text.trim(), context);
                             setState(() {
                               loading = false;
                             });

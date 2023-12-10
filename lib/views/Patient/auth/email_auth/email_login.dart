@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:medreminder/constants/colors/colors.dart';
 import 'package:medreminder/constants/strings/login.dart';
 import 'package:medreminder/controllers/services/auth_controller/login_controller.dart';
@@ -178,8 +179,8 @@ class _LoginState extends State<EmailLogin> {
                             });
                             await LoginController().login(
                               context,
-                              emailController.text,
-                              passController.text,
+                              emailController.text.trim(),
+                              passController.text.trim(),
                             );
                             setState(() {
                               loading = false;

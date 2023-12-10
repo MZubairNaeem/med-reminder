@@ -125,62 +125,6 @@ class _ReportState extends State<Report> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // StreamBuilder<QuerySnapshot>(
-                          //   stream: FirebaseFirestore.instance
-                          //       .collection('medSchedule')
-                          //       .where('uid', isEqualTo: uid)
-                          //       .where('time',
-                          //           isGreaterThanOrEqualTo:
-                          //               Timestamp.fromDate(medStartDate!))
-                          //       .where('startTimeDate',
-                          //           isLessThan: Timestamp.fromDate(medEndDate!))
-                          //       .snapshots(),
-                          //   builder: (BuildContext context,
-                          //       AsyncSnapshot<QuerySnapshot> snapshot) {
-                          //     if (snapshot.hasError) {
-                          //       print(snapshot.error);
-                          //       return const Text('Something went wrong');
-                          //     }
-
-                          //     if (snapshot.connectionState ==
-                          //         ConnectionState.waiting) {
-                          //       return const Text("Loading");
-                          //     }
-
-                          //     return Text(
-                          //       'Total Medicines: ${snapshot.data!.docs.length}',
-                          //       style: const TextStyle(
-                          //         fontSize: 20,
-                          //         fontWeight: FontWeight.bold,
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-                          //Display the count as taken medicine
-                          // StreamBuilder<int>(
-                          //     stream: takenCount
-                          //         .stream, // Use the stream from the controller
-                          //     builder: (BuildContext context, snapshot) {
-                          //       return Text(
-                          //         "Taken ${snapshot.data ?? 0}",
-                          //         style: const TextStyle(
-                          //           fontSize: 20,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //       );
-                          //     }),
-                          // StreamBuilder<int>(
-                          //     stream: PendingCount
-                          //         .stream, // Use the stream from the controller
-                          //     builder: (BuildContext context, snapshot) {
-                          //       return Text(
-                          //         "Pending ${snapshot.data ?? 0}",
-                          //         style: const TextStyle(
-                          //           fontSize: 20,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //       );
-                          //     }),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -204,13 +148,27 @@ class _ReportState extends State<Report> {
                                             Timestamp.fromDate(medEndDate!))
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -240,13 +198,27 @@ class _ReportState extends State<Report> {
                                     .where('status', isEqualTo: true)
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -275,13 +247,27 @@ class _ReportState extends State<Report> {
                                             Timestamp.fromDate(medEndDate!))
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -309,185 +295,31 @@ class _ReportState extends State<Report> {
                                     .where('time', isLessThan: Timestamp.now())
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
                           ),
-                          // Consumer(
-                          //   builder: (context, ref, _) {
-                          //     final userResult = ref.watch(medProvider);
-                          //     // ref.refresh(medProvider);
-                          //     return userResult.when(
-                          //       data: (data) {
-                          //         int count = 0;
-                          //         int documentCount = 0;
-                          //         for (var id in data) {
-                          //           final test = FirebaseFirestore.instance
-                          //               .collection('medSchedule')
-                          //               .doc(id.id)
-                          //               .collection('intervals')
-                          //               .get();
-                          //           test.then((QuerySnapshot querySnapshot) {
-                          //             documentCount = querySnapshot.size;
-                          //             count = count + documentCount;
-                          //             print(
-                          //                 "Total Document Count: $documentCount");
-                          //           });
-                          //         }
-                          //         return Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             Text(
-                          //               'Total Dosages $documentCount.',
-                          //               style: TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //             const SizedBox(width: 10),
-                          //             //   Consumer(
-                          //             //     builder: (context, ref, _) {
-                          //             //       final userResult =
-                          //             //           ref.watch(medProvider);
-                          //             //       // ref.refresh(medProvider);
-                          //             //       return userResult.when(
-                          //             //         data: (data) {
-                          //             //           return Text(
-                          //             //             data.toString(),
-                          //             //             style: TextStyle(
-                          //             //               fontSize: 20,
-                          //             //               fontWeight: FontWeight.bold,
-                          //             //             ),
-                          //             //           );
-                          //             //         },
-                          //             //         loading: () => const Text("..."),
-                          //             //         error: (error, stackTrace) =>
-                          //             //             Text('Error: $error'),
-                          //             //       );
-                          //             //     },
-                          //             //   ),
-                          //           ],
-                          //         );
-                          //       },
-                          //       loading: () => const Text("..."),
-                          //       error: (error, stackTrace) =>
-                          //           Text('Error: $error'),
-                          //     );
-                          //   },
-                          // ),
-                          // const SizedBox(height: 10),
-                          // Consumer(
-                          //   builder: (context, ref, _) {
-                          //     final userResult = ref.watch(takenMedProvider);
-                          //     ref.refresh(takenMedProvider);
-                          //     return userResult.when(
-                          //       data: (relatives) {
-                          //         return Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             const Text(
-                          //               'Taken',
-                          //               style: TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //             const SizedBox(width: 10),
-                          //             Text(
-                          //               '${relatives.length}',
-                          //               style: const TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         );
-                          //       },
-                          //       loading: () => const Text("..."),
-                          //       error: (error, stackTrace) =>
-                          //           Text('Error: $error'),
-                          //     );
-                          //   },
-                          // ),
-                          // const SizedBox(height: 10),
-                          // Consumer(
-                          //   builder: (context, ref, _) {
-                          //     final userResult = ref.watch(pendingMedProvider);
-                          //     ref.refresh(pendingMedProvider);
-                          //     return userResult.when(
-                          //       data: (relatives) {
-                          //         return Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             const Text(
-                          //               'Pending',
-                          //               style: TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //             const SizedBox(width: 10),
-                          //             Text(
-                          //               '${relatives.length}',
-                          //               style: const TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         );
-                          //       },
-                          //       loading: () => const Text("..."),
-                          //       error: (error, stackTrace) =>
-                          //           Text('Error: $error'),
-                          //     );
-                          //   },
-                          // ),
-                          // const SizedBox(height: 10),
-                          // Consumer(
-                          //   builder: (context, ref, _) {
-                          //     final userResult = ref.watch(missedMedProvider);
-                          //     ref.refresh(missedMedProvider);
-                          //     return userResult.when(
-                          //       data: (relatives) {
-                          //         return Row(
-                          //           mainAxisAlignment:
-                          //               MainAxisAlignment.spaceBetween,
-                          //           children: [
-                          //             const Text(
-                          //               'Missed',
-                          //               style: TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //             const SizedBox(width: 10),
-                          //             Text(
-                          //               '${relatives.length}',
-                          //               style: const TextStyle(
-                          //                 fontSize: 20,
-                          //                 fontWeight: FontWeight.bold,
-                          //               ),
-                          //             ),
-                          //           ],
-                          //         );
-                          //       },
-                          //       loading: () => const Text("..."),
-                          //       error: (error, stackTrace) =>
-                          //           Text('Error: $error'),
-                          //     );
-                          //   },
-                          // ),
                         ],
                       ),
                     ),
@@ -569,13 +401,27 @@ class _ReportState extends State<Report> {
                                             Timestamp.fromDate(endDate!))
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -605,13 +451,27 @@ class _ReportState extends State<Report> {
                                     .where('status', isEqualTo: true)
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -640,13 +500,27 @@ class _ReportState extends State<Report> {
                                             Timestamp.fromDate(endDate!))
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],
@@ -675,13 +549,27 @@ class _ReportState extends State<Report> {
                                         isLessThan: Timestamp.now())
                                     .snapshots(),
                                 builder: (context, snapshot) {
-                                  return Text(
-                                    snapshot.data!.docs.length.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    // Show a progress indicator while data is loading
+                                    return const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle errors
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    // Data has been loaded successfully, display the count
+                                    return Text(
+                                      snapshot.data!.docs.length.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    );
+                                  }
                                 },
                               )
                             ],

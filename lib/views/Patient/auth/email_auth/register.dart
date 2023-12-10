@@ -167,8 +167,13 @@ class _EmailSignupState extends State<EmailSignup> {
                       } else if (!RegExp(
                               r'^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).*$')
                           .hasMatch(value)) {
-                        // The regex checks for at least one uppercase letter and at least one special character
-                        return 'Password must contain at least one uppercase letter and one special character';
+                        if (!RegExp(r'^(?=.*[A-Z])').hasMatch(value)) {
+                          return 'Password must contain at least one uppercase letter';
+                        } else if (!RegExp(r'^(?=.*[!@#$%^&*(),.?":{}|<>])')
+                            .hasMatch(value)) {
+                          return 'Password must contain at least one special character';
+                        }
+                        return 'Password must contain at least one uppercase letter \nand one special character';
                       }
 
                       return null;
@@ -231,9 +236,9 @@ class _EmailSignupState extends State<EmailSignup> {
                           });
                           await RegisterController().register(
                             context: context,
-                            email: emailController.text,
-                            password: passController.text,
-                            username: nameController.text,
+                            email: emailController.text.trim(),
+                            password: passController.text.trim(),
+                            username: nameController.text.trim(),
                             userType: user,
                           );
                           setState(() {
@@ -241,8 +246,9 @@ class _EmailSignupState extends State<EmailSignup> {
                           });
                         }
                       },
-                      style: ElevatedButton.styleFrom( foregroundColor: white,
-                          backgroundColor: secondary,
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: white,
+                        backgroundColor: secondary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
