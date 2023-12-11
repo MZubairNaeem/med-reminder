@@ -10,7 +10,8 @@ class Relative {
         isEqualTo: FirebaseAuth.instance.currentUser!.uid,
       );
 
-  addRelative(BuildContext context, String credentials, String uid) async {
+  addRelative(BuildContext context, String credentials, String uid,
+      String? username) async {
     try {
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('relative')
@@ -28,8 +29,9 @@ class Relative {
       }
       RelativeModel relativeModel = RelativeModel(
         uid: FirebaseAuth.instance.currentUser!.uid,
-        phone: credentials,
+        credentials: credentials,
         relativeUid: uid,
+        username: username,
       );
       await FirebaseFirestore.instance
           .collection('relative')

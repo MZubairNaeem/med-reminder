@@ -73,11 +73,53 @@ class Auth_ {
     String uid = FirebaseAuth.instance.currentUser!.uid;
     //create user in firestore with uid
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    firestore.collection('users').doc(uid).set({
-      'uid': uid,
-      'phone': phoneNo,
-      'userType': 'caretaker',
-    });
+    //check if user exists
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await firestore.collection('users').doc(uid).get();
+    print(doc.exists);
+    if (doc.exists) {
+      print('user exists');
+      Map<String, dynamic> data = doc.data()!;
+      //user exists
+      //get user data
+      //save user data in shared preferences
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString('uid', uid);
+      sharedPreferences.setString('userType', 'caretaker');
+      // ignore: use_build_context_synchronously
+      Get.offAll(() => const Caretaker_Home());
+      Get.snackbar(
+        'Success',
+        'Logged in successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } else {
+      //user does not exist
+      //create user
+      firestore.collection('users').doc(uid).set({
+        'uid': uid,
+        'credentials': phoneNo,
+        'userType': 'caretaker',
+        'username': '@username',
+      });
+      //save user data in shared preferences
+      final SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString('uid', uid);
+      sharedPreferences.setString('userType', 'caretaker');
+      // ignore: use_build_context_synchronously
+      Get.offAll(() => const Caretaker_Home());
+      Get.snackbar(
+        'Success',
+        'Logged in successfully',
+        backgroundColor: Colors.green,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    }
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.setString('uid', uid);

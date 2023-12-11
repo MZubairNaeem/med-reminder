@@ -135,7 +135,8 @@ class _SearchRelativeState extends State<SearchRelative> {
                                               Relative().addRelative(
                                                   context,
                                                   searchUser.credentials!,
-                                                  searchUser.uid!);
+                                                  searchUser.uid!,
+                                                  searchUser.username!);
                                             },
                                             child: const Icon(
                                               Icons.add,

@@ -16,7 +16,8 @@ final relativelist = FutureProvider<List<RelativeModel>>((ref) async {
     return RelativeModel(
       uid: data['uid'],
       relativeUid: data['relativeUid'],
-      phone: data['phone'],
+      credentials: data['credentials'],
+      username: data['username'],
     );
   }).toList();
 
@@ -24,7 +25,7 @@ final relativelist = FutureProvider<List<RelativeModel>>((ref) async {
 });
 
 final missedRelativeAppoinmentProvider =
-    FutureProvider.family<List<AppointmentModel>,String>((ref,uid) async {
+    FutureProvider.family<List<AppointmentModel>, String>((ref, uid) async {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   QuerySnapshot<Map<String, dynamic>> doc = await firestore
       .collection('appointments')
@@ -52,7 +53,8 @@ final missedRelativeAppoinmentProvider =
   return appointments;
 });
 
-final missedRelativeMedProvider = FutureProvider.family<List<MedModel>,String>((ref,uid) async {
+final missedRelativeMedProvider =
+    FutureProvider.family<List<MedModel>, String>((ref, uid) async {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   QuerySnapshot<Map<String, dynamic>> doc = await firestore
       .collection('medSchedule')

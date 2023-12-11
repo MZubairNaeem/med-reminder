@@ -108,7 +108,7 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
                                                         .deleteRelative(
                                                             context,
                                                             relative[index]
-                                                                .phone!);
+                                                                .credentials!);
                                                     print(result);
                                                     // setState(() {
                                                     //   load = false;
@@ -136,7 +136,7 @@ class _NotifyRelativeListState extends State<NotifyRelativeList> {
                                                   ),
                                                 ),
                                                 title: Text(
-                                                  relative[index].phone!,
+                                                  relative[index].credentials!,
                                                   style: TextStyle(
                                                     fontSize: 16.sp,
                                                     fontWeight: FontWeight.bold,

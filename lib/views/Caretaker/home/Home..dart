@@ -23,6 +23,66 @@ class Caretaker_Home extends StatefulWidget {
 
 class _CaretakerHomeState extends State<Caretaker_Home> {
   bool load = false;
+  TextEditingController name = TextEditingController();
+
+  @override
+  void initState() {
+    //refreshing the data
+    Future.delayed(const Duration(milliseconds: 500), () async {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      DocumentSnapshot<Map<String, dynamic>> doc =
+          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+      //if username not equal to null
+      if (doc.data()!['username'] == '@username') {
+        Get.defaultDialog(
+          title: 'Enter Username',
+          content: TextFormField(
+            controller: name,
+            decoration: const InputDecoration(
+              hintText: 'Enter Username',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                try {
+                  await FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(uid)
+                      .update({
+                    'username': name.text.trim(),
+                  }).then((value) => {
+                            name.clear(),
+                            Get.back(),
+                            Get.back(),
+                          });
+                } catch (e) {
+                  Get.snackbar('Error', e.toString());
+                }
+              },
+              child: const Text('Save'),
+            ),
+            // TextButton(
+            //   onPressed: () {
+            //     Get.back();
+            //   },
+            //   child: const Text('Cancel'),
+            // )
+          ],
+        );
+        setState(() {
+          load = false;
+        });
+      } else {
+        // Get.snackbar('Success', 'Welcome ${doc.data()!['username']}');
+        setState(() {
+          load = false;
+        });
+      }
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

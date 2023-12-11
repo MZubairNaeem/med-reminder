@@ -15,7 +15,7 @@ final patientlist = FutureProvider<List<RelativeModel>>((ref) async {
     return RelativeModel(
       uid: data['uid'],
       relativeUid: data['relativeUid'],
-      phone: data['phone'],
+      credentials: data['credentials'],
     );
   }).toList();
 
